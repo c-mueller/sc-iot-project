@@ -1,89 +1,191 @@
-% This is samplepaper.tex, a sample chapter demonstrating the
-% LLNCS macro package for Springer Computer Science proceedings;
-% Version 2.20 of 2017/10/04
-%
 \documentclass[runningheads]{llncs}
 %
 \usepackage{graphicx}
 
 \begin{document}
 %
-\title{Come Up with a Title for Your Project}
+\title{IHMES - Intelligent home music entertainment system}
 
-\author{Group ID: First Author \and
-Second Author \and
-Third Author}
+%\author{Smart Cities and Internet of Things - Group 16: \\
+%Tobias Haller (\texttt{3132111}) \email{st141219@stud.uni-stuttgart.de}\\
+%Jonas Hofer (\texttt{XXXXXXX}) \email{st173462@stud.uni-stuttgart.de} \\
+%Christian M\"uller (\texttt{3132108}) \email{st140956@stud.uni-stuttgart.de}}
 
-\institute{Service Computing Department, IAAS, University of Stuttgart
-\email{firstname.lastname@uni-stuttgart.de}}
+\author{Group 16 - Tobias Haller \and Jonas Hofer \and Christian M\"uller}
+
+\institute{Service Computing Department, IAAS, University of Stuttgart}
+
 %
 \maketitle              % typeset the header of the contribution
 %
-\begin{abstract}
-The abstract should briefly summarize the contents of the report in
-150--250 words. 
+%\begin{abstract}
+%    The abstract should briefly summarize the contents of the report in
+%    150--250 words. 
+%    
+%    \keywords{First keyword  \and Second keyword \and Another keyword.}
+%\end{abstract}
 
-\keywords{First keyword  \and Second keyword \and Another keyword.}
-\end{abstract}
-%
-%
-%
 \section{System Introduction}
-Describe the scope (background information and problem statement) and the goals of your project.
 
-Table~\ref{tab1} an example of a table.
+Increasing people's efficiency and comfort is an important topic of research. Making everyday life more comfortable and easier is a predominant aspect of development related to smart buildings and especially smart homes.
+Therefore, it is not surprising that companies offering solutions for smart cities and smart home devices have significant market growth. 
 
-\begin{table}
-\caption{Table captions should be placed above the
-tables.}\label{tab1}
-\begin{tabular}{|l|l|}
-\hline
-Item & Deadline \\
-\hline
-I1 & D1 \\
-I2 & D2 \\
-I3 & D3 \\
-I4 & D4 \\
-I5 & D5 \\
-\hline
-\end{tabular}
-\end{table}
+Since we are participating in the lecture "Smart Cities and IoT" we want to gain practical experience in addition to the theoretical fundamentals taught by the lecture. Since Smart Cities are just a bigger model or a further development of a smart home system, we will consider a smart home system as our project. 
 
-Fig.~\ref{fig1} gives an example of a figure.
+Let´s assume we live in an appartement with e.g. a kitchen, a bathroom, a living room and a bedroom. Since we have a huge music affinity we want to listen the whole day to music while moving in our appartement. Without any smart home functionality we would have to turn on the speakers in the room we are currently in or turn it off once again when leaving. Additionally, of course we would have to connect our smartphone to some speaker first and play our favorite music. Once we got established the connection and the music is playing we would have to regulate the volume of the music according to many factors such as noise in the room. 
 
-\begin{figure}
-\includegraphics[width=\textwidth]{fig1}
-\caption{A figure caption is always placed below the illustration.
-Please note that short captions are centered, while long ones are
-justified by the macro package automatically.} \label{fig1}
-\end{figure}
-
-For citations of references, we prefer the use of square brackets
-and consecutive numbers. The following bibliography provides
-a sample reference list with entries for journal
-articles~\cite{ref_article1}, a book~\cite{ref_book1}, proceedings without editors~\cite{ref_proc1},
-and a homepage~\cite{ref_url1}. Multiple citations are grouped
-\cite{ref_article1,ref_book1},
-\cite{ref_article1,ref_book1,ref_proc1,ref_url1}.
+In the following based on this basic problem definition and main scope of our work we want to specify our use cases and requirements for a smart home system which aims to automate such tasks as well as some additional ones for a user. 
 
 \section{System Analysis}
-Describe the user requirements of your system.
+There are some core requirements and functionalities a user wants from this smart home system. Given the described scenario we want to improve a users situation by providing a way to play their favorite music in every room where people are currently in. In addition we want to extend comfort by increasing and decreasing the volume of the music according to external factors, e.g. the noise in the environment. Another part of our smart home system can be to identify the mood of a user and adapt music and environment according to this.
+
+The systems core functions will be separated into functional and non-functional requirements according to ISO 25010. All requirements will be priorized by - - / - / o / + and ++, where all requirements with + or ++ are considered to be mandatory for our project.  All other requirements are considered as desirable or optional requirements. 
+
+\subsection{Functional Requirements}
+
+\begin{description}
+    \item[ID] FA-1
+    \item[Title] Autonomous Volume regulation
+    \item[Description] The system should be able to regulate the volume of our music.
+    \item[Dependencies] FA-2, FA-3, FA-4
+    \item[Priority] ++  
+\end{description}
+
+\begin{description}
+    \item[ID] FA-2
+    \item[Title] Play Music
+    \item[Description] The system should be able to play music.
+    \item[Dependencies] FA-5
+    \item[Priority] ++
+\end{description}
+
+\begin{description}
+    \item[ID] FA-3
+    \item[Title] Recognize people in room
+    \item[Description] The system should recognize how many people are currently in the rooms of the appartement.
+    \item[Dependencies] None
+    \item[Priority] ++
+\end{description}
+
+\begin{description}
+    \item[ID] FA-4
+    \item[Title] Recognize loud environments
+    \item[Description] The system should recognize when it is noisy. For example when the shower in the bathroom is turned on, it should recognize that.
+    \item[Dependencies] FA-3
+    \item[Priority] ++
+\end{description}
+
+\begin{description}
+    \item[ID] FA-5
+    \item[Title] Classify mood of the music
+    \item[Description] The system should be able to identify the mood of a music that is currently played.
+    \item[Dependencies] None
+    \item[Priority] o
+\end{description}
+
+\begin{description}
+    \item[ID] FA-6
+    \item[Title] Light regulation
+    \item[Description] The system should be able to regulate the lights in the appartement.
+    \item[Dependencies] FA-5
+    \item[Priority] o
+\end{description}
+
+\pagebreak
+
+\begin{description}
+    \item[ID] FA-7
+    \item[Title] Human music interaction
+    \item[Description] A human should be able to regulate the volume of the system.
+    \item[Dependencies] None
+    \item[Priority] o
+\end{description}
+
+\begin{description}
+    \item[ID] FA-8
+    \item[Title] Night regulation
+    \item[Description] At night the humans should be prohibited from increasing the volume above a certain limit.
+    \item[Dependencies] None
+    \item[Priority] o
+\end{description}
+
+\begin{description}
+    \item[ID] FA-9
+    \item[Title] Classify mood of a user
+    \item[Description] The system should be able to identify the mood of a user and act accordingly.
+    \item[Dependencies] FA-5
+    \item[Priority] o
+\end{description}
+
+\begin{description}
+    \item[ID] FA-10
+    \item[Title] Activate and deactivate speakers
+    \item[Description] The system should be able to turn speakers from which music can be played on or off.
+    \item[Dependencies] None
+    \item[Priority] ++
+\end{description}
+
+\subsection{Non-functional Requirements}
+
+\begin{description}
+    \item[ID] NFA-1
+    \item[Title] Realworld application
+    \item[Description] The system should be easily transformed to a real world running smart home system.
+    \item[Dependencies] None
+    \item[Priority] -
+\end{description}
+
+\begin{description}
+    \item[ID] NFA-2
+    \item[Title] AI-planning
+    \item[Description] AI-planning will be used for volume regulation in all the rooms.
+    \item[Dependencies] None
+    \item[Priority] ++
+\end{description}
+
+\begin{description}
+    \item[ID] NFA-3
+    \item[Title] Message Queuing
+    \item[Description] Message Queuing (MQ) middleware will be used for the communication between devices in the system
+    \item[Dependencies] None
+    \item[Priority] ++
+\end{description}
 
 \section{System Architecture Design}
-Describe and provide a design of the architecture of your system.
 
-\section{System Implementation}
-Describe the implementation of your system. This section is only relevant for the report and should be omitted for the project description. 
+In the following we will specify our main components that execute our main functionalities. All components are separated into the following Layers according to ISO/OSI Model. 
 
-\section{Discussion and Conclusions}
-Here you can discuss some interesting points or limitations of your system and conclude the report.
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{img/system-design.png}
+    \caption{The system design illustrated as a diagram}
+    \label{fig:system-design}
+\end{figure}
+
+\subsection{Presentation Layer}
+The Presentation Layer consists out of the User Interface and the User itself. The (human) User interacts with our system via the User Interface which provides a GUI. The user can execute the functional requirements provided in FA-7. 
+
+\subsection{Reasoning Layer}
+The reasoning layer consists of the knowledge base and the control unit. The knowledge base stores all the sensor data that is generated and stores information about the individual rooms with the state of all the actuators. It receives all data from the Context Transformation component in the Ubiquitous Layer. The Control Unit interacts closely with the Knowledge Base, as it receives a notification as soon as new sensor data is stored in the Knowledge Base. Based on all the data, the Control Unit decides in which rooms the music volume needs to be adjusted or regulated. As soon as it has reached a conclusion, it communicates this via the Sensors/Actuators gateway in the Ubiquitous Layer. 
+
+\subsection{Ubiquitous Layer}
+The main component of the ubiquitous layer is the sensor/actuator gateway which communicated between the physical layer devices and the components of the reasoning layer. It will process commands from the control unit of the reasoning layer directly in order to relay commands to the actuators of the system. Sensor data however will be given to the Context Transformation component which has the job to take this raw data and transform it to a more precise and informative format which will then be communicated with the knowledge base of the reasoning layer.
+
+\subsection{Physcial Layer}
+There are two main components of the physical layer. Firstly the sensor which produces data that will be sent to the gateway. Sensors will be used to satisfy functional requirements such as FA-4 and others. Secondly actuators will get instructions from the gateway and execute upon these as is described in the functional requirements part, such as FA-10. 
+
+% \section{System Implementation}
+% Describe the implementation of your system. This section is only relevant for the report and should be omitted for the project description. 
+
+% \section{Discussion and Conclusions}
+% Here you can discuss some interesting points or limitations of your system and conclude the report.
 
 %
 % ---- Bibliography ----
 %
-\bibliographystyle{splncs04}
-\bibliography{mybib}
+%\bibliographystyle{splncs04}
+%\bibliography{mybib}
 
-All links were last followed on April 17, 2020.
+%All links were last followed on \today.
 
 \end{document}
