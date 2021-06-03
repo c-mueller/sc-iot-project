@@ -32,7 +32,7 @@
     Making everyday life more comfortable and easier is a predominant aspect of development related to smart buildings and especially smart homes.
     Therefore, it is not surprising that companies offering solutions for smart cities and smart home devices have significant market growth.
 
-    Since we are participating in the lecture 'Smart Cities and IoT' we want to gain practical experience in addition to the theoretical fundamentals taught by the lecture.
+    Since we are participating in the lecture "Smart Cities and IoT" we want to gain practical experience in addition to the theoretical fundamentals taught by the lecture.
     Since Smart Cities are just a bigger model or a further development of a smart home system, we will consider a smart home system as our project.
 
     Let's assume we live in an appartement with e.g. a kitchen, a bathroom, a living room and a bedroom.
@@ -50,7 +50,7 @@
     In addition we want to extend comfort by increasing and decreasing the volume of the music according to external factors, e.g. the noise in the environment.
     Another part of our smart home system can be to identify the mood of a user and adapt music and environment according to this.
 
-    The systems core functions will be separated into functional and non-functional requirements according to ISO 25010. All requirements will be priorized by - - / - / o / + and ++, where all requirements with + or ++ are considered to be mandatory for our project. All other requirements are considered as desirable or optional requirements.
+    The core system functions will be separated into both functional and non-functional requirements according to ISO 25010. All requirements will be priorized by - - / - / 0 / + and ++, where all requirements with + or ++ are considered to be mandatory for our project. All other requirements are considered as desirable or optional requirements.
 
     \subsection{Functional Requirements}
 
@@ -172,16 +172,16 @@
     \end{figure}
 
     \subsection{Presentation Layer}
-    The Presentation Layer consists out of the User Interface and the User itself. The (human) User interacts with our system via the User Interface which provides a GUI. The user can execute the functional requirements provided in FA-7.
+    The Presentation Layer consists of the User Interface and the User itself. The (human) User interacts with our system via the User Interface which is a GUI. The user can monitor the system as described in functional requirement FA-5.
 
     \subsection{Reasoning Layer}
-    The reasoning layer consists of the knowledge base and the control unit. The knowledge base stores all the sensor data that is generated and stores information about the individual rooms with the state of all the actuators. It receives all data from the Context Transformation component in the Ubiquitous Layer. The Control Unit interacts closely with the Knowledge Base, as it receives a notification as soon as new sensor data is stored in the Knowledge Base. Based on all the data, the Control Unit decides in which rooms the music volume needs to be adjusted or regulated. As soon as it has reached a conclusion, it communicates this via the Sensors/Actuators gateway in the Ubiquitous Layer.
+    The reasoning layer consists of the knowledge base and the control unit. The knowledge base stores all the sensor data that is generated and stores information about the individual room with the state of all the actuators. It receives all its data from the Context Transformation component in the Ubiquitous Layer. The Control Unit interacts closely with the Knowledge Base, as it receives a notification as soon as new sensor data is stored in the Knowledge Base. Based on all the data, the Control Unit decides based on AI-planning what actions it should take next. As soon as it has reached a conclusion and formulated a plan, it communicates this plan with the Sensors/Actuators gateway in the Ubiquitous Layer.
 
     \subsection{Ubiquitous Layer}
-    The main component of the ubiquitous layer is the sensor/actuator gateway which communicated between the physical layer devices and the components of the reasoning layer. It will process commands from the control unit of the reasoning layer directly in order to relay commands to the actuators of the system. Sensor data however will be given to the Context Transformation component which has the job to take this raw data and transform it to a more precise and informative format which will then be communicated with the knowledge base of the reasoning layer.
+    The main component of the ubiquitous layer is the sensor/actuator gateway which communicates between the physical layer devices and the components of the reasoning layer. It will process commands from the control unit of the reasoning layer directly in order to relay commands to the actuators of the system. Sensor data however will be given to the Context Transformation component which has the job to take this raw data and transform it to a more precise and informative format which will then be communicated with the knowledge base of the reasoning layer.
 
     \subsection{Physcial Layer}
-    There are two main components of the physical layer. Firstly the sensor which produces data that will be sent to the gateway. Sensors will be used to satisfy functional requirements such as FA-4 and others. Secondly actuators will get instructions from the gateway and execute upon these as is described in the functional requirements part, such as FA-10.
+    There are two main components of the physical layer. Firstly the sensor which produces sensor data that will be sent to the gateway. Sensors will be used to satisfy functional requirements such as FA-8 and others. Secondly actuators will get instructions from the gateway and execute upon these as is described in the functional requirements.
 
 % \section{System Implementation}
 % Describe the implementation of your system. This section is only relevant for the report and should be omitted for the project description. 
