@@ -29,7 +29,7 @@ Result 7 Relevant states
 
 ### Übergänge im Graph
 
-![](https://notepad.krnl.eu/uploads/upload_d5a9f687809029ff2591e94e155ce23a.png)
+![](upload_d5a9f687809029ff2591e94e155ce23a.png)
 
 #### Edge #1
 
