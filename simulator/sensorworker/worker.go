@@ -11,9 +11,10 @@ type Worker struct {
 	Sensor         model.Sensor
 	UpdateInterval time.Duration
 
-	state        model.WorkerState
-	currentValue float64
-	lastEmitted  time.Time
+	state         model.WorkerState
+	interruptChan chan bool
+	currentValue  float64
+	lastEmitted   time.Time
 
 	mqttConfig model.BrokerConfig
 
@@ -26,6 +27,7 @@ func (w *Worker) Init(logger *logrus.Entry, config model.BrokerConfig) error {
 	w.state = model.Inactive
 	w.logger = logger.WithField("sensor", w.Sensor.Name)
 	w.currentValue = w.Sensor.InitialValue
+	w.interruptChan = make(chan bool, 1)
 	w.ticker = time.NewTicker(w.UpdateInterval)
 
 	err := w.initMQTT(config)
@@ -40,14 +42,19 @@ func (w *Worker) Init(logger *logrus.Entry, config model.BrokerConfig) error {
 
 func (w *Worker) Start() error {
 	w.state = model.Active
-
+	go w.workerLoop()
 
 	return nil
 }
 
 func (w *Worker) Stop() error {
-	w.state = model.Inactive
 	w.ticker.Stop()
+	w.interruptChan <- true
+
+	for w.state == model.Active {
+		time.Sleep(time.Millisecond * 10)
+	}
+	w.brokerClient.Disconnect(0)
 
 	return nil
 }

@@ -84,7 +84,7 @@ func main() {
 	if *jsonLog {
 		logrus.SetFormatter(&logrus.JSONFormatter{})
 	}
-	logrus.StandardLogger().SetLevel(logrus.DebugLevel)
+	logrus.StandardLogger().SetLevel(logrus.TraceLevel)
 	globalLogger = logrus.NewEntry(logrus.StandardLogger()).WithField("module", "global")
 
 	simulator := &core.Simulator{
