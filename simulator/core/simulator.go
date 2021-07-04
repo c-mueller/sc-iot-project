@@ -8,9 +8,14 @@ import (
 
 type Simulator struct {
 	HttpEndpoint string
+	MQTTHostname string
+	MQTTPort     int
 
-	Sensors []model.Sensor
+	Sensors   []model.Sensor
 	Actuators []model.Actuator
+
+	sensorWorkers   map[string]model.SensorWorker
+	actuatorWorkers map[string]model.ActuatorWorker
 
 	logger *logrus.Entry
 	engine *gin.Engine
@@ -20,6 +25,10 @@ func (s *Simulator) Init(logger *logrus.Entry) error {
 	s.logger = logger
 
 	s.InitializeApi()
+	err := s.initializeSensorWorkers()
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -27,6 +36,3 @@ func (s *Simulator) Init(logger *logrus.Entry) error {
 func (s *Simulator) Run() error {
 	return s.RunHttpServer()
 }
-
-
-

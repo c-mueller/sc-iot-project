@@ -1,0 +1,29 @@
+package sensorworker
+
+import (
+	"encoding/json"
+	"github.com/c-mueller/sc-iot-project/simulator/model"
+	"time"
+)
+
+func (w *Worker) workerLoop() {
+	for range w.ticker.C {
+		w.logger.Tracef("Sending Value %f to MQTT Broker", w.currentValue)
+
+		message := model.SensorMessage{
+			SensorName: w.Sensor.Name,
+			Unit:       w.Sensor.Unit,
+			Value:      w.currentValue,
+			MeasuredAt: time.Now(),
+		}
+		messageJson, _ := json.Marshal(message)
+
+		t := w.brokerClient.Publish(w.mqttConfig.Topic, 0, true, string(messageJson))
+		go func() {
+			_ = t.Wait()
+			if t.Error() != nil {
+				w.logger.WithError(t.Error()).Errorf("Publishing Sensor Data has failed. Reason: %s", t.Error().Error())
+			}
+		}()
+	}
+}

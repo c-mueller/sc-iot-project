@@ -1,9 +1,17 @@
 package model
 
+import "github.com/sirupsen/logrus"
+
+type BrokerConfig struct {
+	Hostname string
+	Port     int
+	Topic    string
+}
+
 type Worker interface {
 	GetWorkerDeviceName() string
 	GetState() WorkerState
-	Init() error
+	Init(entry *logrus.Entry, config BrokerConfig) error
 	Start() error
 	Stop() error
 }

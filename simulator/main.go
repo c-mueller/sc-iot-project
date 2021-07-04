@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/c-mueller/sc-iot-project/simulator/core"
 	"github.com/c-mueller/sc-iot-project/simulator/model"
 	"github.com/gin-gonic/gin"
@@ -9,8 +10,10 @@ import (
 )
 
 var (
-	endpointFlag = kingpin.Flag("endpoint", "HTTP Endpoint for the server").Default(":8080").String()
-	jsonLog      = kingpin.Flag("json-log", "Log using json formatter").Default("true").Bool()
+	httpPort     = kingpin.Flag("http-port", "HTTP port for the server").Short('p').Default("8080").Int()
+	mqttHostFlag = kingpin.Flag("mqtt-host", "Hostname/IP of the MQQT Broker").Short('Q').Default("127.0.0.1").String()
+	mqttPortFlag = kingpin.Flag("mqtt-port", "Port of the MQTT broker").Short('P').Default("1883").Int()
+	jsonLog      = kingpin.Flag("json-log", "Log using json formatter").Bool()
 )
 
 var sensors = []model.Sensor{
@@ -85,13 +88,18 @@ func main() {
 	globalLogger = logrus.NewEntry(logrus.StandardLogger()).WithField("module", "global")
 
 	simulator := &core.Simulator{
-		HttpEndpoint: *endpointFlag,
+		HttpEndpoint: fmt.Sprintf(":%d", *httpPort),
+		MQTTHostname: *mqttHostFlag,
+		MQTTPort:     *mqttPortFlag,
 		Sensors:      sensors,
 		Actuators:    actuators,
 	}
-	_ = simulator.Init(globalLogger.WithField("module", "simulator_root"))
+	err:= simulator.Init(globalLogger.WithField("module", "simulator_root"))
+	if err != nil {
+		panic(err)
+	}
 
-	err := simulator.Run()
+	err = simulator.Run()
 	if err != nil {
 		panic(err)
 	}
