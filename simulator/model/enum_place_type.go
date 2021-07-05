@@ -43,3 +43,16 @@ func (s *PlaceType) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+func (s PlaceType) MarshalYAML() (interface{}, error) {
+	return placeTypeToString[s], nil
+}
+
+func (s *PlaceType) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	var typeString string
+	err := unmarshal(&typeString)
+	if err != nil {
+		return err
+	}
+	*s = placeTypeFromString[typeString]
+	return nil
+}

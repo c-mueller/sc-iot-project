@@ -48,3 +48,17 @@ func (s *ActuatorType) UnmarshalJSON(b []byte) error {
 	*s = actuatorTypeFromString[j]
 	return nil
 }
+
+func (s ActuatorType) MarshalYAML() (interface{}, error) {
+	return actuatorTypeToString[s], nil
+}
+
+func (s *ActuatorType) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	var typeString string
+	err := unmarshal(&typeString)
+	if err != nil {
+		return err
+	}
+	*s = actuatorTypeFromString[typeString]
+	return nil
+}

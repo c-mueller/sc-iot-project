@@ -10,11 +10,13 @@ type SensorMessage struct {
 }
 
 type Sensor struct {
-	Type         SensorType `json:"type"`
-	Place        PlaceType  `json:"place"`
-	Name         string     `json:"name"`
-	Unit         string     `json:"unit"`
-	InitialValue float64    `json:"-"`
+	Type         SensorType `json:"type" yaml:"type"`
+	Place        PlaceType  `json:"place" yaml:"place"`
+	Name         string     `json:"name" yaml:"name"`
+	Unit         string     `json:"unit" yaml:"unit"`
+	InitialValue float64    `json:"-" yaml:"initial_value"`
+	Topic        string     `json:"-" yaml:"topic"`
+	Location     string     `json:"location" yaml:"location"`
 }
 
 type SensorState struct {
@@ -25,9 +27,10 @@ type SensorState struct {
 }
 
 type Actuator struct {
-	Type  ActuatorType `json:"type"`
-	Name  string       `json:"name"`
-	Topic string       `json:"topic"`
+	Type     ActuatorType `json:"type" yaml:"type"`
+	Name     string       `json:"name" yaml:"name"`
+	Topic    string       `json:"topic" yaml:"topic"`
+	Location string       `json:"location" yaml:"location"`
 }
 
 type ActuatorState struct {

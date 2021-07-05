@@ -48,3 +48,17 @@ func (s *SensorType) UnmarshalJSON(b []byte) error {
 	*s = sensorTypeFromString[j]
 	return nil
 }
+
+func (s SensorType) MarshalYAML() (interface{}, error) {
+	return sensorTypeToString[s], nil
+}
+
+func (s *SensorType) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	var typeString string
+	err := unmarshal(&typeString)
+	if err != nil {
+		return err
+	}
+	*s = sensorTypeFromString[typeString]
+	return nil
+}
