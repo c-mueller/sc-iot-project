@@ -1,6 +1,0 @@
-{
-	"roomID": 001,
-	"actuatortype":"air_conditioning",
-	"state": "on",
-	"targetTemp": "22"
-}

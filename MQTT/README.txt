@@ -3,7 +3,7 @@ Subscribing:
 		--> room001/input/temperature
 		--> room001/input/humidity
 		--> room001/input/co2
-		--> room001/input/dust
+		--> room001/input/particulate_matter
 
 		--> room001/output/heater
 		--> room001/output/air_conditioning
@@ -14,6 +14,8 @@ Subscribing:
 		--> outside/temperature
 
 		--> core/
+
+das core topic ist der client für kommunikation core zu MQTT; core client subscribt sich auf alle anderen topics
 
 Mögliche Sensorwerte:
 	CO2 Sensor:
@@ -26,26 +28,25 @@ Mögliche Sensorwerte:
 		--> gemessen in %
 		--> 0%..100%
 		--> optimal wäre 50% für einen Büroraum
-	Staubsensor:
+	particulate_matter:
 		--> gemessen in Mikrogramm pro Kubikmeter
 		--> Grenzwert: 50 Mikrogramm pro Kubikmeter
 
 Aktuatoren mögliche Zustände:
 	Belüftungsanlage(Fenster):
-		--> offen / geschlossen
+		--> true/false
 	Heizung:
-		--> an/aus + Zieltemperatur?
+		--> true/false + Zieltemperatur
 	Klimaanlage:
-		--> an/aus + Zieltemperatur
+		--> true/false + Zieltemperatur
 	Luftreiniger:
-		--> an/aus
+		--> true/false
 
 MQTT_to_Core_JSON:
 - rooms Array --> Erweiterung für mehrere Räume einfach möglich
 	- jeder Raum mit Zimmer Nummer -->  Core kann zwischen Toilette, Küche, Büroraum ODER outside differenzieren
 	- measurement Array für die verschiedenen Sensorwerte
 		--> sensortyp --> dust, humidity, CO2,...
-		--> IDEE: alle values immer als String speichern? --> geparst wird im core --> dann speichern in DB
 		--> timestamp nach ISO 8601 Format --> best practise für JSON
 - outside für sensoren außerhalb des Gebäudes
 	--> measurement Array identisch zu room measurement
@@ -53,19 +54,14 @@ MQTT_to_Core_JSON:
 MQTT_Broker_to_Actor:
 - broker itself already knows, who whould receive the message 
 - broker selects the receiving topics itself
-- state "on/off" für Fenster, Klima, Heizung, Luftreiniger
-- targetTemperatur für Klimaanlage und Heizung
+- state "true/false" für Fenster, Klima, Heizung, Luftreiniger
+- targetTemperatur für Klimaanlage und Heizung --> bleibt drin, ist aber unnötig
 
 MQTT_Sensor_to_MQTTBroker:
-- roomID --> für outside ist die ID "outside"
+- location--> für outside ist die ID null
 - timestamp ISO 8601
 - sensortyp 
 - sensorwert
 
-MQTT_Core_to_Broker:
-- Annahme: core sendet nie kombinierte Nachrichten an Aktuatoren --> somit kein array nötig und jede 
-Ansteuerung wird in getrennten Nachrichten übermittelt
-- Nachricht enthält roomID
-- Aktuatorentyp um dem broker die Zuordnung zu ermöglichen
-- Status on/off (gültig für alle Aktuatoren)
-- targetTemperature, sofern Aktuatorentyp Klimaanlage oder Heizung
+MQTT "Broker to Core"
+wird von core/ client generiert
