@@ -1,6 +1,6 @@
 {
 	"location": "room001",
 	"timestamp": "2021-07-05T07:30:01Z",
-	"sensortype": "sensor_humidity",
+	"sensortype": "humidity",
 	"value": 12
 }

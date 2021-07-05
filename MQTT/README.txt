@@ -63,5 +63,5 @@ MQTT_Sensor_to_MQTTBroker:
 - sensortyp 
 - sensorwert
 
-MQTT --> Broker to Core
-
+MQTT "Broker to Core"
+wird von core/ client generiert
