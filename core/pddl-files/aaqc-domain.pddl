@@ -5,7 +5,6 @@
         :strips
         :negative-preconditions
         :disjunctive-preconditions
-        :equality
         :conditional-effects
     )
     (:types 
