@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 )
 
 type Simulator struct {
@@ -53,16 +52,11 @@ func (s *Simulator) Run() error {
 		os.Exit(1)
 	}()
 
-	go func() {
-		for _, worker := range s.sensorWorkers {
-			err := worker.Start()
-			if err != nil {
-				s.logger.WithError(err).Errorf("Launching sensor worker %q failed. Reason: %s", worker.GetWorkerDeviceName(), err.Error())
-				os.Exit(1)
-			}
-			time.Sleep(5 * time.Second)
-		}
-	}()
+	err := s.runWorkers()
+	if err != nil {
+		return err
+	}
 
 	return s.RunHttpServer()
 }
+

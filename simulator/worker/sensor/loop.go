@@ -1,4 +1,4 @@
-package sensorworker
+package sensor
 
 import (
 	"encoding/json"
@@ -30,6 +30,7 @@ func (w *Worker) publishSensorData() {
 		MeasuredAt: time.Now(),
 	}
 	messageJson, _ := json.Marshal(message)
+	w.lastEmitted = message.MeasuredAt
 
 	t := w.brokerClient.Publish(w.mqttConfig.Topic, 0, true, string(messageJson))
 	go func() {

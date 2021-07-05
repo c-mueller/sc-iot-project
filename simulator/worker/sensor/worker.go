@@ -1,4 +1,4 @@
-package sensorworker
+package sensor
 
 import (
 	"github.com/c-mueller/sc-iot-project/simulator/model"
