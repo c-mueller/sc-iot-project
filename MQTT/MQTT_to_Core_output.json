@@ -1,17 +1,17 @@
 {
 	"rooms":[
 		{
-			"roomID": "001",
+			"roomID": 001,
 			"type": "office",
 			"measurements": [
 				{
 					"sensortype": "sensor_dust",
-					"value": "100",
+					"value": 50,
 					"timestamp": "2021-07-05T07:27:01Z" 
 				},
 				{
 					"sensortype": "sensor_humidity",
-					"value": "12",
+					"value": 12,
 					"timestamp": "2021-07-05T07:30:01Z" 	
 				}
 			]
@@ -21,12 +21,12 @@
 		"measurements": [
 			{
 				"sensortype": "sensor_co2",
-				"value": "1000",
+				"value": 1000,
 				"timestamp": "2021-07-05T07:35:15Z" 
 			}, 
 			{
 					"sensortype": "sensor_temperature",
-					"value": "20",
+					"value": 20,
 					"timestamp": "2021-07-05T07:14:09Z" 	
 			}
 		]
