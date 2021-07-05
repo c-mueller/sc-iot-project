@@ -1,6 +1,5 @@
 {
 	"roomID": 001,
-	"type": "office",
 	"timestamp": "2021-07-05T07:30:01Z",
 	"sensortype": "sensor_humidity",
 	"value": 12

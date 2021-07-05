@@ -2,7 +2,6 @@
 	"rooms":[
 		{
 			"roomID": 001,
-			"type": "office",
 			"measurements": [
 				{
 					"sensortype": "sensor_dust",

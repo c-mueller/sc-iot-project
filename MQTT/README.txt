@@ -13,6 +13,8 @@ Subscribing:
 		--> outside/dust
 		--> outside/temperature
 
+		--> core/
+
 Mögliche Sensorwerte:
 	CO2 Sensor:
 		--> gemessen in ppm
@@ -40,8 +42,7 @@ Aktuatoren mögliche Zustände:
 
 MQTT_to_Core_JSON:
 - rooms Array --> Erweiterung für mehrere Räume einfach möglich
-	- jeder Raum mit Zimmer Nummer --> einfache Zuordnung der Sensorwerte im Core
-	- jedes Room Array Element mit typ --> Core kann zwischen Toilette, Küche, Büroraum differenzieren
+	- jeder Raum mit Zimmer Nummer -->  Core kann zwischen Toilette, Küche, Büroraum ODER outside differenzieren
 	- measurement Array für die verschiedenen Sensorwerte
 		--> sensortyp --> dust, humidity, CO2,...
 		--> IDEE: alle values immer als String speichern? --> geparst wird im core --> dann speichern in DB
@@ -49,7 +50,22 @@ MQTT_to_Core_JSON:
 - outside für sensoren außerhalb des Gebäudes
 	--> measurement Array identisch zu room measurement
 
-MQTT_to_Actor:
-- json nicht unbedingt nötig. 
+MQTT_Broker_to_Actor:
+- broker itself already knows, who whould receive the message 
+- broker selects the receiving topics itself
+- state "on/off" für Fenster, Klima, Heizung, Luftreiniger
+- targetTemperatur für Klimaanlage und Heizung
 
 MQTT_Sensor_to_MQTTBroker:
+- roomID --> für outside ist die ID "outside"
+- timestamp ISO 8601
+- sensortyp 
+- sensorwert
+
+MQTT_Core_to_Broker:
+- Annahme: core sendet nie kombinierte Nachrichten an Aktuatoren --> somit kein array nötig und jede 
+Ansteuerung wird in getrennten Nachrichten übermittelt
+- Nachricht enthält roomID
+- Aktuatorentyp um dem broker die Zuordnung zu ermöglichen
+- Status on/off (gültig für alle Aktuatoren)
+- targetTemperature, sofern Aktuatorentyp Klimaanlage oder Heizung
