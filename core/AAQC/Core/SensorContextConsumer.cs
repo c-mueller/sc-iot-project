@@ -6,11 +6,16 @@ namespace Core
 {
     public class SensorContextConsumer: ISensorContextConsumer
     {
-        private AiPlanner _planner;
-        
+        private readonly AiPlanner _planner;
+
+        public SensorContextConsumer(AiPlanner planner)
+        {
+            _planner = planner;
+        }
+
         public void Consume(SensorContext sensorContext)
         {
-            _planner.Plan();
+            _planner.Initiate(sensorContext);
         }
     }
 }

@@ -10,6 +10,8 @@
 
     <ItemGroup>
       <PackageReference Include="Flurl" Version="3.0.2" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="StackExchange.Redis" Version="2.2.62" />
     </ItemGroup>
 
     <ItemGroup>
