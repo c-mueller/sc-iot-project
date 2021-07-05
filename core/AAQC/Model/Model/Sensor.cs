@@ -1,10 +1,13 @@
+using System;
+
 namespace Core.Model
 {
     public class Sensor
     {
+        public string Name { get; set; }
         public SensorType Type { get; set; }   
-        public string Value { get; set; }
-        public string Timestamp { get; set; }
+        public double Value { get; set; }
+        public DateTime MeasuredAt { get; set; }
     }
     
     public enum SensorType
@@ -12,6 +15,6 @@ namespace Core.Model
         Temperature,
         Humidity,
         ParticulateMatter,
-        Co2,
+        CO2,
     }
 }

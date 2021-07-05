@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{543FC572-EF60-4D53-AAC8-925A6E1A8081}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{B31889EE-0E42-46AA-B352-B3418AD1F45C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingEndpoint", "MessagingEndpoint\MessagingEndpoint.csproj", "{6423344E-EED3-46F2-9FBC-19A3E3CCE8CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{543FC572-EF60-4D53-AAC8-925A6E1A8081}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{543FC572-EF60-4D53-AAC8-925A6E1A8081}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{543FC572-EF60-4D53-AAC8-925A6E1A8081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B31889EE-0E42-46AA-B352-B3418AD1F45C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B31889EE-0E42-46AA-B352-B3418AD1F45C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B31889EE-0E42-46AA-B352-B3418AD1F45C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B31889EE-0E42-46AA-B352-B3418AD1F45C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6423344E-EED3-46F2-9FBC-19A3E3CCE8CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6423344E-EED3-46F2-9FBC-19A3E3CCE8CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6423344E-EED3-46F2-9FBC-19A3E3CCE8CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6423344E-EED3-46F2-9FBC-19A3E3CCE8CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
