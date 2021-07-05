@@ -243,9 +243,12 @@
     (:action activateAirPurifier
         :parameters (
             ?ap - air-purifier
+            ?ai - air-purity-in
+            ?ao - air-purity-out
         )
-        :precondition (
-            air-purity-bad ?ap
+        :precondition (and 
+            (not(on ?ap))
+            (air-purity-bad ?ai)
         )
         :effect (
             on ?ap
@@ -255,9 +258,12 @@
     (:action deactivateAirPurifier
         :parameters (
             ?ap - air-purifier
+            ?ai - air-purity-in
+            ?ao - air-purity-out
         )
-        :precondition (
-            air-purity-good ?ap
+        :precondition (and
+            (on ?ap)
+            (air-purity-good ?ai)
         )
         :effect (
             not(on ?ap)

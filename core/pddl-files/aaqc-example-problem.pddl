@@ -19,7 +19,9 @@
 (:init
     (temperature-low to)
     (temperature-low ti)
+    (humidity-low ho)
     (air-purity-bad ai)
+    (air-purity-bad ao)
 )
 
 ;The goal has to be constructed by the application outside of this example problem
