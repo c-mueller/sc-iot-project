@@ -10,7 +10,8 @@ namespace Model.Model
 
     public class SensorLocation
     {
-        public string Location { get; set; }
+        public string LocationId { get; set; }
+        public Location Location { get; set; }
         public List<SensorState> Measures { get; set; }
     }
 
@@ -28,5 +29,11 @@ namespace Model.Model
         Humidity,
         ParticulateMatter,
         CO2,
+    }
+
+    public enum Location
+    {
+        Inside,
+        Outside,
     }
 }

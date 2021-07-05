@@ -1,4 +1,6 @@
+using System;
 using Core.Model;
+using Model;
 using Model.Interfaces;
 using Model.Model;
 
@@ -17,7 +19,7 @@ namespace Core.AiPlanning
             _contextStore = contextStore;
         }
 
-        public void Initiate(SensorContext sensorContext)
+        public void Initiate(SensorContext currentContext)
         {
             // Evaluate if there are any changes
             var latestContext = _contextStore.GetLastContext();
@@ -26,6 +28,8 @@ namespace Core.AiPlanning
                 // TODO set latestContext to init context
             }
             
+            SensorContextEvaluator.Evaluate(currentContext);
+            SensorContextEvaluator.Evaluate(latestContext);
             
         }
     }
