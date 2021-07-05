@@ -1,6 +1,6 @@
 using System;
 
-namespace Core.Model
+namespace Model.Model
 {
     public class Sensor
     {
