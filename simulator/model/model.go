@@ -19,14 +19,15 @@ type Sensor struct {
 
 type SensorState struct {
 	SensorName   string    `json:"sensor_name"`
-	Sensor       Sensor    `json:"sensor"`
+	Sensor       Sensor    `json:"-"`
 	CurrentValue float64   `json:"current_value"`
 	LastMeasured time.Time `json:"last_measured"`
 }
 
 type Actuator struct {
-	Type ActuatorType `json:"type"`
-	Name string       `json:"name"`
+	Type  ActuatorType `json:"type"`
+	Name  string       `json:"name"`
+	Topic string       `json:"topic"`
 }
 
 type ActuatorState struct {

@@ -1,4 +1,4 @@
-package sensorworker
+package sensor
 
 import (
 	"fmt"
@@ -7,11 +7,11 @@ import (
 )
 
 func (w *Worker) onMQTTConnect(client mqtt.Client) {
-	w.logger.Debugf("Connected Service Worker %q to MQTT Broker.", w.Sensor.Name)
+	w.logger.Debugf("Connected Sensor Worker %q to MQTT Broker.", w.Sensor.Name)
 }
 
 func (w *Worker) onMQTTConnectionLost(client mqtt.Client, err error) {
-	w.logger.WithError(err).Errorf("Service Worket %q lost connection to MQTT Broker. Reason: %s", w.Sensor.Name, err.Error())
+	w.logger.WithError(err).Errorf("Sensor Worket %q lost connection to MQTT Broker. Reason: %s", w.Sensor.Name, err.Error())
 }
 
 func (w *Worker) initMQTT(config model.BrokerConfig) error {

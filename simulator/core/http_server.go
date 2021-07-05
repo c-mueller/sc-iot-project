@@ -25,6 +25,8 @@ func (s *Simulator) InitializeApi() {
 
 	apiRouteGroup := s.engine.Group("/api")
 	apiRouteGroup.GET("/sensors", s.ListSensors)
+	apiRouteGroup.GET("/sensors/:name", s.GetSensor)
+	apiRouteGroup.POST("/sensors/:name", s.SetSensorValue)
 	apiRouteGroup.GET("/actuators", s.ListActuators)
 }
 
