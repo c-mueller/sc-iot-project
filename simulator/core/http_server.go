@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	util "github.com/c-mueller/sc-iot-project/simulator/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -28,12 +29,12 @@ func (s *Simulator) InitializeApi() {
 	apiRouteGroup.GET("/sensors/:name", s.GetSensor)
 	apiRouteGroup.POST("/sensors/:name", s.SetSensorValue)
 	apiRouteGroup.GET("/actuators", s.ListActuators)
+	apiRouteGroup.GET("/actuators/:name", s.GetActuator)
 }
 
-
 func (s *Simulator) RunHttpServer() error {
-	s.logger.Infof("Listening on endpoint %q...", s.HttpEndpoint)
-	err := s.engine.Run(s.HttpEndpoint)
+	s.logger.Infof("Listening on endpoint :%d...", s.Config.HTTPPort)
+	err := s.engine.Run(fmt.Sprintf(":%d", s.Config.HTTPPort))
 	if err != nil {
 		return err
 	}

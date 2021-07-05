@@ -1,13 +1,26 @@
 package actuator
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/c-mueller/sc-iot-project/simulator/model"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"time"
 )
 
 func (w *Worker) onMQTTMessage(client mqtt.Client, message mqtt.Message) {
+	payload := message.Payload()
+	recvAt := time.Now()
 
+	var res model.ActuatorMessage
+	err := json.Unmarshal(payload, &res)
+	if err != nil {
+		w.logger.WithField("message", string(payload)).WithError(err).Warnf("Discarded message %q. Reaason: %s", string(payload), err.Error())
+		return
+	}
+	w.active = res.Active
+	w.lastReceieved = recvAt
+	w.logger.Infof("Updated Actuator state of %q to %v", w.Actuator.Name, w.active)
 }
 
 func (w *Worker) onMQTTConnect(client mqtt.Client) {

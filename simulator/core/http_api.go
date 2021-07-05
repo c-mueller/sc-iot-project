@@ -12,6 +12,12 @@ type sensorInfo struct {
 	Sensor       model.Sensor      `json:"sensor"`
 }
 
+type actuatorInfo struct {
+	State        model.WorkerState   `json:"state"`
+	CurrentState model.ActuatorState `json:"current_state"`
+	Sensor       model.Actuator      `json:"sensor"`
+}
+
 func (s *Simulator) SetSensorValue(context *gin.Context) {
 	worker := s.sensorWorkers[context.Param("name")]
 	if worker == nil {
@@ -63,6 +69,33 @@ func (s *Simulator) ListSensors(context *gin.Context) {
 	context.JSON(200, workerSensorInfo)
 }
 
+func (s *Simulator) GetActuator(context *gin.Context) {
+	worker := s.actuatorWorkers[context.Param("name")]
+	if worker == nil {
+		context.String(404, "Actuator not Found")
+		return
+	}
+
+	workerState := worker.GetCurrentState()
+	workerInfo := actuatorInfo{
+		State:        worker.GetState(),
+		CurrentState: workerState,
+		Sensor:       workerState.Actuator,
+	}
+
+	context.JSON(200, workerInfo)
+}
+
 func (s *Simulator) ListActuators(context *gin.Context) {
-	context.JSON(200, s.Actuators)
+	workerActuatorInfo := make(map[string]actuatorInfo, 0)
+	for _, worker := range s.actuatorWorkers {
+		workerState := worker.GetCurrentState()
+		workerActuatorInfo[worker.GetWorkerDeviceName()] = actuatorInfo{
+			State:        worker.GetState(),
+			CurrentState: workerState,
+			Sensor:       workerState.Actuator,
+		}
+	}
+
+	context.JSON(200, workerActuatorInfo)
 }

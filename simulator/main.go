@@ -15,6 +15,8 @@ var (
 	generateConfigFlag = kingpin.Flag("gen-config", "Generate default config file").Bool()
 	configPathFlag     = kingpin.Flag("config", "Path to the config file").Short('c').Default("config.yml").File()
 	jsonLog            = kingpin.Flag("json-log", "Log using json formatter").Bool()
+	debugLog           = kingpin.Flag("debug", "Set log level to debug").Bool()
+	traceLog           = kingpin.Flag("trace", "Set log level to trace").Bool()
 )
 
 var globalLogger *logrus.Entry
@@ -47,14 +49,16 @@ func main() {
 		logrus.SetFormatter(&logrus.JSONFormatter{})
 	}
 	logrus.StandardLogger().SetLevel(logrus.InfoLevel)
+	if *debugLog {
+		logrus.StandardLogger().SetLevel(logrus.DebugLevel)
+	}
+	if *traceLog {
+		logrus.StandardLogger().SetLevel(logrus.TraceLevel)
+	}
 	globalLogger = logrus.NewEntry(logrus.StandardLogger()).WithField("module", "global")
 
 	simulator := &core.Simulator{
-		HttpEndpoint: fmt.Sprintf(":%d", cfg.HTTPPort),
-		MQTTHostname: cfg.MQTTEndpoint,
-		MQTTPort:     cfg.MQTTPort,
-		Sensors:      cfg.Sensors,
-		Actuators:    cfg.Actuators,
+		Config: cfg,
 	}
 	err = simulator.Init(globalLogger.WithField("module", "simulator_root"))
 	if err != nil {

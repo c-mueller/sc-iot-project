@@ -3,6 +3,7 @@ package sensor
 import (
 	"encoding/json"
 	"github.com/c-mueller/sc-iot-project/simulator/model"
+	"strings"
 	"time"
 )
 
@@ -21,16 +22,16 @@ func (w *Worker) workerLoop() {
 }
 
 func (w *Worker) publishSensorData() {
-	w.logger.Tracef("Sending Value %f to MQTT Broker", w.currentValue)
+	w.logger.Debugf("Sending Value %f to MQTT Broker", w.currentValue)
 
 	message := model.SensorMessage{
-		SensorName: w.Sensor.Name,
-		Unit:       w.Sensor.Unit,
+		Location:   w.Sensor.Location,
+		SensorType: strings.ToLower(w.Sensor.Type.String()),
 		Value:      w.currentValue,
-		MeasuredAt: time.Now(),
+		Timestamp:  time.Now(),
 	}
 	messageJson, _ := json.Marshal(message)
-	w.lastEmitted = message.MeasuredAt
+	w.lastEmitted = message.Timestamp
 
 	t := w.brokerClient.Publish(w.mqttConfig.Topic, 0, true, string(messageJson))
 	go func() {

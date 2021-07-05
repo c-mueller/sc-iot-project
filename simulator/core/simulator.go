@@ -10,12 +10,7 @@ import (
 )
 
 type Simulator struct {
-	HttpEndpoint string
-	MQTTHostname string
-	MQTTPort     int
-
-	Sensors   []model.Sensor
-	Actuators []model.Actuator
+	Config       model.SimulatorConfig
 
 	sensorWorkers   map[string]model.SensorWorker
 	actuatorWorkers map[string]model.ActuatorWorker
@@ -29,6 +24,11 @@ func (s *Simulator) Init(logger *logrus.Entry) error {
 
 	s.InitializeApi()
 	err := s.initializeSensorWorkers()
+	if err != nil {
+		return err
+	}
+
+	err = s.initializeActuatorWorkers()
 	if err != nil {
 		return err
 	}
@@ -48,6 +48,12 @@ func (s *Simulator) Run() error {
 				s.logger.WithError(err).Errorf("Termination of Sensor Worker %q failed. Reason: %s", worker.GetWorkerDeviceName(), err.Error())
 			}
 		}
+		for _, worker := range s.actuatorWorkers {
+			err := worker.Stop()
+			if err != nil {
+				s.logger.WithError(err).Errorf("Termination of Actuator Worker %q failed. Reason: %s", worker.GetWorkerDeviceName(), err.Error())
+			}
+		}
 
 		os.Exit(1)
 	}()
@@ -59,4 +65,3 @@ func (s *Simulator) Run() error {
 
 	return s.RunHttpServer()
 }
-

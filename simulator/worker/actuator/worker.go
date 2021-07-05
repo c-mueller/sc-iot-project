@@ -42,7 +42,7 @@ func (w *Worker) Init(logger *logrus.Entry, config model.BrokerConfig) error {
 		return err
 	}
 
-	w.logger.Debugf("Initialized Sensor Worker for sensor %q.", w.Actuator.Name)
+	w.logger.Debugf("Initialized Actuator Worker for sensor %q.", w.Actuator.Name)
 	return nil
 }
 
@@ -57,8 +57,10 @@ func (w *Worker) Start() error {
 			return
 		}
 
+		w.logger.Tracef("Actuator Worker %q awaits messages...", w.Actuator.Name)
 		<-w.interruptChan
 		w.state = model.Inactive
+		w.logger.Tracef("Terminating Actuator Worker %q...", w.Actuator.Name)
 	}()
 	return nil
 }
