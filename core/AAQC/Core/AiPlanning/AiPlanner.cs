@@ -1,6 +1,4 @@
-using System;
 using Core.Model;
-using Model;
 using Model.Interfaces;
 using Model.Model;
 
@@ -22,14 +20,8 @@ namespace Core.AiPlanning
         public void Initiate(SensorContext currentContext)
         {
             // Evaluate if there are any changes
-            var latestContext = _contextStore.GetLastContext();
-            if (latestContext.Equals(new SensorContext()))
-            {
-                // TODO set latestContext to init context
-            }
-            
+            var latestPddlObjectState = _contextStore.GetLastPddlObjectState();
             var currentPddlObjectState = SensorContextEvaluator.Evaluate(currentContext);
-            var latestPddlObjectState = SensorContextEvaluator.Evaluate(latestContext);
             
         }
     }

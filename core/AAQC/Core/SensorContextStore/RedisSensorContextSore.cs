@@ -1,4 +1,5 @@
 using Core.Model;
+using Model;
 using Model.Model;
 using Newtonsoft.Json;
 using StackExchange.Redis;
@@ -15,18 +16,22 @@ namespace Core.SensorContextStore
             _connection = connection;
         }
         
-        public void StoreContext(SensorContext sensorContext)
+        public void StorePddlObjectState(PddlObjectState objectState)
         {
-            var payload = JsonConvert.SerializeObject(sensorContext);
+            var payload = JsonConvert.SerializeObject(objectState);
             var db = _connection.GetDatabase();
             db.StringSet(LatestContextKey, payload);
         }
 
-        public SensorContext GetLastContext()
+        public PddlObjectState GetLastPddlObjectState()
         {
             var db = _connection.GetDatabase();
             var context = db.StringGet(LatestContextKey);
-            return context.HasValue ? JsonConvert.DeserializeObject<SensorContext>(context.ToString()): new SensorContext();
+            if (context.HasValue)
+            {
+                return JsonConvert.DeserializeObject<PddlObjectState>(context.ToString());
+            }
+            return Constants.InitialPddlObjectState;
         }
     }
 }

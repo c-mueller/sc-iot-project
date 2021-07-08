@@ -1,3 +1,5 @@
+using Model.Model;
+
 namespace Model
 {
     public static class Constants
@@ -13,5 +15,25 @@ namespace Model
         public const double AirPurityInsideLowerThreshold = 20;
         public const double HumidityOutsideThreshold = 20;
         public const double Co2EmergencyThreshold = 20;
+
+        public static readonly PddlObjectState InitialPddlObjectState = new PddlObjectState
+        {
+            SensorStates = new PddlObjectSensors
+            {
+                TemperatureIn = PddlSensorState.Normal,
+                TemperatureOut = PddlSensorState.Normal,
+                HumidityOut = PddlSensorState.Normal,
+                AirPurityIn = PddlSensorState.Normal,
+                AirPurityOut = PddlSensorState.Normal,
+                Co2LevelIn = PddlSensorState.Normal,
+            },
+            ActuatorStates = new PddlObjectActuators
+            {
+                Ventilation = PddlActuatorState.Off,
+                Heater = PddlActuatorState.Off,
+                AirConditioner = PddlActuatorState.Off,
+                AirPurifier = PddlActuatorState.Off,
+            },
+        };
     }
 }

@@ -4,7 +4,7 @@ namespace Core.Model
 {
     public interface ISensorContextStore
     {
-        void StoreContext(SensorContext sensorContext);
-        SensorContext GetLastContext();
+        void StorePddlObjectState(PddlObjectState objectState);
+        PddlObjectState GetLastPddlObjectState();
     }
 }

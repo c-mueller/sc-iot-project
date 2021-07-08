@@ -1,5 +1,4 @@
 using System;
-using Core.Model;
 using Model;
 using Model.Model;
 
@@ -46,7 +45,7 @@ namespace Core.AiPlanning
 
             return new PddlObjectState
             {
-                sensorStates = sensors,
+                SensorStates = sensors,
             };
         }
 
