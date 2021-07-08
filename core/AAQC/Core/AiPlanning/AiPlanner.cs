@@ -28,8 +28,8 @@ namespace Core.AiPlanning
                 // TODO set latestContext to init context
             }
             
-            SensorContextEvaluator.Evaluate(currentContext);
-            SensorContextEvaluator.Evaluate(latestContext);
+            var currentPddlObjectState = SensorContextEvaluator.Evaluate(currentContext);
+            var latestPddlObjectState = SensorContextEvaluator.Evaluate(latestContext);
             
         }
     }

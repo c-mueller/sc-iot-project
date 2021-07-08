@@ -12,10 +12,10 @@ namespace Model.Model
     {
         public string LocationId { get; set; }
         public Location Location { get; set; }
-        public List<SensorState> Measures { get; set; }
+        public List<SensorMeasure> Measures { get; set; }
     }
 
-    public class SensorState
+    public class SensorMeasure
     {
         public string Name { get; set; }
         public SensorType Type { get; set; }
