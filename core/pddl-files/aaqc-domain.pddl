@@ -167,7 +167,7 @@
         )
     )
 
-    (:action activateAirCondition
+    (:action activateAirConditioner
         :parameters (
             ?v - ventilation
             ?h - heater
@@ -200,7 +200,7 @@
         )
     )
 
-    (:action deactivateAirCondition
+    (:action deactivateAirConditioner
         :parameters (
             ?v - ventilation
             ?h - heater

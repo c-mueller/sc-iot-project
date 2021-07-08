@@ -4,10 +4,10 @@ namespace Model.Model
 {
     public class ActuatorContext
     {
-        private List<ActuatorState> ActuatorStates { get; set; }
+        public List<ActuatorInfo> ActuatorStates { get; set; }
     }
 
-    public class ActuatorState
+    public class ActuatorInfo
     {
         public string Name { get; set; }
         public ActuatorType Type { get; set; }

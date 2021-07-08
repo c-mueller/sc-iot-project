@@ -43,10 +43,10 @@ namespace Model
             },
             ActuatorStates = new PddlObjectActuators
             {
-                Ventilation = PddlActuatorState.Off,
-                Heater = PddlActuatorState.Off,
-                AirConditioner = PddlActuatorState.Off,
-                AirPurifier = PddlActuatorState.Off,
+                IsVentilationActive = false,
+                IsHeaterActive = false,
+                IsAirConditionerActive = false,
+                IsAirPurifierActive = false,
             },
         };
     }

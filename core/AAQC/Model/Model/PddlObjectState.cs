@@ -1,14 +1,11 @@
+using System;
+
 namespace Model.Model
 {
     public class PddlObjectState
     {
         public PddlObjectSensors SensorStates { get; set; }
         public PddlObjectActuators ActuatorStates { get; set; }
-
-        public bool AreAllInsideSensorsNormal()
-        {
-            return SensorStates.AreAllInsideSensorsNormal();
-        }
     }
 
     public class PddlObjectSensors
@@ -19,26 +16,22 @@ namespace Model.Model
         public PddlSensorState AirPurityIn { set; get; }
         public PddlSensorState AirPurityOut { set; get; }
         public PddlSensorState Co2LevelIn { set; get; }
-
-        public bool AreAllInsideSensorsNormal()
-        {
-            return TemperatureIn == PddlSensorState.Normal && AirPurityIn == PddlSensorState.Normal &&
-                   Co2LevelIn == PddlSensorState.Normal;
-        }
     }
 
     public class PddlObjectActuators
     {
-        public PddlActuatorState Ventilation { set; get; }
-        public PddlActuatorState Heater { set; get; }
-        public PddlActuatorState AirConditioner { set; get; }
-        public PddlActuatorState AirPurifier { set; get; }
-    }
+        public bool IsVentilationActive { set; get; }
+        public bool IsHeaterActive { set; get; }
+        public bool IsAirConditionerActive { set; get; }
+        public bool IsAirPurifierActive { set; get; }
 
-    public enum PddlActuatorState
-    {
-        On,
-        Off,
+        public bool Equals(PddlObjectActuators other)
+        {
+            return IsVentilationActive == other.IsVentilationActive && 
+                   IsHeaterActive == other.IsHeaterActive &&
+                   IsAirConditionerActive == other.IsAirConditionerActive &&
+                   IsAirPurifierActive == other.IsAirPurifierActive;
+        }
     }
 
     public enum PddlSensorState

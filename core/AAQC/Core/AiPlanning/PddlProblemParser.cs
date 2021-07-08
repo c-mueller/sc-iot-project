@@ -103,7 +103,7 @@ namespace Core.AiPlanning
 
         private static PddlProblem ParseVentilationState(PddlObjectActuators actuators, PddlProblem problem)
         {
-            if (actuators.Ventilation == PddlActuatorState.On)
+            if (actuators.IsVentilationActive)
                 problem.AddInitState("on", Constants.VentilationObjectName);
 
             return problem;
@@ -111,7 +111,7 @@ namespace Core.AiPlanning
 
         private static PddlProblem ParseHeaterState(PddlObjectActuators actuators, PddlProblem problem)
         {
-            if (actuators.Heater == PddlActuatorState.On)
+            if (actuators.IsHeaterActive)
                 problem.AddInitState("on", Constants.HeaterObjectName);
 
             return problem;
@@ -119,7 +119,7 @@ namespace Core.AiPlanning
 
         private static PddlProblem ParseAirConditionerState(PddlObjectActuators actuators, PddlProblem problem)
         {
-            if (actuators.AirConditioner == PddlActuatorState.On)
+            if (actuators.IsAirConditionerActive)
                 problem.AddInitState("on", Constants.AirConditionerObjectName);
 
             return problem;
@@ -127,7 +127,7 @@ namespace Core.AiPlanning
 
         private static PddlProblem ParseAirPurifierState(PddlObjectActuators actuators, PddlProblem problem)
         {
-            if (actuators.AirPurifier == PddlActuatorState.On)
+            if (actuators.IsAirPurifierActive)
                 problem.AddInitState("on", Constants.AirPurifierObjectName);
 
             return problem;

@@ -1,6 +1,7 @@
 using Core.AiPlanning;
+using Core.AiPlanning.ExternalPddlSolver;
 using Core.Model;
-using Core.SensorContextStore;
+using Core.Store;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,19 +26,34 @@ namespace Core
         {
             services.AddControllers();
 
-            services.AddSingleton<ISensorContextStore>(e =>
+            services.AddSingleton<IApplicationStateStore>(e =>
             {
-                var connection = e.GetService<IConnectionMultiplexer>();
-                return new RedisSensorContextSore(connection);
+                var conMux = e.GetService<IConnectionMultiplexer>();
+                return new RedisApplicationStateSore(conMux);
             });
 
             // TODO Add ActuatorContextConsumer service
             // services.AddSingleton<IActuatorContextConsumer>(e => new ActuatorContextConsumer());
 
-            services.AddSingleton<AiPlanner>(e => new AiPlanner(e.GetService<IActuatorContextConsumer>(),
-                e.GetService<ISensorContextStore>()));
+            services.AddSingleton<IExternalPddlSolver>(e =>
+            {
+                return new OnlinePddlSolver();
+            });
+            
+            services.AddSingleton<AiPlanner>(e =>
+            {
+                var actuatorContextConsumer = e.GetService<IActuatorContextConsumer>();
+                var applicationStateStore = e.GetService<IApplicationStateStore>();
+                var pddlSolver = e.GetService<IExternalPddlSolver>();
+                return new AiPlanner(actuatorContextConsumer, applicationStateStore, pddlSolver);
+            });
 
-            services.AddSingleton<ISensorContextConsumer>(e => new SensorContextConsumer(e.GetService<AiPlanner>()));
+            services.AddSingleton<ISensorContextConsumer>(e =>
+            {
+                var aiPlanner = e.GetService<AiPlanner>();
+                var applicationStateStore = e.GetService<IApplicationStateStore>();
+                return new SensorContextConsumer(aiPlanner, applicationStateStore);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
