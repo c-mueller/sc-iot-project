@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Model;
 
@@ -50,6 +51,11 @@ namespace Core.Model
             _objects.Add(Constants.AirPurityInObjectName, "air-purity-in");
             _objects.Add(Constants.AirPurityOutObjectName, "air-purity-out");
             _objects.Add(Constants.Co2LevelInObjectName, "co2-level-in");
+        }
+
+        public bool HasInitStates()
+        {
+            return _initStates.Any();
         }
 
         public void AddInitState(string predicate, string objectName)
