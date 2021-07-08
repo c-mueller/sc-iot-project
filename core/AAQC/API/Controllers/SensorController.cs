@@ -1,6 +1,6 @@
-using Core.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Model.Interfaces;
 using Model.Model;
 
 namespace Core.Controllers

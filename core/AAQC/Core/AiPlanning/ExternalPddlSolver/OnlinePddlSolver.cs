@@ -1,6 +1,7 @@
-using Core.Model;
 using Flurl;
 using Flurl.Http;
+using Model.Interfaces;
+using Model.Model;
 
 namespace Core.AiPlanning.ExternalPddlSolver
 {

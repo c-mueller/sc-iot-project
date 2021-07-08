@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
+using Model.Model;
 
-namespace Core.Model
+namespace Model.Interfaces
 {
     public interface IExternalPddlSolver
     {

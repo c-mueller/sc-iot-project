@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Model;
 
-namespace Core.Model
+namespace Model.Model
 {
     public class PddlProblem
     {
@@ -41,6 +40,7 @@ namespace Core.Model
 
         public PddlProblem()
         {
+            ProblemName = "aaqcProblem";
             _objects.Add("v", "ventilation");
             _objects.Add("h", "heater");
             _objects.Add("ac", "air-conditioner");

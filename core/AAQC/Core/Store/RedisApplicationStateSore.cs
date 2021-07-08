@@ -1,5 +1,5 @@
-using Core.Model;
 using Model;
+using Model.Interfaces;
 using Model.Model;
 using Newtonsoft.Json;
 using StackExchange.Redis;
