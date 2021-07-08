@@ -16,13 +16,19 @@ namespace Model
         public const double HumidityOutsideThreshold = 20;
         public const double Co2EmergencyThreshold = 20;
             
-        // PDDL object names
+        // PDDL sensor object names
         public const string TemperatureInObjectName = "ti";
         public const string TemperatureOutObjectName = "to";
         public const string HumidityOutObjectName = "ho";
         public const string AirPurityInObjectName = "ai";
         public const string AirPurityOutObjectName = "ao";
         public const string Co2LevelInObjectName = "ci";
+        
+        //PDDL actuator object names
+        public const string VentilationObjectName = "v";
+        public const string HeaterObjectName = "h";
+        public const string AirConditionerObjectName = "ac";
+        public const string AirPurifierObjectName = "ap";
         
         public static readonly PddlObjectState InitialPddlObjectState = new PddlObjectState
         {

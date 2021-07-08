@@ -10,17 +10,19 @@ namespace Core.AiPlanning
         public static PddlProblem Parse(PddlObjectState state)
         {
             var problem = new PddlProblem();
-            
-            problem = ParseHumidityOut(state.SensorStates, problem);
 
+            problem = ParseHumidityOut(state.SensorStates, problem);
             problem = ParseTemperatureIn(state.SensorStates, problem);
             problem = ParseTemperatureOut(state.SensorStates, problem);
-
             problem = ParseCo2In(state.SensorStates, problem);
-
             problem = ParseAirPurityIn(state.SensorStates, problem);
             problem = ParseAirPurityOut(state.SensorStates, problem);
-            
+
+            problem = ParseVentilationState(state.ActuatorStates, problem);
+            problem = ParseHeaterState(state.ActuatorStates, problem);
+            problem = ParseAirConditionerState(state.ActuatorStates, problem);
+            problem = ParseAirPurifierState(state.ActuatorStates, problem);
+
             return problem;
         }
 
@@ -78,9 +80,7 @@ namespace Core.AiPlanning
         private static PddlProblem ParseCo2In(PddlObjectSensors sensors, PddlProblem problem)
         {
             if (sensors.Co2LevelIn == PddlSensorState.AboveThreshold)
-            {
                 problem.AddInitState("co2-level-emergency", Constants.Co2LevelInObjectName);
-            }
 
             return problem;
         }
@@ -88,9 +88,7 @@ namespace Core.AiPlanning
         private static PddlProblem ParseAirPurityIn(PddlObjectSensors sensors, PddlProblem problem)
         {
             if (sensors.AirPurityIn == PddlSensorState.AboveThreshold)
-            {
                 problem.AddInitState("air-purity-bad", Constants.AirPurityInObjectName);
-            }
 
             return problem;
         }
@@ -98,9 +96,39 @@ namespace Core.AiPlanning
         private static PddlProblem ParseAirPurityOut(PddlObjectSensors sensors, PddlProblem problem)
         {
             if (sensors.AirPurityOut == PddlSensorState.AboveThreshold)
-            {
                 problem.AddInitState("air-purity-bad", Constants.AirPurityOutObjectName);
-            }
+
+            return problem;
+        }
+
+        private static PddlProblem ParseVentilationState(PddlObjectActuators actuators, PddlProblem problem)
+        {
+            if (actuators.Ventilation == PddlActuatorState.On)
+                problem.AddInitState("on", Constants.VentilationObjectName);
+
+            return problem;
+        }
+
+        private static PddlProblem ParseHeaterState(PddlObjectActuators actuators, PddlProblem problem)
+        {
+            if (actuators.Heater == PddlActuatorState.On)
+                problem.AddInitState("on", Constants.HeaterObjectName);
+
+            return problem;
+        }
+
+        private static PddlProblem ParseAirConditionerState(PddlObjectActuators actuators, PddlProblem problem)
+        {
+            if (actuators.AirConditioner == PddlActuatorState.On)
+                problem.AddInitState("on", Constants.AirConditionerObjectName);
+
+            return problem;
+        }
+
+        private static PddlProblem ParseAirPurifierState(PddlObjectActuators actuators, PddlProblem problem)
+        {
+            if (actuators.AirPurifier == PddlActuatorState.On)
+                problem.AddInitState("on", Constants.AirPurifierObjectName);
 
             return problem;
         }
