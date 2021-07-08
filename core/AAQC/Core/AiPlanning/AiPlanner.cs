@@ -22,6 +22,7 @@ namespace Core.AiPlanning
             var currentPddlObjectState = SensorContextEvaluator.Evaluate(currentContext);
 
             var currentProblem = PddlProblemParser.Parse(currentPddlObjectState);
+            var problemFile = currentProblem.BuildProblemFile();
         }
     }
 }

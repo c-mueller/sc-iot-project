@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using System.Text;
+using Model;
 
 namespace Core.Model
 {
     public class PddlProblem
     {
         public string ProblemName { get; set; }
-        public string DomainName = "aaqc";
-        public string ObjectsString =
+        private const string DomainName = "aaqc";
+        
+        private const string ObjectsString =
             "(:objects\n" +
             "    v - ventilation\n" +
             "    h - heater\n" +
@@ -20,27 +22,39 @@ namespace Core.Model
             "    ao - air-purity-out\n" +
             "    ci - co2-level-in\n" +
             ")";
-        public Dictionary<string, string> Objects { get; set; }
-        public List<PddlPredicateObjectPair> InitStates { get; set; }
-        public List<PddlPredicateObjectPair> Goals { get; set; }
+
+        private const string GoalsString =
+            "(:goal (and\n" +
+            "    (not(temperature-low ti))\n" +
+            "    (not(temperature-high ti))\n" +
+            "    (not(air-purity-bad ai))\n" +
+            "    (not(co2-level-emergency ci))\n" +
+            "    (not(on h))\n" +
+            "    (not(on ac))\n" +
+            "    (not(on ap))\n" +
+            "    (not(on v))\n))";
+
+        private readonly Dictionary<string, string> _objects = new Dictionary<string, string>();
+        private readonly List<PddlPredicateObjectPair> _initStates = new List<PddlPredicateObjectPair>();
+        private readonly List<PddlPredicateObjectPair> _goals = new List<PddlPredicateObjectPair>();
 
         public PddlProblem()
         {
-            Objects.Add("v", "ventilation");
-            Objects.Add("h", "heater");
-            Objects.Add("ac", "air-conditioner");
-            Objects.Add("ap", "air-purifier");
-            Objects.Add("ti", "temperature-in");
-            Objects.Add("to", "temperature-out");
-            Objects.Add("ho", "humidity-out");
-            Objects.Add("ai", "air-purity-in");
-            Objects.Add("ao", "air-purity-out");
-            Objects.Add("ci", "co2-level-in");
+            _objects.Add("v", "ventilation");
+            _objects.Add("h", "heater");
+            _objects.Add("ac", "air-conditioner");
+            _objects.Add("ap", "air-purifier");
+            _objects.Add(Constants.TemperatureInObjectName, "temperature-in");
+            _objects.Add(Constants.TemperatureOutObjectName, "temperature-out");
+            _objects.Add(Constants.HumidityOutObjectName, "humidity-out");
+            _objects.Add(Constants.AirPurityInObjectName, "air-purity-in");
+            _objects.Add(Constants.AirPurityOutObjectName, "air-purity-out");
+            _objects.Add(Constants.Co2LevelInObjectName, "co2-level-in");
         }
 
         public void AddInitState(string predicate, string objectName)
         {
-            InitStates.Add(new PddlPredicateObjectPair
+            _initStates.Add(new PddlPredicateObjectPair
             {
                 Predicate = predicate,
                 ObjectName = objectName,
@@ -49,28 +63,32 @@ namespace Core.Model
 
         public void AddGoal(PddlPredicateObjectPair goal)
         {
-            Goals.Add(goal);
+            _goals.Add(goal);
         }
 
         public string BuildProblemFile()
         {
             var sb = new StringBuilder();
             sb.AppendLine($"(define (problem {ProblemName}) (:domain {DomainName})");
-            
+
+            sb.AppendLine(ObjectsString);
+
             sb.AppendLine("(:init");
-            foreach (var initState in InitStates)
+            foreach (var initState in _initStates)
             {
                 sb.AppendLine($"    ({initState.Predicate} {initState.ObjectName})");
             }
+
             sb.AppendLine(")");
 
-            sb.AppendLine("(:goal (and");
-            foreach (var goal in Goals)
-            {
-                sb.AppendLine($"    ({goal.Predicate} {goal.ObjectName})");
-            }
-            sb.AppendLine("))");
-            
+            // sb.AppendLine("(:goal (and");
+            // foreach (var goal in Goals)
+            // {
+            //     sb.AppendLine($"    ({goal.Predicate} {goal.ObjectName})");
+            // }
+            // sb.AppendLine("))");
+            sb.AppendLine(GoalsString);
+
             sb.AppendLine(")");
             return sb.ToString();
         }
