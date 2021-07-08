@@ -7,13 +7,11 @@ namespace Core.AiPlanning
     public class AiPlanner
     {
         private IActuatorContextConsumer _actuatorContextConsumer;
-        private PddlEvaluator _evaluator;
         private readonly ISensorContextStore _contextStore;
 
-        public AiPlanner(IActuatorContextConsumer actuatorContextConsumer, PddlEvaluator evaluator, ISensorContextStore contextStore)
+        public AiPlanner(IActuatorContextConsumer actuatorContextConsumer, ISensorContextStore contextStore)
         {
             _actuatorContextConsumer = actuatorContextConsumer;
-            _evaluator = evaluator;
             _contextStore = contextStore;
         }
 
