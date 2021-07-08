@@ -19,15 +19,15 @@
 (:init
     (temperature-low to)
     (temperature-low ti)
-    (humidity-low ho)
     (air-purity-bad ai)
-    (air-purity-bad ao)
 )
 
 ;The goal has to be constructed by the application outside of this example problem
 (:goal (and
-    (on h)
-    (on ap)
+    (not (temperature-low ti))
+    (not (temperature-high ti))
+    (not (air-purity-bad ai))
+    (not (co2-level-emergency ci))
 ))
 
 ;un-comment the following line if metric is needed

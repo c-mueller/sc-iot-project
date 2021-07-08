@@ -24,7 +24,6 @@
         (humidity-high ?h - humidity)
         (humidity-low ?h - humidity)
         (air-purity-bad ?a - air-purity)
-        (air-purity-good ?a - air-purity)
         (co2-level-emergency ?c - co2-level)
     )
 
@@ -37,6 +36,7 @@
             ?ti - temperature-in
             ?to - temperature-out
             ?ho - humidity-out
+            ?ai - air-purity-in
             ?ci - co2-level-in
         )
         :precondition (or 
@@ -64,6 +64,10 @@
         )
         :effect (and
             (on ?v)
+            (not (temperature-low ?ti))
+            (not (temperature-high ?ti))
+            (not (air-purity-bad ?ai))
+            (not (co2-level-emergency ?ci))
             (when
                 (and (co2-level-emergency ?ci))
                 (and 
@@ -131,8 +135,10 @@
                 )
             )
         )
-        :effect (
-            on ?h
+        :effect (and
+            (on ?h)
+            (not (temperature-low ?ti))
+            (not (temperature-high ?ti))
         )
     )
 
@@ -187,8 +193,10 @@
                 )
             )
         )
-        :effect (
-            on ?ac
+        :effect (and
+            (on ?ac)
+            (not (temperature-low ?ti))
+            (not (temperature-high ?ti))
         )
     )
 
@@ -227,8 +235,9 @@
             (not(on ?ap))
             (air-purity-bad ?ai)
         )
-        :effect (
-            on ?ap
+        :effect (and 
+            (on ?ap)
+            (not (air-purity-bad ?ai))
         )
     )
 
@@ -240,15 +249,13 @@
         )
         :precondition (and
             (on ?ap)
-            (air-purity-good ?ai)
+            (not (air-purity-bad ?ai))
         )
         :effect (
             not(on ?ap)
         )
     )
-
-;    (:action actionTemplate
-;        :parameters (
+)
 ;            ?v - ventilation
 ;            ?h - heater
 ;            ?ac - air-conditioner
@@ -259,8 +266,3 @@
 ;            ?ai - air-purity-in
 ;            ?ao - air-purity-out
 ;            ?ci - co2-level-in
-;        )
-;        :precondition ()
-;        :effect ()
-;    )
-)
