@@ -16,29 +16,19 @@ namespace Core.AiPlanning
                     switch (measure.Type)
                     {
                         case SensorType.Humidity:
-                        {
                             sensors = EvaluateHumidity(measure, sensors);
                             break;
-                        }
                         case SensorType.Temperature:
-                        {
                             sensors = EvaluateTemperature(measure, sensors, location.Location);
                             break;
-                        }
                         case SensorType.CO2:
-                        {
                             sensors = EvaluateCo2(measure, sensors);
                             break;
-                        }
                         case SensorType.ParticulateMatter:
-                        {
                             sensors = EvaluateParticulateMatter(measure, sensors, location.Location);
                             break;
-                        }
                         default:
-                        {
                             throw new ArgumentOutOfRangeException();
-                        }
                     }
                 }
             }

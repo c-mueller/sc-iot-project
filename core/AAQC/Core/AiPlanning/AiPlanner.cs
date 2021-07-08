@@ -6,7 +6,7 @@ namespace Core.AiPlanning
 {
     public class AiPlanner
     {
-        private IActuatorContextConsumer _actuatorContextConsumer;
+        private readonly IActuatorContextConsumer _actuatorContextConsumer;
         private readonly ISensorContextStore _contextStore;
 
         public AiPlanner(IActuatorContextConsumer actuatorContextConsumer, ISensorContextStore contextStore)
@@ -20,7 +20,8 @@ namespace Core.AiPlanning
             // Evaluate if there are any changes
             var latestPddlObjectState = _contextStore.GetLastPddlObjectState();
             var currentPddlObjectState = SensorContextEvaluator.Evaluate(currentContext);
-            
+
+            var currentProblem = PddlProblemParser.Parse(currentPddlObjectState);
         }
     }
 }

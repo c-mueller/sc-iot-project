@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 
 namespace Core.Model
 {
@@ -37,20 +38,47 @@ namespace Core.Model
             Objects.Add("ci", "co2-level-in");
         }
 
-        public void AddInitState(PddlPredicateObjectPair state)
+        public void AddInitState(string predicate, string objectName)
         {
-            InitStates.Add(state);
+            InitStates.Add(new PddlPredicateObjectPair
+            {
+                Predicate = predicate,
+                ObjectName = objectName,
+            });
         }
 
         public void AddGoal(PddlPredicateObjectPair goal)
         {
             Goals.Add(goal);
         }
+
+        public string BuildProblemFile()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"(define (problem {ProblemName}) (:domain {DomainName})");
+            
+            sb.AppendLine("(:init");
+            foreach (var initState in InitStates)
+            {
+                sb.AppendLine($"    ({initState.Predicate} {initState.ObjectName})");
+            }
+            sb.AppendLine(")");
+
+            sb.AppendLine("(:goal (and");
+            foreach (var goal in Goals)
+            {
+                sb.AppendLine($"    ({goal.Predicate} {goal.ObjectName})");
+            }
+            sb.AppendLine("))");
+            
+            sb.AppendLine(")");
+            return sb.ToString();
+        }
     }
-    
+
     public class PddlPredicateObjectPair
     {
-        private string Predicate { get; set; }
-        private string ObjectName { get; set; }
+        public string Predicate { get; set; }
+        public string ObjectName { get; set; }
     }
 }
