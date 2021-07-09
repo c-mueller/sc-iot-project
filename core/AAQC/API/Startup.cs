@@ -1,6 +1,7 @@
 using Core.AiPlanning;
 using Core.AiPlanning.ExternalPddlSolver;
 using Core.Store;
+using MessagingEndpoint;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -30,9 +31,11 @@ namespace Core
                 var conMux = e.GetService<IConnectionMultiplexer>();
                 return new RedisApplicationStateSore(conMux);
             });
-
-            // TODO Add ActuatorContextConsumer service
-            // services.AddSingleton<IActuatorContextConsumer>(e => new ActuatorContextConsumer());
+            
+            services.AddSingleton<IActuatorContextConsumer>(e =>
+            {
+                return new OutgoingMessages();
+            });
 
             services.AddSingleton<IExternalPddlSolver>(e =>
             {

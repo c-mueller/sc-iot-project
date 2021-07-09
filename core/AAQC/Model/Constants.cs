@@ -15,7 +15,13 @@ namespace Model
         public const double AirPurityInsideLowerThreshold = 20;
         public const double HumidityOutsideThreshold = 20;
         public const double Co2EmergencyThreshold = 20;
-            
+        
+        // Actuator Names
+        public const string VentilationName = "ventilation";
+        public const string HeaterName = "heater";
+        public const string AirConditionerName = "air-conditioner";
+        public const string AirPurifierName = "air-purifier";
+
         // PDDL sensor object names
         public const string TemperatureInObjectName = "ti";
         public const string TemperatureOutObjectName = "to";
