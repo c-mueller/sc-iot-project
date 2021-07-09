@@ -30,18 +30,18 @@ namespace Model
         public const string AirConditionerObjectName = "ac";
         public const string AirPurifierObjectName = "ap";
         
-        public static readonly PddlObjectState InitialPddlObjectState = new PddlObjectState
+        public static readonly ObjectState InitialObjectState = new ObjectState
         {
-            SensorStates = new PddlObjectSensors
+            SensorStates = new SensorState
             {
-                TemperatureIn = PddlSensorState.Normal,
-                TemperatureOut = PddlSensorState.Normal,
-                HumidityOut = PddlSensorState.Normal,
-                AirPurityIn = PddlSensorState.Normal,
-                AirPurityOut = PddlSensorState.Normal,
-                Co2LevelIn = PddlSensorState.Normal,
+                TemperatureIn = ThresholdRelation.Normal,
+                TemperatureOut = ThresholdRelation.Normal,
+                HumidityOut = ThresholdRelation.Normal,
+                AirPurityIn = ThresholdRelation.Normal,
+                AirPurityOut = ThresholdRelation.Normal,
+                Co2LevelIn = ThresholdRelation.Normal,
             },
-            ActuatorStates = new PddlObjectActuators
+            ActuatorStates = new ActuatorState
             {
                 IsVentilationActive = false,
                 IsHeaterActive = false,

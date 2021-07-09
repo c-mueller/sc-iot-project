@@ -6,9 +6,9 @@ namespace Core.AiPlanning
 {
     public static class SensorContextEvaluator
     {
-        public static PddlObjectState Evaluate(SensorContext context)
+        public static ObjectState Evaluate(SensorContext context)
         {
-            var sensors = new PddlObjectSensors();
+            var sensors = new SensorState();
             foreach (var location in context.Locations)
             {
                 foreach (var measure in location.Measures)
@@ -33,65 +33,65 @@ namespace Core.AiPlanning
                 }
             }
 
-            return new PddlObjectState
+            return new ObjectState
             {
                 SensorStates = sensors,
             };
         }
 
-        private static PddlObjectSensors EvaluateHumidity(SensorMeasure sensorMeasure, PddlObjectSensors sensors)
+        private static SensorState EvaluateHumidity(SensorMeasure measure, SensorState sensors)
         {
-            if (sensorMeasure.Value > Constants.HumidityOutsideThreshold)
+            if (measure.Value > Constants.HumidityOutsideThreshold)
             {
-                sensors.HumidityOut = PddlSensorState.AboveThreshold;
+                sensors.HumidityOut = ThresholdRelation.AboveThreshold;
             }
-            else if (sensorMeasure.Value < Constants.HumidityOutsideThreshold)
+            else if (measure.Value < Constants.HumidityOutsideThreshold)
             {
-                sensors.HumidityOut = PddlSensorState.BelowThreshold;
+                sensors.HumidityOut = ThresholdRelation.BelowThreshold;
             }
             else
             {
-                sensors.HumidityOut = PddlSensorState.Normal;
+                sensors.HumidityOut = ThresholdRelation.Normal;
             }
 
             return sensors;
         }
 
-        private static PddlObjectSensors EvaluateTemperature(SensorMeasure sensorMeasure, PddlObjectSensors sensors,
+        private static SensorState EvaluateTemperature(SensorMeasure measure, SensorState sensors,
             Location location)
         {
             switch (location)
             {
                 case Location.Outside:
                 {
-                    if (sensorMeasure.Value > Constants.TemperatureOutsideUpperThreshold)
+                    if (measure.Value > Constants.TemperatureOutsideUpperThreshold)
                     {
-                        sensors.TemperatureOut = PddlSensorState.AboveThreshold;
+                        sensors.TemperatureOut = ThresholdRelation.AboveThreshold;
                     }
-                    else if (sensorMeasure.Value < Constants.TemperatureOutsideLowerThreshold)
+                    else if (measure.Value < Constants.TemperatureOutsideLowerThreshold)
                     {
-                        sensors.TemperatureOut = PddlSensorState.BelowThreshold;
+                        sensors.TemperatureOut = ThresholdRelation.BelowThreshold;
                     }
                     else
                     {
-                        sensors.TemperatureOut = PddlSensorState.Normal;
+                        sensors.TemperatureOut = ThresholdRelation.Normal;
                     }
 
                     break;
                 }
                 case Location.Inside:
                 {
-                    if (sensorMeasure.Value > Constants.TemperatureInsideUpperThreshold)
+                    if (measure.Value > Constants.TemperatureInsideUpperThreshold)
                     {
-                        sensors.TemperatureIn = PddlSensorState.AboveThreshold;
+                        sensors.TemperatureIn = ThresholdRelation.AboveThreshold;
                     }
-                    else if (sensorMeasure.Value < Constants.TemperatureInsideLowerThreshold)
+                    else if (measure.Value < Constants.TemperatureInsideLowerThreshold)
                     {
-                        sensors.TemperatureIn = PddlSensorState.BelowThreshold;
+                        sensors.TemperatureIn = ThresholdRelation.BelowThreshold;
                     }
                     else
                     {
-                        sensors.TemperatureIn = PddlSensorState.Normal;
+                        sensors.TemperatureIn = ThresholdRelation.Normal;
                     }
 
                     break;
@@ -105,55 +105,55 @@ namespace Core.AiPlanning
             return sensors;
         }
 
-        private static PddlObjectSensors EvaluateCo2(SensorMeasure sensorMeasure, PddlObjectSensors sensors)
+        private static SensorState EvaluateCo2(SensorMeasure measure, SensorState sensors)
         {
-            if (sensorMeasure.Value > Constants.Co2EmergencyThreshold)
+            if (measure.Value > Constants.Co2EmergencyThreshold)
             {
-                sensors.Co2LevelIn = PddlSensorState.AboveThreshold;
+                sensors.Co2LevelIn = ThresholdRelation.AboveThreshold;
             }
             else
             {
-                sensors.Co2LevelIn = PddlSensorState.BelowThreshold;
+                sensors.Co2LevelIn = ThresholdRelation.BelowThreshold;
             }
 
             return sensors;
         }
 
-        private static PddlObjectSensors EvaluateParticulateMatter(SensorMeasure sensorMeasure,
-            PddlObjectSensors sensors, Location location)
+        private static SensorState EvaluateParticulateMatter(SensorMeasure measure,
+            SensorState sensors, Location location)
         {
             switch (location)
             {
                 case Location.Outside:
                 {
-                    if (sensorMeasure.Value > Constants.AirPurityOutsideUpperThreshold)
+                    if (measure.Value > Constants.AirPurityOutsideUpperThreshold)
                     {
-                        sensors.AirPurityOut = PddlSensorState.AboveThreshold;
+                        sensors.AirPurityOut = ThresholdRelation.AboveThreshold;
                     }
-                    else if (sensorMeasure.Value < Constants.AirPurityOutsideLowerThreshold)
+                    else if (measure.Value < Constants.AirPurityOutsideLowerThreshold)
                     {
-                        sensors.AirPurityOut = PddlSensorState.BelowThreshold;
+                        sensors.AirPurityOut = ThresholdRelation.BelowThreshold;
                     }
                     else
                     {
-                        sensors.AirPurityOut = PddlSensorState.Normal;
+                        sensors.AirPurityOut = ThresholdRelation.Normal;
                     }
 
                     break;
                 }
                 case Location.Inside:
                 {
-                    if (sensorMeasure.Value > Constants.AirPurityInsideUpperThreshold)
+                    if (measure.Value > Constants.AirPurityInsideUpperThreshold)
                     {
-                        sensors.AirPurityIn = PddlSensorState.AboveThreshold;
+                        sensors.AirPurityIn = ThresholdRelation.AboveThreshold;
                     }
-                    else if (sensorMeasure.Value < Constants.AirPurityInsideLowerThreshold)
+                    else if (measure.Value < Constants.AirPurityInsideLowerThreshold)
                     {
-                        sensors.AirPurityIn = PddlSensorState.BelowThreshold;
+                        sensors.AirPurityIn = ThresholdRelation.BelowThreshold;
                     }
                     else
                     {
-                        sensors.AirPurityIn = PddlSensorState.Normal;
+                        sensors.AirPurityIn = ThresholdRelation.Normal;
                     }
 
                     break;

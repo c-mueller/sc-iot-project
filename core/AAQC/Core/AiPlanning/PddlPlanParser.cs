@@ -5,17 +5,17 @@ namespace Core.AiPlanning
 {
     public static class PddlPlanParser
     {
-        public static PddlObjectActuators Parse(string plan)
+        public static ActuatorState Parse(string plan)
         {
             var steps = ParseSteps(plan);
 
-            var actuators = new PddlObjectActuators();
+            var actuators = new ActuatorState();
             foreach (var step in steps)
             {
                 if (step.StartsWith("deactivate"))
-                    DecideActuatorState(step, actuators, false);
+                    actuators = DecideActuatorState(step, actuators, false);
                 else
-                    DecideActuatorState(step, actuators, true);
+                    actuators = DecideActuatorState(step, actuators, true);
             }
 
             return actuators;
@@ -37,7 +37,7 @@ namespace Core.AiPlanning
             return uncleanedStep.Split()[0].Trim('(').ToLower();
         }
 
-        private static PddlObjectActuators DecideActuatorState(string step, PddlObjectActuators actuators,
+        private static ActuatorState DecideActuatorState(string step, ActuatorState actuators,
             bool isActive)
         {
             switch (step)

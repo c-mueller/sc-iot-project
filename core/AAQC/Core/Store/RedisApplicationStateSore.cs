@@ -17,32 +17,32 @@ namespace Core.Store
             _connection = connection;
         }
         
-        public void StorePddlObjectState(PddlObjectState objectState)
+        public void StoreLatestObjectState(ObjectState objectState)
         {
             var db = _connection.GetDatabase();
             var payload = JsonConvert.SerializeObject(objectState);
             db.StringSet(LatestPddlObjectState, payload);
         }
 
-        public void StoreSensorContext(SensorContext context)
+        public void StoreLatestSensorContext(SensorContext context)
         {
             var db = _connection.GetDatabase();
             var payload = JsonConvert.SerializeObject(context);
             db.StringSet(LatestContextKey, payload);
         }
 
-        public PddlObjectState GetLastPddlObjectState()
+        public ObjectState GetLatestObjectState()
         {
             var db = _connection.GetDatabase();
             var objectState = db.StringGet(LatestPddlObjectState);
             if (objectState.HasValue)
             {
-                return JsonConvert.DeserializeObject<PddlObjectState>(objectState.ToString());
+                return JsonConvert.DeserializeObject<ObjectState>(objectState.ToString());
             }
-            return Constants.InitialPddlObjectState;
+            return Constants.InitialObjectState;
         }
 
-        public SensorContext GetLastSensorContext()
+        public SensorContext GetLatestSensorContext()
         {
             var db = _connection.GetDatabase();
             var context = db.StringGet(LatestContextKey);

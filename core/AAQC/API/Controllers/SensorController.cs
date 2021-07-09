@@ -22,7 +22,7 @@ namespace Core.Controllers
         [HttpGet]
         public ActionResult<SensorContext> GetSensorData()
         {
-            return Ok(_applicationStateStore.GetLastSensorContext());
+            return Ok(_applicationStateStore.GetLatestSensorContext());
         }
     }
 }

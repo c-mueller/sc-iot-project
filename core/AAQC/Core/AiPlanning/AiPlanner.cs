@@ -31,23 +31,69 @@ namespace Core.AiPlanning
             var plan = _pddlSolver.CreatePlanForProblem(currentProblem);
             var newActuatorState = PddlPlanParser.Parse(plan);
 
-            var latestPddlObjectState = _contextStore.GetLastPddlObjectState();
+            var latestPddlObjectState = _contextStore.GetLatestObjectState();
             if (newActuatorState.Equals(latestPddlObjectState.ActuatorStates))
             {
                 return;
             }
             
-            _contextStore.StorePddlObjectState(currentPddlObjectState);
-            // TODO create Actuator Context and send
-            // TODO decide if we want to send all actuator info or only changed ones
-            var actuatorInfos = new List<ActuatorInfo>();
+            var actuatorInfos = GetActuatorInfos(newActuatorState, latestPddlObjectState.ActuatorStates);
             
             var actuatorContext = new ActuatorContext
             {
                 ActuatorStates = actuatorInfos,
             };
             
+            _contextStore.StoreLatestObjectState(currentPddlObjectState);
             _actuatorContextConsumer.Consume(actuatorContext);
+        }
+
+        private List<ActuatorInfo> GetActuatorInfos(ActuatorState newActuatorState,
+            ActuatorState currentActuatorState)
+        {
+            var actuatorInfos = new List<ActuatorInfo>();
+            if (newActuatorState.IsVentilationActive != currentActuatorState.IsVentilationActive)
+            {
+                actuatorInfos.Add(new ActuatorInfo
+                {
+                    Name = "ventilation",
+                    Type = ActuatorType.Ventilation,
+                    Active = newActuatorState.IsVentilationActive,
+                    TargetValue = 0 // TODO
+                });
+            }
+            if (newActuatorState.IsHeaterActive != currentActuatorState.IsHeaterActive)
+            {
+                actuatorInfos.Add(new ActuatorInfo
+                {
+                    Name = "heater",
+                    Type = ActuatorType.Heater,
+                    Active = newActuatorState.IsHeaterActive,
+                    TargetValue = 0 // TODO
+                });
+            }
+            if (newActuatorState.IsAirConditionerActive != currentActuatorState.IsAirConditionerActive)
+            {
+                actuatorInfos.Add(new ActuatorInfo
+                {
+                    Name = "air-conditioner",
+                    Type = ActuatorType.AirConditioner,
+                    Active = newActuatorState.IsAirConditionerActive,
+                    TargetValue = 0 // TODO
+                });
+            }
+            if (newActuatorState.IsAirPurifierActive != currentActuatorState.IsAirPurifierActive)
+            {
+                actuatorInfos.Add(new ActuatorInfo
+                {
+                    Name = "air-purifier",
+                    Type = ActuatorType.AirPurifier,
+                    Active = newActuatorState.IsAirPurifierActive,
+                    TargetValue = 0 // TODO
+                });
+            }
+
+            return actuatorInfos;
         }
     }
 }
