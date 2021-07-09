@@ -11,12 +11,28 @@ namespace MessagingEndpoint
     {
         public MQTTClient() {
             var mqttClient = new MqttFactory().CreateManagedMqttClient();
+            string clientId = Guid.NewGuid().ToString();
+            string mqttURI = "localhost";
+            int mqttPort = 1883; 
+            bool mqttSecure = false;
 
-            var url = "https://test.mosquitto.org/";
-            //var username = "user";
-            //var psw = "user";
-            var port = 1883;            //unauthenticated, unencrypted
-            init(url,port);
+        var messageBuilder = new MqttClientOptionsBuilder()
+            .WithClientId(clientId)
+            //.WithCredentials(mqttUser, mqttPassword)
+            .WithTcpServer(mqttURI, mqttPort)
+            .WithCleanSession();
+                    var options = mqttSecure
+            ? messageBuilder
+            .WithTls()
+            .Build()
+            : messageBuilder
+            .Build();
+
+
+            var managedOptions = new ManagedMqttClientOptionsBuilder()
+            .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
+            .WithClientOptions(options)
+            .Build();
             setUpConnectionHandlers(mqttClient);
             
             mqttClient.UseApplicationMessageReceivedHandler(e =>            //handler message received
@@ -37,24 +53,28 @@ namespace MessagingEndpoint
                 }
             });
 
-
-            // Connecting
-            Task.Run(() => this.SubscribeAsync(mqttClient,"$share:mygroup:/mytopic")).Wait();
             
-            Task.Run(() => this.PublishAsync(mqttClient,"$share:mygroup:/mytopic","hallo")).Wait();
+            Task.Run(async () =>await mqttClient.StartAsync(managedOptions)).Wait();
+            
+            // Connecting
+            Task.Run(() => this.SubscribeAsync(mqttClient,"test/")).Wait();
+            Console.WriteLine("Topic subscribt");
+            Task.Run(() => this.PublishAsync(mqttClient,"test/","hallo12")).Wait();
+            Console.WriteLine("Topic gepublisht");
         }
 
-        private void init(string url,int port) {
-            var options = new ManagedMqttClientOptionsBuilder()
-                            .WithAutoReconnectDelay(TimeSpan.FromSeconds(30))
-                            .WithClientOptions(new MqttClientOptionsBuilder()
-                                .WithClientId(Guid.NewGuid().ToString())
-                                .WithTcpServer(url, port)
-                                //.WithCredentials(username, psw)
-                                .WithCleanSession()
-                                .Build())
-                            .Build();
-        }
+        
+
+        /*static void Main(string[] args)           //für test
+        {
+            // Display the number of command line arguments.
+            Console.WriteLine("Los gehts");
+            new MQTTClient();
+            while(true) {
+
+            }
+        }*/
+
 
         private void setUpConnectionHandlers(IManagedMqttClient mqttClient) {
             mqttClient.UseConnectedHandler(e =>
