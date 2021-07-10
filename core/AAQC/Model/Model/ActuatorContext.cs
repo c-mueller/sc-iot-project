@@ -4,13 +4,13 @@ namespace Model.Model
 {
     public class ActuatorContext
     {
-        private List<ActuatorState> ActuatorStates { get; set; }
-    }
-
-    public class ActuatorState
-    {
         public string Name { get; set; }
         public ActuatorType Type { get; set; }
+        public ActuatorInfo ActuatorInfo { get; set; }
+    }
+
+    public class ActuatorInfo
+    {
         public bool Active { get; set; }
         public double TargetValue { get; set; }
     }
