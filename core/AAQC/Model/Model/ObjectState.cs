@@ -2,8 +2,8 @@ namespace Model.Model
 {
     public class ObjectState
     {
-        public SensorState SensorStates { get; set; }
-        public ActuatorState ActuatorStates { get; set; }
+        public SensorState SensorState { get; set; }
+        public ActuatorState ActuatorState { get; set; }
     }
 
     public class SensorState
@@ -18,10 +18,10 @@ namespace Model.Model
 
     public class ActuatorState
     {
-        public bool IsVentilationActive { set; get; }
-        public bool IsHeaterActive { set; get; }
-        public bool IsAirConditionerActive { set; get; }
-        public bool IsAirPurifierActive { set; get; }
+        public bool? IsVentilationActive { set; get; }
+        public bool? IsHeaterActive { set; get; }
+        public bool? IsAirConditionerActive { set; get; }
+        public bool? IsAirPurifierActive { set; get; }
 
         public bool Equals(ActuatorState other)
         {

@@ -28,8 +28,9 @@
     (not (temperature-high ti))
     (not (air-purity-bad ai))
     (not (co2-level-emergency ci))
+    (not (on v))
+    (not (on h))
+    (not (on ac))
+    (not (on ap))
 ))
-
-;un-comment the following line if metric is needed
-;(:metric minimize (???))
 )
