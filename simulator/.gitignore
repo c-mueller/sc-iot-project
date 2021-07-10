@@ -2,6 +2,8 @@
 bin/
 main
 simulator
+ui-bin/
+*-packr.go
 
 ### Go template
 # Binaries for programs and plugins

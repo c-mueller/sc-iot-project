@@ -5,6 +5,7 @@ import (
 	util "github.com/c-mueller/sc-iot-project/simulator/utils"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/gobuffalo/packr"
 	"github.com/sirupsen/logrus"
 )
 
@@ -25,6 +26,11 @@ func (s *Simulator) InitializeApi() {
 	s.engine.Use(cors.Default())
 	s.engine.Use(util.LogEnricherMiddleware(s.logger))
 	s.engine.Use(util.LogMiddleware(s.logger, true))
+
+	s.engine.StaticFS("/ui", packr.NewBox("ui-bin"))
+	s.engine.GET("/", func(context *gin.Context) {
+		context.Redirect(301, "/ui")
+	})
 
 	apiRouteGroup := s.engine.Group("/api")
 	apiRouteGroup.GET("/sensors", s.ListSensors)
