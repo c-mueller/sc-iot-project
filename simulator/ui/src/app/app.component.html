@@ -1,0 +1,13 @@
+<main role="main" style="margin: 30px">
+  <div class="container" *ngIf="!loading">
+    <div *ngFor="let sensorLocation of getLocations()">
+      <h1>{{sensorLocation}}</h1>
+      <div class="row">
+        <div class="col-lg-4" *ngFor="let e of sensors[sensorLocation]">
+          <app-sensor [sensorName]="e.sensor.name"></app-sensor>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>

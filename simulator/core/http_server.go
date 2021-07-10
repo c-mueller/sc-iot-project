@@ -3,6 +3,7 @@ package core
 import (
 	"fmt"
 	util "github.com/c-mueller/sc-iot-project/simulator/utils"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -21,6 +22,7 @@ func (s *Simulator) InitializeApi() {
 	}()
 	s.engine = gin.New()
 	s.engine.Use(gin.Recovery())
+	s.engine.Use(cors.Default())
 	s.engine.Use(util.LogEnricherMiddleware(s.logger))
 	s.engine.Use(util.LogMiddleware(s.logger, true))
 
