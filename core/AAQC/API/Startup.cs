@@ -36,21 +36,25 @@ namespace API
                 return new RedisApplicationStateSore(conMux);
             });
 
-            services.AddSingleton<IManagedMqttClient>(e => { return new MqttFactory().CreateManagedMqttClient(); });
+            services.AddSingleton<IManagedMqttClient>(e => new MqttFactory().CreateManagedMqttClient());
 
-            services.AddSingleton<MQTTEndpoint>(e =>
+            services.AddSingleton(e =>
             {
-                return new MQTTEndpoint(e.GetService<ISensorContextConsumer>(), e.GetService<IManagedMqttClient>());
+                var sensorContextConsumer = e.GetService<ISensorContextConsumer>();
+                var mqttClient = e.GetService<IManagedMqttClient>();
+                return new MQTTEndpoint(sensorContextConsumer, mqttClient);
             });
 
             services.AddSingleton<IActuatorContextConsumer>(e =>
             {
-                return new ActuatorContextConsumer(e.GetService<MQTTEndpoint>(), e.GetService<IManagedMqttClient>());
+                var mqttEndpoint = e.GetService<MQTTEndpoint>();
+                var mqttClient = e.GetService<IManagedMqttClient>();
+                return new ActuatorContextConsumer(mqttEndpoint, mqttClient);
             });
 
-            services.AddSingleton<IExternalPddlSolver>(e => { return new OnlinePddlSolver(); });
+            services.AddSingleton<IExternalPddlSolver>(e => new OnlinePddlSolver());
 
-            services.AddSingleton<AiPlanner>(e =>
+            services.AddSingleton(e =>
             {
                 var actuatorContextConsumer = e.GetService<IActuatorContextConsumer>();
                 var applicationStateStore = e.GetService<IApplicationStateStore>();
