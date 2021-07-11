@@ -10,5 +10,10 @@
       <ProjectReference Include="..\MessagingEndpoint\MessagingEndpoint.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MQTTnet" Version="3.0.16" />
+      <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="3.0.16" />
+    </ItemGroup>
+
 
 </Project>

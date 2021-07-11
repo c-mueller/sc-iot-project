@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Model.Interfaces;
+using MQTTnet;
+using MQTTnet.Extensions.ManagedClient;
 using StackExchange.Redis;
 
 
@@ -33,27 +35,20 @@ namespace Core
                 return new RedisApplicationStateSore(conMux);
             });
 
+            services.AddSingleton<IManagedMqttClient>(e => { return new MqttFactory().CreateManagedMqttClient(); });
+
             services.AddSingleton<MQTTEndpoint>(e =>
             {
-                return new MQTTEndpoint(e.GetService<ISensorContextConsumer>());
+                return new MQTTEndpoint(e.GetService<ISensorContextConsumer>(), e.GetService<IManagedMqttClient>());
             });
-            
-            services.AddSingleton<IManagedMqttClient>(e =>
-            {
-                return new MqttFactory().CreateManagedMqttClient()();
-            });
-            
 
             services.AddSingleton<IActuatorContextConsumer>(e =>
             {
                 return new OutgoingMessages(e.GetService<MQTTEndpoint>(), e.GetService<IManagedMqttClient>());
             });
 
-            services.AddSingleton<IExternalPddlSolver>(e =>
-            {
-                return new OnlinePddlSolver();
-            });
-            
+            services.AddSingleton<IExternalPddlSolver>(e => { return new OnlinePddlSolver(); });
+
             services.AddSingleton<AiPlanner>(e =>
             {
                 var actuatorContextConsumer = e.GetService<IActuatorContextConsumer>();
