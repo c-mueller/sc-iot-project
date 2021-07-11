@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Model.Interfaces;
 using StackExchange.Redis;
 
+
 namespace Core
 {
     public class Startup
@@ -31,10 +32,21 @@ namespace Core
                 var conMux = e.GetService<IConnectionMultiplexer>();
                 return new RedisApplicationStateSore(conMux);
             });
+
+            services.AddSingleton<MQTTEndpoint>(e =>
+            {
+                return new MQTTEndpoint(e.GetService<ISensorContextConsumer>());
+            });
             
+            services.AddSingleton<IManagedMqttClient>(e =>
+            {
+                return new MqttFactory().CreateManagedMqttClient()();
+            });
+            
+
             services.AddSingleton<IActuatorContextConsumer>(e =>
             {
-                return new OutgoingMessages();
+                return new OutgoingMessages(e.GetService<MQTTEndpoint>(), e.GetService<IManagedMqttClient>());
             });
 
             services.AddSingleton<IExternalPddlSolver>(e =>

@@ -8,21 +8,26 @@ using System.Security.Authentication;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Model.Interfaces;
+using Newtonsoft.Json;
+using Model.Model;
 
 namespace MessagingEndpoint
 {
     public class MQTTEndpoint
     {
         public Dictionary<string, string> clients { get; set; }
-        public MQTTEndpoint() {
+        ISensorContextConsumer incomingMessages;
+        public MQTTEndpoint(ISensorContextConsumer incomingMessages) {
             var mqttClient = new MqttFactory().CreateManagedMqttClient();
-            new OutgoingMessages(this,mqttClient);
-            new IncomingMessages(this,mqttClient);
+            //outgoingMessages = new OutgoingMessages(this,mqttClient);
+            //incomingMessages = new IncomingMessages(this,mqttClient);
             string clientId = "DON";//Guid.NewGuid().ToString();
             string mqttURI = "localhost";
             int mqttPort = 1883; 
             bool mqttSecure = false;
             clients = new Dictionary<string, string>();
+            this.incomingMessages = incomingMessages; 
 
         var messageBuilder = new MqttClientOptionsBuilder()
             .WithClientId(clientId)
@@ -60,6 +65,10 @@ namespace MessagingEndpoint
                         } else {
                             Console.WriteLine("topic und client existieren bereits");
                         }
+                        var sensorcontext = JsonConvert.DeserializeObject<SensorContext>(payload);
+                        incomingMessages.Consume(sensorcontext);
+                        //incoming message --> parse json string to Sensorcontext --> then call IncomingMessages
+                        
                     }
                 }
                 catch (Exception ex)
