@@ -15,40 +15,32 @@ namespace MessagingEndpoint
 {
     public class MQTTEndpoint
     {
-        public Dictionary<string, string> clients { get; set; }
-        private readonly ISensorContextConsumer incomingMessages;
+        public Dictionary<string, string> Clients { get; set; }
+        private readonly ISensorContextConsumer _incomingMessages;
         private readonly IManagedMqttClient _mqttClient;
+
+        private const string ClientId = "DON";
+        private const string MqttUri = "localhost";
+        private const int MqttPort = 1883;
 
         public MQTTEndpoint(ISensorContextConsumer incomingMessages, IManagedMqttClient mqttClient)
         {
-            //outgoingMessages = new OutgoingMessages(this,mqttClient);
-            //incomingMessages = new IncomingMessages(this,mqttClient);
-            string clientId = "DON"; //Guid.NewGuid().ToString();
-            string mqttURI = "localhost";
-            int mqttPort = 1883;
-            bool mqttSecure = false;
-            clients = new Dictionary<string, string>();
-            this.incomingMessages = incomingMessages;
+            _incomingMessages = incomingMessages;
             _mqttClient = mqttClient;
 
-            var messageBuilder = new MqttClientOptionsBuilder()
-                .WithClientId(clientId)
-                //.WithCredentials(mqttUser, mqttPassword)
-                .WithTcpServer(mqttURI, mqttPort)
-                .WithCleanSession();
-            var options = mqttSecure
-                ? messageBuilder
-                    .WithTls()
-                    .Build()
-                : messageBuilder
-                    .Build();
+            Clients = new Dictionary<string, string>();
 
+            var options = new MqttClientOptionsBuilder()
+                .WithClientId(ClientId)
+                .WithTcpServer(MqttUri, MqttPort)
+                .WithCleanSession()
+                .Build();
 
             var managedOptions = new ManagedMqttClientOptionsBuilder()
                 .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
                 .WithClientOptions(options)
                 .Build();
-            setUpConnectionHandlers(_mqttClient);
+            SetUpConnectionHandlers(_mqttClient);
 
             _mqttClient.UseApplicationMessageReceivedHandler(e => //handler message received
             {
@@ -60,10 +52,10 @@ namespace MessagingEndpoint
                     {
                         string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
                         Console.WriteLine($"Topic: {topic}. Message Received: {payload}"); //pass it to json parser
-                        if (!clients.TryGetValue(topic, out string client))
+                        if (!Clients.TryGetValue(topic, out string client))
                         {
                             string[] subs = topic.Split('/');
-                            clients.Add(subs.Last(), topic);
+                            Clients.Add(subs.Last(), topic);
                             Console.WriteLine("neuer Client " + subs.Last() + " unter topic: " + topic +
                                               " hinzugefügt");
                         }
@@ -73,7 +65,7 @@ namespace MessagingEndpoint
                         }
 
                         var sensorcontext = JsonConvert.DeserializeObject<SensorContext>(payload);
-                        incomingMessages.Consume(sensorcontext);
+                        _incomingMessages.Consume(sensorcontext);
                         //incoming message --> parse json string to Sensorcontext --> then call IncomingMessages
                     }
                 }
@@ -84,10 +76,10 @@ namespace MessagingEndpoint
             });
 
 
-            Task.Run(async () => await _mqttClient.StartAsync(managedOptions)).Wait();
+            _mqttClient.StartAsync(managedOptions).Wait();
 
             // Connecting
-            Task.Run(() => this.SubscribeAsync(_mqttClient, "#")).Wait();
+            SubscribeAsync(_mqttClient, "#").Wait();
             Console.WriteLine("Topic subscribt");
             //Task.Run(() => this.PublishAsync(mqttClient,"room001/output/heater","hallo12")).Wait();
             //Console.WriteLine("Topic gepublisht");
@@ -105,19 +97,19 @@ namespace MessagingEndpoint
         }*/
 
 
-        private void setUpConnectionHandlers(IManagedMqttClient mqttClient)
+        private static void SetUpConnectionHandlers(IManagedMqttClient mqttClient)
         {
             mqttClient.UseConnectedHandler(e => { Console.WriteLine("Connected successfully with MQTT Brokers."); });
             mqttClient.UseDisconnectedHandler(e => { Console.WriteLine("Disconnected from MQTT Brokers."); });
         }
 
-        public async Task SubscribeAsync(IManagedMqttClient mqttClient, string topic, int qos = 1) =>
+        private static async Task SubscribeAsync(IManagedMqttClient mqttClient, string topic, int qos = 1) =>
             await mqttClient.SubscribeAsync(new TopicFilterBuilder()
                 .WithTopic(topic)
                 .WithQualityOfServiceLevel((MqttQualityOfServiceLevel) qos)
                 .Build());
 
-        public async Task PublishAsync(IManagedMqttClient mqttClient, string topic, string payload,
+        public static async Task PublishAsync(IManagedMqttClient mqttClient, string topic, string payload,
             bool retainFlag = true, int qos = 1) =>
             await mqttClient.PublishAsync(new MqttApplicationMessageBuilder()
                 .WithTopic(topic)

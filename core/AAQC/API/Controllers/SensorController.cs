@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Model.Interfaces;
 using Model.Model;
 
-namespace Core.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("api/sensors")]

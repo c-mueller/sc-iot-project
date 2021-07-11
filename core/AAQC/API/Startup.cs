@@ -1,3 +1,4 @@
+using Core;
 using Core.AiPlanning;
 using Core.AiPlanning.ExternalPddlSolver;
 using Core.Store;
@@ -13,7 +14,7 @@ using MQTTnet.Extensions.ManagedClient;
 using StackExchange.Redis;
 
 
-namespace Core
+namespace API
 {
     public class Startup
     {
@@ -44,7 +45,7 @@ namespace Core
 
             services.AddSingleton<IActuatorContextConsumer>(e =>
             {
-                return new OutgoingMessages(e.GetService<MQTTEndpoint>(), e.GetService<IManagedMqttClient>());
+                return new ActuatorContextConsumer(e.GetService<MQTTEndpoint>(), e.GetService<IManagedMqttClient>());
             });
 
             services.AddSingleton<IExternalPddlSolver>(e => { return new OnlinePddlSolver(); });
