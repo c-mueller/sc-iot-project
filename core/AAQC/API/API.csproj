@@ -2,12 +2,17 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        <RootNamespace>Core</RootNamespace>
+        <RootNamespace>API</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Core\Core.csproj" />
       <ProjectReference Include="..\MessagingEndpoint\MessagingEndpoint.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MQTTnet" Version="3.0.16" />
+      <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="3.0.16" />
     </ItemGroup>
 
 

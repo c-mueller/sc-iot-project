@@ -1,3 +1,5 @@
+using System;
+using Core;
 using Core.AiPlanning;
 using Core.AiPlanning.ExternalPddlSolver;
 using Core.Store;
@@ -8,9 +10,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Model.Interfaces;
+using MQTTnet;
+using MQTTnet.Client.Options;
+using MQTTnet.Extensions.ManagedClient;
 using StackExchange.Redis;
 
-namespace Core
+
+namespace API
 {
     public class Startup
     {
@@ -31,18 +37,47 @@ namespace Core
                 var conMux = e.GetService<IConnectionMultiplexer>();
                 return new RedisApplicationStateSore(conMux);
             });
-            
-            services.AddSingleton<IActuatorContextConsumer>(e =>
+
+            services.AddSingleton<IManagedMqttClient>(e =>
             {
-                return new OutgoingMessages();
+                var client = new MqttFactory().CreateManagedMqttClient();
+                
+                var options = new MqttClientOptionsBuilder()
+                    .WithClientId(Guid.NewGuid().ToString())
+                    .WithTcpServer(Configuration["MqttHost"], int.Parse(Configuration["MqttPort"]))
+                    .WithCleanSession()
+                    .Build();
+
+                var managedOptions = new ManagedMqttClientOptionsBuilder()
+                    .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
+                    .WithClientOptions(options)
+                    .Build();
+                
+                client.UseConnectedHandler(_ => { Console.WriteLine("Successfully connected with MQTT Broker."); });
+                client.UseDisconnectedHandler(_ => { Console.WriteLine("Disconnected from MQTT Broker."); });
+                
+                client.StartAsync(managedOptions).Wait();
+                
+                return client;
             });
 
-            services.AddSingleton<IExternalPddlSolver>(e =>
+            services.AddSingleton(e =>
             {
-                return new OnlinePddlSolver();
+                var sensorContextConsumer = e.GetService<ISensorContextConsumer>();
+                var mqttClient = e.GetService<IManagedMqttClient>();
+                return new MqttEndpoint(sensorContextConsumer, mqttClient);
             });
-            
-            services.AddSingleton<AiPlanner>(e =>
+
+            services.AddSingleton<IActuatorContextConsumer>(e =>
+            {
+                var mqttEndpoint = e.GetService<MqttEndpoint>();
+                var mqttClient = e.GetService<IManagedMqttClient>();
+                return new ActuatorContextConsumer(mqttEndpoint, mqttClient);
+            });
+
+            services.AddSingleton<IExternalPddlSolver>(e => new OnlinePddlSolver());
+
+            services.AddSingleton(e =>
             {
                 var actuatorContextConsumer = e.GetService<IActuatorContextConsumer>();
                 var applicationStateStore = e.GetService<IApplicationStateStore>();

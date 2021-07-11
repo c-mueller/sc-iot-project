@@ -35,7 +35,7 @@ namespace Core.AiPlanning
 
             return new ObjectState
             {
-                SensorStates = sensors,
+                SensorState = sensors,
             };
         }
 

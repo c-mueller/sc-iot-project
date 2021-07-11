@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Model;
 using Model.Interfaces;
 using Model.Model;
@@ -28,84 +29,98 @@ namespace Core.AiPlanning
             {
                 return;
             }
-            
-            var plan = _pddlSolver.CreatePlanForProblem(currentProblem);
-            var newActuatorState = PddlPlanParser.Parse(plan);
 
-            var latestObjectState = _contextStore.GetLatestObjectState();
-            if (newActuatorState.Equals(latestObjectState.ActuatorStates))
+            var plan = _pddlSolver.CreatePlanForProblem(currentProblem);
+
+            var newActuatorState = PddlPlanParser.Parse(plan);
+            var latestActuatorState = _contextStore.GetLatestActuatorState();
+
+            // Fill in actuator values that are not included in the plan with the value they currently have 
+            newActuatorState.IsVentilationActive ??= latestActuatorState.IsVentilationActive;
+            newActuatorState.IsHeaterActive ??= latestActuatorState.IsHeaterActive;
+            newActuatorState.IsAirConditionerActive ??= latestActuatorState.IsAirConditionerActive;
+            newActuatorState.IsAirPurifierActive ??= latestActuatorState.IsAirPurifierActive;
+
+            var actuators = GetActuatorContexts(newActuatorState, latestActuatorState).ToList();
+            if (!actuators.Any())
             {
                 return;
             }
-            
-            var actuators = GetActuatorInfos(newActuatorState, latestObjectState.ActuatorStates);
 
             foreach (var actuator in actuators)
             {
                 _actuatorContextConsumer.Consume(actuator);
             }
-            
-            _contextStore.StoreLatestObjectState(currentObjectState);
+
+            _contextStore.StoreLatestActuatorState(currentObjectState.ActuatorState);
         }
 
-        private List<ActuatorContext> GetActuatorInfos(ActuatorState newActuatorState,
-            ActuatorState currentActuatorState)
+        private static IEnumerable<ActuatorContext> GetActuatorContexts(ActuatorState newActuatorState,
+            ActuatorState latestActuatorState)
         {
-            var actuatorInfos = new List<ActuatorContext>();
-            if (newActuatorState.IsVentilationActive != currentActuatorState.IsVentilationActive)
+            if (newActuatorState.Equals(latestActuatorState))
             {
-                actuatorInfos.Add(new ActuatorContext
+                return new List<ActuatorContext>();
+            }
+
+            var actuators = new List<ActuatorContext>();
+            if (newActuatorState.IsVentilationActive != latestActuatorState.IsVentilationActive)
+            {
+                actuators.Add(new ActuatorContext
                 {
                     Name = Constants.VentilationName,
                     Type = ActuatorType.Ventilation,
                     ActuatorInfo = new ActuatorInfo
                     {
-                        Active = newActuatorState.IsVentilationActive,
-                        TargetValue = 0 // TODO
-                    }
-                });
-            }
-            if (newActuatorState.IsHeaterActive != currentActuatorState.IsHeaterActive)
-            {
-                actuatorInfos.Add(new ActuatorContext
-                {
-                    Name = Constants.HeaterName,
-                    Type = ActuatorType.Heater,
-                    ActuatorInfo = new ActuatorInfo
-                    {
-                        Active = newActuatorState.IsHeaterActive,
-                        TargetValue = 0 // TODO
-                    }
-                });
-            }
-            if (newActuatorState.IsAirConditionerActive != currentActuatorState.IsAirConditionerActive)
-            {
-                actuatorInfos.Add(new ActuatorContext
-                {
-                    Name = Constants.AirConditionerName,
-                    Type = ActuatorType.AirConditioner,
-                    ActuatorInfo = new ActuatorInfo
-                    {
-                        Active = newActuatorState.IsAirConditionerActive,
-                        TargetValue = 0 // TODO
-                    }
-                });
-            }
-            if (newActuatorState.IsAirPurifierActive != currentActuatorState.IsAirPurifierActive)
-            {
-                actuatorInfos.Add(new ActuatorContext
-                {
-                    Name = Constants.AirPurifierName,
-                    Type = ActuatorType.AirPurifier,
-                    ActuatorInfo = new ActuatorInfo
-                    {
-                        Active = newActuatorState.IsAirPurifierActive,
+                        Active = newActuatorState.IsVentilationActive.GetValueOrDefault(),
                         TargetValue = 0 // TODO
                     }
                 });
             }
 
-            return actuatorInfos;
+            if (newActuatorState.IsHeaterActive != latestActuatorState.IsHeaterActive)
+            {
+                actuators.Add(new ActuatorContext
+                {
+                    Name = Constants.HeaterName,
+                    Type = ActuatorType.Heater,
+                    ActuatorInfo = new ActuatorInfo
+                    {
+                        Active = newActuatorState.IsHeaterActive.GetValueOrDefault(),
+                        TargetValue = 0 // TODO
+                    }
+                });
+            }
+
+            if (newActuatorState.IsAirConditionerActive != latestActuatorState.IsAirConditionerActive)
+            {
+                actuators.Add(new ActuatorContext
+                {
+                    Name = Constants.AirConditionerName,
+                    Type = ActuatorType.AirConditioner,
+                    ActuatorInfo = new ActuatorInfo
+                    {
+                        Active = newActuatorState.IsAirConditionerActive.GetValueOrDefault(),
+                        TargetValue = 0 // TODO
+                    }
+                });
+            }
+
+            if (newActuatorState.IsAirPurifierActive != latestActuatorState.IsAirPurifierActive)
+            {
+                actuators.Add(new ActuatorContext
+                {
+                    Name = Constants.AirPurifierName,
+                    Type = ActuatorType.AirPurifier,
+                    ActuatorInfo = new ActuatorInfo
+                    {
+                        Active = newActuatorState.IsAirPurifierActive.GetValueOrDefault(),
+                        TargetValue = 0 // TODO
+                    }
+                });
+            }
+
+            return actuators;
         }
     }
 }
