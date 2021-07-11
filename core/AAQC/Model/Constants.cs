@@ -38,7 +38,7 @@ namespace Model
         
         public static readonly ObjectState InitialObjectState = new ObjectState
         {
-            SensorStates = new SensorState
+            SensorState = new SensorState
             {
                 TemperatureIn = ThresholdRelation.Normal,
                 TemperatureOut = ThresholdRelation.Normal,
@@ -47,7 +47,7 @@ namespace Model
                 AirPurityOut = ThresholdRelation.Normal,
                 Co2LevelIn = ThresholdRelation.Normal,
             },
-            ActuatorStates = new ActuatorState
+            ActuatorState = new ActuatorState
             {
                 IsVentilationActive = false,
                 IsHeaterActive = false,

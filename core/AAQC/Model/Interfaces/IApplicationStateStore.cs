@@ -4,9 +4,9 @@ namespace Model.Interfaces
 {
     public interface IApplicationStateStore
     {
-        void StoreLatestObjectState(ObjectState objectState);
+        void StoreLatestActuatorState(ActuatorState actuatorState);
         void StoreLatestSensorContext(SensorContext context);
-        ObjectState GetLatestObjectState();
+        ActuatorState GetLatestActuatorState();
         SensorContext GetLatestSensorContext();
     }
 }

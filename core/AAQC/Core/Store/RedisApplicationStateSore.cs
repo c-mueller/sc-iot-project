@@ -9,7 +9,7 @@ namespace Core.Store
     public class RedisApplicationStateSore: IApplicationStateStore
     {
         private const string LatestContextKey = "latestContext";
-        private const string LatestPddlObjectState = "latestPddlObjectState";
+        private const string LatestActuatorState = "latestActuatorState";
         private readonly IConnectionMultiplexer _connection;
 
         public RedisApplicationStateSore(IConnectionMultiplexer connection)
@@ -17,11 +17,11 @@ namespace Core.Store
             _connection = connection;
         }
         
-        public void StoreLatestObjectState(ObjectState objectState)
+        public void StoreLatestActuatorState(ActuatorState actuatorState)
         {
             var db = _connection.GetDatabase();
-            var payload = JsonConvert.SerializeObject(objectState);
-            db.StringSet(LatestPddlObjectState, payload);
+            var payload = JsonConvert.SerializeObject(actuatorState);
+            db.StringSet(LatestActuatorState, payload);
         }
 
         public void StoreLatestSensorContext(SensorContext context)
@@ -31,26 +31,20 @@ namespace Core.Store
             db.StringSet(LatestContextKey, payload);
         }
 
-        public ObjectState GetLatestObjectState()
+        public ActuatorState GetLatestActuatorState()
         {
             var db = _connection.GetDatabase();
-            var objectState = db.StringGet(LatestPddlObjectState);
-            if (objectState.HasValue)
-            {
-                return JsonConvert.DeserializeObject<ObjectState>(objectState.ToString());
-            }
-            return Constants.InitialObjectState;
+            var objectState = db.StringGet(LatestActuatorState);
+            
+            return objectState.HasValue ? JsonConvert.DeserializeObject<ActuatorState>(objectState.ToString()) : Constants.InitialObjectState.ActuatorState;
         }
 
         public SensorContext GetLatestSensorContext()
         {
             var db = _connection.GetDatabase();
             var context = db.StringGet(LatestContextKey);
-            if (context.HasValue)
-            {
-                return JsonConvert.DeserializeObject<SensorContext>(context.ToString());
-            }
-            return new SensorContext();
+            
+            return context.HasValue ? JsonConvert.DeserializeObject<SensorContext>(context.ToString()) : new SensorContext();
         }
     }
 }
