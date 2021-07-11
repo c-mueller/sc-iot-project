@@ -4,17 +4,25 @@ using MQTTnet.Extensions.ManagedClient;
 using MQTTnet;
 using System.Threading.Tasks;
 using System.Text;
+using System.Security.Authentication;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace MessagingEndpoint
 {
-    public class MQTTClient
+    public class MQTTEndpoint
     {
-        public MQTTClient() {
+        public Dictionary<string, string> clients { get; set; }
+        public MQTTEndpoint() {
             var mqttClient = new MqttFactory().CreateManagedMqttClient();
-            string clientId = Guid.NewGuid().ToString();
+            new OutgoingMessages(this,mqttClient);
+            new IncomingMessages(this,mqttClient);
+            string clientId = "DON";//Guid.NewGuid().ToString();
             string mqttURI = "localhost";
             int mqttPort = 1883; 
             bool mqttSecure = false;
+            clients = new Dictionary<string, string>();
 
         var messageBuilder = new MqttClientOptionsBuilder()
             .WithClientId(clientId)
@@ -40,11 +48,18 @@ namespace MessagingEndpoint
                 try
                 {
                     string topic = e.ApplicationMessage.Topic;
-
+                    
                     if (string.IsNullOrWhiteSpace(topic) == false)
                     {
                         string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
                         Console.WriteLine($"Topic: {topic}. Message Received: {payload}");          //pass it to json parser
+                        if(!clients.TryGetValue(topic,out string client)) {
+                            string[] subs = topic.Split('/');
+                            clients.Add(subs.Last(),topic);      
+                            Console.WriteLine("neuer Client " + subs.Last() + " unter topic: " + topic + " hinzugefügt");
+                        } else {
+                            Console.WriteLine("topic und client existieren bereits");
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -57,15 +72,15 @@ namespace MessagingEndpoint
             Task.Run(async () =>await mqttClient.StartAsync(managedOptions)).Wait();
             
             // Connecting
-            Task.Run(() => this.SubscribeAsync(mqttClient,"test/")).Wait();
+            Task.Run(() => this.SubscribeAsync(mqttClient,"#")).Wait();
             Console.WriteLine("Topic subscribt");
-            Task.Run(() => this.PublishAsync(mqttClient,"test/","hallo12")).Wait();
-            Console.WriteLine("Topic gepublisht");
+            //Task.Run(() => this.PublishAsync(mqttClient,"room001/output/heater","hallo12")).Wait();
+            //Console.WriteLine("Topic gepublisht");
         }
 
         
 
-        /*static void Main(string[] args)           //für test
+        /*static void Main(string[] args)
         {
             // Display the number of command line arguments.
             Console.WriteLine("Los gehts");
