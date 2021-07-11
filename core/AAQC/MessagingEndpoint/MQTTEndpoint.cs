@@ -13,35 +13,19 @@ using Newtonsoft.Json;
 
 namespace MessagingEndpoint
 {
-    public class MQTTEndpoint
+    public class MqttEndpoint
     {
         public Dictionary<string, string> Clients { get; set; }
         private readonly ISensorContextConsumer _incomingMessages;
         private readonly IManagedMqttClient _mqttClient;
-
-        private const string ClientId = "DON";
-        private const string MqttUri = "localhost";
-        private const int MqttPort = 1883;
-
-        public MQTTEndpoint(ISensorContextConsumer incomingMessages, IManagedMqttClient mqttClient)
+        
+        public MqttEndpoint(ISensorContextConsumer incomingMessages, IManagedMqttClient mqttClient)
         {
             _incomingMessages = incomingMessages;
             _mqttClient = mqttClient;
 
             Clients = new Dictionary<string, string>();
-
-            var options = new MqttClientOptionsBuilder()
-                .WithClientId(ClientId)
-                .WithTcpServer(MqttUri, MqttPort)
-                .WithCleanSession()
-                .Build();
-
-            var managedOptions = new ManagedMqttClientOptionsBuilder()
-                .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
-                .WithClientOptions(options)
-                .Build();
-            SetUpConnectionHandlers(_mqttClient);
-
+            
             _mqttClient.UseApplicationMessageReceivedHandler(e => //handler message received
             {
                 try
@@ -74,10 +58,7 @@ namespace MessagingEndpoint
                     Console.WriteLine(ex.Message, ex);
                 }
             });
-
-
-            _mqttClient.StartAsync(managedOptions).Wait();
-
+            
             // Connecting
             SubscribeAsync(_mqttClient, "#").Wait();
             Console.WriteLine("Topic subscribt");
@@ -95,14 +76,7 @@ namespace MessagingEndpoint
 
             }
         }*/
-
-
-        private static void SetUpConnectionHandlers(IManagedMqttClient mqttClient)
-        {
-            mqttClient.UseConnectedHandler(e => { Console.WriteLine("Connected successfully with MQTT Brokers."); });
-            mqttClient.UseDisconnectedHandler(e => { Console.WriteLine("Disconnected from MQTT Brokers."); });
-        }
-
+        
         private static async Task SubscribeAsync(IManagedMqttClient mqttClient, string topic, int qos = 1) =>
             await mqttClient.SubscribeAsync(new TopicFilterBuilder()
                 .WithTopic(topic)

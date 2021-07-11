@@ -1,3 +1,4 @@
+using System;
 using Core;
 using Core.AiPlanning;
 using Core.AiPlanning.ExternalPddlSolver;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Model.Interfaces;
 using MQTTnet;
+using MQTTnet.Client.Options;
 using MQTTnet.Extensions.ManagedClient;
 using StackExchange.Redis;
 
@@ -36,18 +38,39 @@ namespace API
                 return new RedisApplicationStateSore(conMux);
             });
 
-            services.AddSingleton<IManagedMqttClient>(e => new MqttFactory().CreateManagedMqttClient());
+            services.AddSingleton<IManagedMqttClient>(e =>
+            {
+                var client = new MqttFactory().CreateManagedMqttClient();
+                
+                var options = new MqttClientOptionsBuilder()
+                    .WithClientId(Guid.NewGuid().ToString())
+                    .WithTcpServer(Configuration["MqttHost"], int.Parse(Configuration["MqttPort"]))
+                    .WithCleanSession()
+                    .Build();
+
+                var managedOptions = new ManagedMqttClientOptionsBuilder()
+                    .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
+                    .WithClientOptions(options)
+                    .Build();
+                
+                client.UseConnectedHandler(_ => { Console.WriteLine("Successfully connected with MQTT Broker."); });
+                client.UseDisconnectedHandler(_ => { Console.WriteLine("Disconnected from MQTT Broker."); });
+                
+                client.StartAsync(managedOptions).Wait();
+                
+                return client;
+            });
 
             services.AddSingleton(e =>
             {
                 var sensorContextConsumer = e.GetService<ISensorContextConsumer>();
                 var mqttClient = e.GetService<IManagedMqttClient>();
-                return new MQTTEndpoint(sensorContextConsumer, mqttClient);
+                return new MqttEndpoint(sensorContextConsumer, mqttClient);
             });
 
             services.AddSingleton<IActuatorContextConsumer>(e =>
             {
-                var mqttEndpoint = e.GetService<MQTTEndpoint>();
+                var mqttEndpoint = e.GetService<MqttEndpoint>();
                 var mqttClient = e.GetService<IManagedMqttClient>();
                 return new ActuatorContextConsumer(mqttEndpoint, mqttClient);
             });

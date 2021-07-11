@@ -9,10 +9,10 @@ namespace MessagingEndpoint
 {
     public class ActuatorContextConsumer : IActuatorContextConsumer      
     {
-        private readonly MQTTEndpoint _mqttEndpoint;
+        private readonly MqttEndpoint _mqttEndpoint;
         private readonly IManagedMqttClient _mqttClient;
 
-        public ActuatorContextConsumer(MQTTEndpoint mqttEndpoint, IManagedMqttClient mqttClient) {
+        public ActuatorContextConsumer(MqttEndpoint mqttEndpoint, IManagedMqttClient mqttClient) {
             _mqttEndpoint = mqttEndpoint;
             _mqttClient = mqttClient;
         }
@@ -23,7 +23,7 @@ namespace MessagingEndpoint
             var serializedActuatorInfo = JsonConvert.SerializeObject(actuatorContext.ActuatorInfo);
             var topic = _mqttEndpoint.Clients[actuatorContext.Name];
             
-            MQTTEndpoint.PublishAsync(_mqttClient, topic, serializedActuatorInfo).Wait();
+            MqttEndpoint.PublishAsync(_mqttClient, topic, serializedActuatorInfo).Wait();
             //Console.WriteLine("Topic gepublisht");
         }
     }
