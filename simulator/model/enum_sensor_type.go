@@ -8,24 +8,24 @@ import (
 type SensorType uint
 
 const (
-	Temperature SensorType = iota
-	Humidity               = Temperature + 1
-	AirParticle            = Humidity + 1
-	CO2                    = AirParticle + 1
+	Temperature       SensorType = iota
+	Humidity                     = Temperature + 1
+	ParticulateMatter            = Humidity + 1
+	CO2                          = ParticulateMatter + 1
 )
 
 var sensorTypeToString = map[SensorType]string{
-	Temperature: "Temperature",
-	Humidity:    "Humidity",
-	AirParticle: "AirParticle",
-	CO2:         "CO2",
+	Temperature:       "Temperature",
+	Humidity:          "Humidity",
+	ParticulateMatter: "ParticulateMatter",
+	CO2:               "CO2",
 }
 
 var sensorTypeFromString = map[string]SensorType{
-	"Temperature": Temperature,
-	"Humidity":    Humidity,
-	"AirParticle": AirParticle,
-	"CO2":         CO2,
+	"Temperature":       Temperature,
+	"Humidity":          Humidity,
+	"ParticulateMatter": ParticulateMatter,
+	"CO2":               CO2,
 }
 
 func (s SensorType) String() string {

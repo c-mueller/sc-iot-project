@@ -17,7 +17,7 @@ namespace Core
 
         public void Consume(SensorContext sensorContext)
         {
-            _contextStore.StoreLatestSensorContext(sensorContext);
+            // _contextStore.StoreLatestSensorContext(sensorContext);
             _planner.Initiate(sensorContext);
         }
     }

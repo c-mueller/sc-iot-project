@@ -1,7 +1,7 @@
 export enum SensorType {
   Temperature = "Temperature",
   Humidity = "Humidity",
-  AirParticle = "AirParticle",
+  ParticulateMatter = "ParticulateMatter",
   CO2 = "CO2"
 }
 
@@ -24,7 +24,7 @@ export const SensorRanges: any = {
     step: 1,
     unit: 'ppm'
   },
-  [SensorType.AirParticle]: {
+  [SensorType.ParticulateMatter]: {
     min: 0,
     max: 10000,
     step: 1,

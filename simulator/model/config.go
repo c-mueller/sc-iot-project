@@ -13,7 +13,7 @@ var sensors = []Sensor{
 		InitialValue: 20,
 	},
 	{
-		Type:         AirParticle,
+		Type:         ParticulateMatter,
 		Place:        Indoors,
 		Topic:        "room001/input/particulate_matter",
 		Location:     "room001",
@@ -49,7 +49,7 @@ var sensors = []Sensor{
 		InitialValue: 20,
 	},
 	{
-		Type:         AirParticle,
+		Type:         ParticulateMatter,
 		Place:        Outdoors,
 		Topic:        "outdoors/particulate_matter",
 		Location:     "outdoors",

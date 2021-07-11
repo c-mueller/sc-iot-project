@@ -3,7 +3,6 @@ package sensor
 import (
 	"encoding/json"
 	"github.com/c-mueller/sc-iot-project/simulator/model"
-	"strings"
 	"time"
 )
 
@@ -26,7 +25,7 @@ func (w *Worker) publishSensorData() {
 
 	message := model.SensorMessage{
 		Location:   w.Sensor.Location,
-		SensorType: strings.ToLower(w.Sensor.Type.String()),
+		SensorType: w.Sensor.Type.String(),
 		Value:      w.currentValue,
 		Timestamp:  time.Now(),
 	}

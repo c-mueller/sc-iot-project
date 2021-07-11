@@ -2,7 +2,7 @@ http_port: 8080
 mqtt_endpoint: nsa-agent.l.krnl.eu
 #mqtt_endpoint: 127.0.0.1
 mqtt_port: 1883
-sensor_update_interval: 15s
+sensor_update_interval: 1s
 sensors:
 - type: Temperature
   place: Indoors
@@ -11,12 +11,12 @@ sensors:
   initial_value: 20
   topic: room001/input/temperature
   location: room001
-- type: AirParticle
+- type: ParticulateMatter
   place: Indoors
   name: air-particles-indoors
-  unit: ppm
+  unit: ug/m3
   initial_value: 50
-  topic: room001/input/particulate_matter
+  topic: room001/input/particulate-matter
   location: room001
 - type: Humidity
   place: Indoors
@@ -30,21 +30,21 @@ sensors:
   name: co2-indoors
   unit: ppm
   initial_value: 200
-  topic: room001/input/humidity
+  topic: room001/input/co2
   location: room001
 - type: Temperature
   place: Outdoors
   name: temperature-outdoors
   unit: Celsius
   initial_value: 20
-  topic: outdoors/particulate_matter
+  topic: outdoors/temperature
   location: outdoors
-- type: AirParticle
+- type: ParticulateMatter
   place: Outdoors
   name: air-particles-outdoors
-  unit: ppm
+  unit: ug/m3
   initial_value: 50
-  topic: outdoors/particulate_matter
+  topic: outdoors/particulate-matter
   location: outdoors
 actuators:
 - type: Ventilation
@@ -57,10 +57,10 @@ actuators:
   location: room001
 - type: AirPurifier
   name: air-purifier
-  topic: room001/output/air_purifier
+  topic: room001/output/air-purifier
   location: room001
 - type: AirConditioner
   name: air-conditioner
-  topic: room001/output/air_conditioning
+  topic: room001/output/air-conditioner
   location: room001
 

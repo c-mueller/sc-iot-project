@@ -1,95 +1,114 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 using Model.Interfaces;
 using Model.Model;
 using MQTTnet;
-using MQTTnet.Client.Options;
 using MQTTnet.Extensions.ManagedClient;
 using MQTTnet.Protocol;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace MessagingEndpoint
 {
-    public class MqttEndpoint
+    public class MqttEndpoint : IHostedService
     {
-        public Dictionary<string, string> Clients { get; set; }
+        private static string[] TopicList =
+        {
+            "room001/input/temperature",
+            "room001/input/particulate-matter",
+            "room001/input/humidity",
+            "room001/input/co2",
+            "outdoors/temperature",
+            "outdoors/particulate-matter"
+        };
+
         private readonly ISensorContextConsumer _incomingMessages;
         private readonly IManagedMqttClient _mqttClient;
-        
-        public MqttEndpoint(ISensorContextConsumer incomingMessages, IManagedMqttClient mqttClient)
+        private readonly IApplicationStateStore _stateStore;
+
+        private SensorContext _currentSensorContext = new SensorContext();
+
+        private Timer _plannerUpdateTimer;
+
+        public MqttEndpoint(ISensorContextConsumer incomingMessages, IManagedMqttClient mqttClient,
+            IApplicationStateStore stateStore)
         {
             _incomingMessages = incomingMessages;
             _mqttClient = mqttClient;
-
-            Clients = new Dictionary<string, string>();
-            
-            _mqttClient.UseApplicationMessageReceivedHandler(e => //handler message received
-            {
-                try
-                {
-                    string topic = e.ApplicationMessage.Topic;
-
-                    if (string.IsNullOrWhiteSpace(topic) == false)
-                    {
-                        string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                        Console.WriteLine($"Topic: {topic}. Message Received: {payload}"); //pass it to json parser
-                        if (!Clients.TryGetValue(topic, out string client))
-                        {
-                            string[] subs = topic.Split('/');
-                            Clients.Add(subs.Last(), topic);
-                            Console.WriteLine("neuer Client " + subs.Last() + " unter topic: " + topic +
-                                              " hinzugefügt");
-                        }
-                        else
-                        {
-                            Console.WriteLine("topic und client existieren bereits");
-                        }
-
-                        var sensorcontext = JsonConvert.DeserializeObject<SensorContext>(payload);
-                        _incomingMessages.Consume(sensorcontext);
-                        //incoming message --> parse json string to Sensorcontext --> then call IncomingMessages
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message, ex);
-                }
-            });
-            
-            // Connecting
-            SubscribeAsync(_mqttClient, "#").Wait();
-            Console.WriteLine("Topic subscribt");
-            //Task.Run(() => this.PublishAsync(mqttClient,"room001/output/heater","hallo12")).Wait();
-            //Console.WriteLine("Topic gepublisht");
+            _stateStore = stateStore;
         }
 
-
-        /*static void Main(string[] args)
+        public void Init()
         {
-            // Display the number of command line arguments.
-            Console.WriteLine("Los gehts");
-            new MQTTClient();
-            while(true) {
+            _mqttClient.UseApplicationMessageReceivedHandler(HandleMqttMessage);
 
+            foreach (var topic in TopicList)
+            {
+                SubscribeAsync(_mqttClient, topic).Wait();
             }
-        }*/
-        
-        private static async Task SubscribeAsync(IManagedMqttClient mqttClient, string topic, int qos = 1) =>
-            await mqttClient.SubscribeAsync(new TopicFilterBuilder()
-                .WithTopic(topic)
-                .WithQualityOfServiceLevel((MqttQualityOfServiceLevel) qos)
-                .Build());
+        }
 
-        public static async Task PublishAsync(IManagedMqttClient mqttClient, string topic, string payload,
-            bool retainFlag = true, int qos = 1) =>
-            await mqttClient.PublishAsync(new MqttApplicationMessageBuilder()
+        private void HandleMqttMessage(MqttApplicationMessageReceivedEventArgs messageEvent)
+        {
+            var stringPayload = Encoding.UTF8.GetString(messageEvent.ApplicationMessage.Payload);
+            try
+            {
+                var parsedPayload = JsonConvert.DeserializeObject<SensorInput>(stringPayload);
+
+                _currentSensorContext.SubmitMeasurement(parsedPayload);
+                _stateStore.StoreLatestSensorContext(_currentSensorContext);
+                // _incomingMessages.Consume(_currentSensorContext.DeepCopy());
+            }
+            catch (Exception e)
+            {
+                Log.Error("Failed to Process message {message} from {topic} because: {errorMessage}",
+                    stringPayload,
+                    messageEvent.ApplicationMessage.Topic, e.Message, e);
+                Log.Error(e.StackTrace);
+            }
+        }
+
+        private void PlannerUpdateHandler(object? e)
+        {
+            Log.Information("Updating Planner Context...");
+            try
+            {
+                _incomingMessages.Consume(_currentSensorContext.DeepCopy());
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to update Ai Planner context. Reason: {errorMessage}", ex.Message, ex);
+                Log.Error(ex.StackTrace);
+            }
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            Log.Information("Initializing MQTT Endpoint");
+            Init();
+
+            _plannerUpdateTimer =
+                new Timer(PlannerUpdateHandler, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(15));
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return _plannerUpdateTimer.DisposeAsync().AsTask();
+        }
+
+        private static async Task SubscribeAsync(IManagedMqttClient mqttClient, string topic, int qos = 1)
+        {
+            Log.Information("Subscribing to Topic '{topic}'", topic);
+
+            await mqttClient.SubscribeAsync(new MqttTopicFilterBuilder()
                 .WithTopic(topic)
-                .WithPayload(payload)
                 .WithQualityOfServiceLevel((MqttQualityOfServiceLevel) qos)
-                .WithRetainFlag(retainFlag)
                 .Build());
+        }
     }
 }
