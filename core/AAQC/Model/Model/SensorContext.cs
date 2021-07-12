@@ -7,6 +7,11 @@ namespace Model.Model
 {
     public class SensorContext
     {
+        public SensorContext()
+        {
+            Locations ??= new List<SensorLocation>();
+        }
+        
         public List<SensorLocation> Locations { get; set; }
 
         public void SubmitMeasurement(SensorInput sensorInput)

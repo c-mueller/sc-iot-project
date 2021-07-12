@@ -1,6 +1,7 @@
 using System;
 using Model;
 using Model.Model;
+using Serilog;
 
 namespace Core.AiPlanning
 {
@@ -8,6 +9,7 @@ namespace Core.AiPlanning
     {
         public static PddlProblem Parse(ObjectState state)
         {
+            Log.Information("[AI Planner] Parsing PDDL problem");
             var problem = new PddlProblem();
 
             problem = ParseHumidityOut(state.SensorState, problem);

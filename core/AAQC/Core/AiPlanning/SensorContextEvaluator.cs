@@ -1,6 +1,7 @@
 using System;
 using Model;
 using Model.Model;
+using Serilog;
 
 namespace Core.AiPlanning
 {
@@ -8,6 +9,7 @@ namespace Core.AiPlanning
     {
         public static ObjectState Evaluate(SensorContext context)
         {
+            Log.Information("[AI Planner] Evaluating sensor context");
             var sensors = new SensorState();
             foreach (var location in context.Locations)
             {
@@ -36,6 +38,7 @@ namespace Core.AiPlanning
             return new ObjectState
             {
                 SensorState = sensors,
+                ActuatorState = new ActuatorState(),
             };
         }
 

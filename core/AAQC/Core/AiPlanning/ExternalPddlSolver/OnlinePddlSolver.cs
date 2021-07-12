@@ -2,6 +2,7 @@ using Flurl;
 using Flurl.Http;
 using Model.Interfaces;
 using Model.Model;
+using Serilog;
 
 namespace Core.AiPlanning.ExternalPddlSolver
 {
@@ -12,6 +13,7 @@ namespace Core.AiPlanning.ExternalPddlSolver
 
         public string CreatePlanForProblem(PddlProblem problem)
         {
+            Log.Information("[AI Planner] Creating plan for PDDL Problem");
             return Url
                 .AppendPathSegment(SolverApiPath)
                 .PostJsonAsync(new

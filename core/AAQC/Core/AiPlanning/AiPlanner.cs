@@ -3,6 +3,7 @@ using System.Linq;
 using Model;
 using Model.Interfaces;
 using Model.Model;
+using Serilog;
 
 namespace Core.AiPlanning
 {
@@ -27,11 +28,13 @@ namespace Core.AiPlanning
             var currentProblem = PddlProblemParser.Parse(currentObjectState);
             if (!currentProblem.HasInitStates())
             {
+                Log.Information("[AI Planner] Planning finished: No Init states found");
                 return;
             }
 
             var plan = _pddlSolver.CreatePlanForProblem(currentProblem);
 
+            Log.Information("[AI Planner] Finding changes in actuator state");
             var newActuatorState = PddlPlanParser.Parse(plan);
             var latestActuatorState = _contextStore.GetLatestActuatorState();
 
@@ -44,6 +47,7 @@ namespace Core.AiPlanning
             var actuators = GetActuatorContexts(newActuatorState, latestActuatorState).ToList();
             if (!actuators.Any())
             {
+                Log.Information("[AI Planner] Planning finished: No changes in actuator state found");
                 return;
             }
 
@@ -53,6 +57,7 @@ namespace Core.AiPlanning
             }
 
             _contextStore.StoreLatestActuatorState(currentObjectState.ActuatorState);
+            Log.Information("[AI Planner] Planning finished: Changes in actuator state found");
         }
 
         private static IEnumerable<ActuatorContext> GetActuatorContexts(ActuatorState newActuatorState,
