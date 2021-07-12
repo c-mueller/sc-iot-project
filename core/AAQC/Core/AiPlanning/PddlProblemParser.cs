@@ -28,16 +28,9 @@ namespace Core.AiPlanning
 
         private static PddlProblem ParseHumidityOut(SensorState sensors, PddlProblem problem)
         {
-            switch (sensors.HumidityOut)
-            {
-                case ThresholdRelation.AboveThreshold:
-                    problem.AddInitState("humidity-high", Constants.HumidityOutObjectName);
-                    break;
-                case ThresholdRelation.BelowThreshold:
-                    problem.AddInitState("humidity-low", Constants.HumidityOutObjectName);
-                    break;
-            }
-
+            if (sensors.HumidityOut == ThresholdRelation.AboveThreshold)
+                problem.AddInitState("humidity-high", Constants.HumidityOutObjectName);
+            
             return problem;
         }
 
@@ -46,10 +39,10 @@ namespace Core.AiPlanning
             switch (sensors.TemperatureIn)
             {
                 case ThresholdRelation.AboveThreshold:
-                    problem.AddInitState("temperature-high", Constants.TemperatureOutObjectName);
+                    problem.AddInitState("temperature-high", Constants.TemperatureInObjectName);
                     break;
                 case ThresholdRelation.BelowThreshold:
-                    problem.AddInitState("temperature-low", Constants.TemperatureOutObjectName);
+                    problem.AddInitState("temperature-low", Constants.TemperatureInObjectName);
                     break;
             }
 
@@ -61,10 +54,10 @@ namespace Core.AiPlanning
             switch (sensors.TemperatureOut)
             {
                 case ThresholdRelation.AboveThreshold:
-                    problem.AddInitState("temperature-high", Constants.TemperatureInObjectName);
+                    problem.AddInitState("temperature-high", Constants.TemperatureOutObjectName);
                     break;
                 case ThresholdRelation.BelowThreshold:
-                    problem.AddInitState("temperature-low", Constants.TemperatureInObjectName);
+                    problem.AddInitState("temperature-low", Constants.TemperatureOutObjectName);
                     break;
             }
 
