@@ -15,7 +15,7 @@ namespace MessagingEndpoint
 {
     public class MqttEndpoint : IHostedService
     {
-        private static string[] TopicList =
+        private static readonly string[] TopicList =
         {
             "room001/input/temperature",
             "room001/input/particulate-matter",
@@ -29,7 +29,7 @@ namespace MessagingEndpoint
         private readonly IManagedMqttClient _mqttClient;
         private readonly IApplicationStateStore _stateStore;
 
-        private SensorContext _currentSensorContext = new SensorContext();
+        private readonly SensorContext _currentSensorContext = new SensorContext();
 
         private Timer _plannerUpdateTimer;
 
@@ -41,7 +41,7 @@ namespace MessagingEndpoint
             _stateStore = stateStore;
         }
 
-        public void Init()
+        private void Init()
         {
             _mqttClient.UseApplicationMessageReceivedHandler(HandleMqttMessage);
 
@@ -64,7 +64,7 @@ namespace MessagingEndpoint
             }
             catch (Exception e)
             {
-                Log.Error("Failed to Process message {message} from {topic} because: {errorMessage}",
+                Log.Error("Failed to Process message {Message} from {Topic} because: {ErrorMessage}",
                     stringPayload,
                     messageEvent.ApplicationMessage.Topic, e.Message, e);
                 Log.Error(e.StackTrace);
@@ -80,7 +80,7 @@ namespace MessagingEndpoint
             }
             catch (Exception ex)
             {
-                Log.Error("Failed to update Ai Planner context. Reason: {errorMessage}", ex.Message, ex);
+                Log.Error("Failed to update Ai Planner context. Reason: {ErrorMessage}", ex.Message, ex);
                 Log.Error(ex.StackTrace);
             }
         }
@@ -103,7 +103,7 @@ namespace MessagingEndpoint
 
         private static async Task SubscribeAsync(IManagedMqttClient mqttClient, string topic, int qos = 1)
         {
-            Log.Information("Subscribing to Topic '{topic}'", topic);
+            Log.Information("Subscribing to Topic '{Topic}'", topic);
 
             await mqttClient.SubscribeAsync(new MqttTopicFilterBuilder()
                 .WithTopic(topic)

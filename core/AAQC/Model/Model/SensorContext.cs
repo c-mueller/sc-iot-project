@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Model.Model
@@ -10,30 +11,21 @@ namespace Model.Model
 
         public void SubmitMeasurement(SensorInput sensorInput)
         {
-            if (Locations == null)
-            {
-                Locations = new List<SensorLocation>();
-            }
+            Locations ??= new List<SensorLocation>();
 
             var location = sensorInput.Location == "outdoors" ? Location.Outside : Location.Inside;
 
-            foreach (var sensorLocation in Locations)
+            foreach (var sensorLocation in Locations.Where(sl => sl.LocationId == sensorInput.Location))
             {
-                if (sensorLocation.LocationId == sensorInput.Location)
+                foreach (var measure in sensorLocation.Measures.Where(m => m.Type == sensorInput.SensorType))
                 {
-                    foreach (var measurement in sensorLocation.Measures)
-                    {
-                        if (measurement.Type == sensorInput.SensorType)
-                        {
-                            measurement.Value = sensorInput.Value;
-                            measurement.MeasuredAt = sensorInput.Timestamp;
-                            return;
-                        }
-                    }
-
-                    sensorLocation.Measures.Add(sensorInput.ToSensorMeasure());
+                    measure.Value = sensorInput.Value;
+                    measure.MeasuredAt = sensorInput.Timestamp;
                     return;
                 }
+
+                sensorLocation.Measures.Add(sensorInput.ToSensorMeasure());
+                return;
             }
 
             Locations.Add(new SensorLocation
@@ -43,7 +35,6 @@ namespace Model.Model
                 Measures = new List<SensorMeasure> {sensorInput.ToSensorMeasure()}
             });
         }
-        
     }
 
     public class SensorLocation
