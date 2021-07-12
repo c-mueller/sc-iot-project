@@ -4,17 +4,17 @@ namespace Model
 {
     public static class Constants
     {
-        // Threshold constants TODO fix values
-        public const double TemperatureOutsideUpperThreshold = 20;
-        public const double TemperatureOutsideLowerThreshold = 20;
-        public const double TemperatureInsideUpperThreshold = 20;
+        // Threshold constants
+        public const double TemperatureOutsideUpperThreshold = 25;
+        public const double TemperatureOutsideLowerThreshold = 15;
+        public const double TemperatureInsideUpperThreshold = 22;
         public const double TemperatureInsideLowerThreshold = 20;
-        public const double AirPurityOutsideUpperThreshold = 20;
-        public const double AirPurityOutsideLowerThreshold = 20;
-        public const double AirPurityInsideUpperThreshold = 20;
-        public const double AirPurityInsideLowerThreshold = 20;
-        public const double HumidityOutsideThreshold = 20;
-        public const double Co2EmergencyThreshold = 20;
+        public const double AirPurityOutsideUpperThreshold = 40;
+        public const double AirPurityOutsideLowerThreshold = 0; // TODO remove maybe
+        public const double AirPurityInsideUpperThreshold = 50;
+        public const double AirPurityInsideLowerThreshold = 30;
+        public const double HumidityOutsideThreshold = 60;
+        public const double Co2EmergencyThreshold = 1000;
         
         // Actuator Names
         public const string VentilationName = "ventilation";
