@@ -1,0 +1,9 @@
+<div *ngIf="loaded" class="card" style="margin-bottom: 20px">
+  <h3 class="card-header">{{actuator!.actuator.type}}</h3>
+  <div class="card-body">
+    <ul>
+      <li>Currently Active: <strong>{{actuator!.current_state.active ? 'Yes' : 'No'}}</strong></li>
+      <li>Last Changed: <strong>{{actuator!.current_state.last_updated | formatDate}}</strong></li>
+    </ul>
+  </div>
+</div>

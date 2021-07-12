@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ApiService} from "../../svc/api.service";
-import {Sensor, SensorRanges, SensorType} from "../../util/model";
+import {ApiService} from "../util/svc/api.service";
+import {Sensor, SensorRanges, SensorType} from "../util/model";
 
 @Component({
   selector: 'app-sensor',
@@ -21,12 +21,6 @@ export class SensorComponent implements OnInit {
   newValue = 0
 
   constructor(private api: ApiService) {
-  }
-
-  getUpdateDate(): string {
-    const d = new Date(this.sensor!.current_state.last_measured);
-    return d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + " " +
-      d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "." + d.getMilliseconds();
   }
 
   ngOnInit(): void {

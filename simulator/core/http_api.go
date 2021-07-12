@@ -15,13 +15,13 @@ type sensorInfo struct {
 type actuatorInfo struct {
 	State        model.WorkerState   `json:"state"`
 	CurrentState model.ActuatorState `json:"current_state"`
-	Sensor       model.Actuator      `json:"sensor"`
+	Actuator     model.Actuator      `json:"actuator"`
 }
 
 func (s *Simulator) SetSensorValue(context *gin.Context) {
 	worker := s.sensorWorkers[context.Param("name")]
 	if worker == nil {
-		context.String(404, "Sensor not Found")
+		context.String(404, "Actuator not Found")
 		return
 	}
 
@@ -42,7 +42,7 @@ func (s *Simulator) SetSensorValue(context *gin.Context) {
 func (s *Simulator) GetSensor(context *gin.Context) {
 	worker := s.sensorWorkers[context.Param("name")]
 	if worker == nil {
-		context.String(404, "Sensor not Found")
+		context.String(404, "Actuator not Found")
 		return
 	}
 
@@ -80,7 +80,7 @@ func (s *Simulator) GetActuator(context *gin.Context) {
 	workerInfo := actuatorInfo{
 		State:        worker.GetState(),
 		CurrentState: workerState,
-		Sensor:       workerState.Actuator,
+		Actuator:     workerState.Actuator,
 	}
 
 	context.JSON(200, workerInfo)
@@ -93,7 +93,7 @@ func (s *Simulator) ListActuators(context *gin.Context) {
 		workerActuatorInfo[worker.GetWorkerDeviceName()] = actuatorInfo{
 			State:        worker.GetState(),
 			CurrentState: workerState,
-			Sensor:       workerState.Actuator,
+			Actuator:     workerState.Actuator,
 		}
 	}
 

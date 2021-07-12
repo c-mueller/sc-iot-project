@@ -47,7 +47,7 @@ namespace Core.AiPlanning
                     currentProblem.GetInitStatesAsString());
                 return;
             }
-            if (plan.Any())
+            if (!plan.Any())
             {
                 Log.Information("[AI Planner] Planning finished: Plan is empty and no changes are required");
                 return;

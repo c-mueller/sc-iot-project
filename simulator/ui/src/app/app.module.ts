@@ -5,11 +5,15 @@ import { AppComponent } from './app.component';
 import {HttpClientModule} from "@angular/common/http";
 import { SensorComponent } from './sensor/sensor.component';
 import {FormsModule} from "@angular/forms";
+import { ActuatorComponent } from './actuator/actuator.component';
+import { FormatDatePipe } from './util/format-date.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SensorComponent
+    SensorComponent,
+    ActuatorComponent,
+    FormatDatePipe
   ],
   imports: [
     BrowserModule,

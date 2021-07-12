@@ -45,7 +45,7 @@ func LogMiddleware(log *logrus.Entry, useCtx bool) gin.HandlerFunc {
 			"method":      method,
 			"duration":    durMs,
 			"status_code": statusCode,
-		}).Info(string(messageb))
+		}).Debug(string(messageb))
 
 	}
 }

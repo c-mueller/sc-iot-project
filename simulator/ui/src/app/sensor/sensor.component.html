@@ -1,19 +1,24 @@
-<div *ngIf="loaded">
-  <h3>{{sensor!.sensor.type}}</h3>
-  <ul>
-    <li>Current Value: <strong>{{sensor!.current_state.current_value + ' ' + sensorConfig.unit}}</strong></li>
-    <li>Last Sent: <strong>{{getUpdateDate()}}</strong></li>
-  </ul>
-  <p>
-    <input style="width: 100%" type="range" [(ngModel)]="newValue" [min]="sensorConfig.min" [max]="sensorConfig.max"
-           [step]="sensorConfig.step">
-  </p>
-  <div class="row">
-    <div class="col-sm-8">
-      <p>Current Value: {{newValue + ' ' + sensorConfig.unit}}</p>
-    </div>
-    <div class="col-sm-4">
-      <button class="btn btn-primary" style="width: 100%" (click)="sendValue($event)">Set Value</button>
+<div *ngIf="loaded" class="card" style="margin-bottom: 20px">
+  <h3 class="card-header">{{sensor!.sensor.type}}</h3>
+  <div class="card-body">
+    <ul>
+      <li>Current Value: <strong>{{sensor!.current_state.current_value + ' ' + sensorConfig.unit}}</strong></li>
+      <li>Last Sent: <strong>{{sensor!.current_state.last_measured | formatDate}}</strong></li>
+    </ul>
+    <p>
+      <input style="width: 100%" type="range" [(ngModel)]="newValue" [min]="sensorConfig.min" [max]="sensorConfig.max"
+             [step]="sensorConfig.step">
+    </p>
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="container">
+          <div class="row">Current Value</div>
+          <div class="row"><strong>{{newValue + ' ' + sensorConfig.unit}}</strong></div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" style="width: 100%" (click)="sendValue($event)">Set</button>
+      </div>
     </div>
   </div>
 

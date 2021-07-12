@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Simulator) initializeSensorWorkers() error {
-	s.logger.Infof("Initilializing Sensor Workers...")
+	s.logger.Infof("Initilializing Actuator Workers...")
 
 	s.sensorWorkers = make(map[string]model.SensorWorker)
 	for _, sensor := range s.Config.Sensors {
@@ -28,7 +28,7 @@ func (s *Simulator) initializeSensorWorkers() error {
 		}
 	}
 
-	s.logger.Infof("Initilaized %d Sensor Workers", len(s.sensorWorkers))
+	s.logger.Infof("Initilaized %d Actuator Workers", len(s.sensorWorkers))
 	return nil
 }
 

@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../environments/environment";
+import {environment} from "../../../environments/environment";
 import {Observable} from "rxjs";
-import {Sensor, SensorInfo, SensorMap} from "../util/model";
+import {Actuator, ActuatorMap, Sensor, SensorInfo, SensorMap} from "../model";
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,14 @@ export class ApiService {
 
   getSensorInfos(): Observable<SensorMap> {
     return this.client.get<SensorMap>(environment.apiEndpoint + "/api/sensors");
+  }
+
+  getActuatorInfos(): Observable<ActuatorMap> {
+    return this.client.get<ActuatorMap>(environment.apiEndpoint + "/api/actuators");
+  }
+
+  getActuator(name: string): Observable<Actuator> {
+    return this.client.get<Actuator>(environment.apiEndpoint + "/api/actuators/" + name);
   }
 
   getSensor(name: string): Observable<Sensor> {

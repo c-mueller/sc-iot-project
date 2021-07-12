@@ -13,7 +13,7 @@ func (w *Worker) workerLoop() {
 		case <-w.ticker.C:
 			w.publishSensorData()
 		case <-w.interruptChan:
-			w.logger.Debugf("Terminating Sensor Worker %q...", w.Sensor.Name)
+			w.logger.Debugf("Terminating Actuator Worker %q...", w.Sensor.Name)
 			w.state = model.Inactive
 			return
 		}
@@ -36,7 +36,7 @@ func (w *Worker) publishSensorData() {
 	go func() {
 		_ = t.Wait()
 		if t.Error() != nil {
-			w.logger.WithError(t.Error()).Errorf("Publishing Sensor Data has failed. Reason: %s", t.Error().Error())
+			w.logger.WithError(t.Error()).Errorf("Publishing Actuator Data has failed. Reason: %s", t.Error().Error())
 		}
 	}()
 }

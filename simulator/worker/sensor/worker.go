@@ -35,7 +35,7 @@ func (w *Worker) Init(logger *logrus.Entry, config model.BrokerConfig) error {
 		return err
 	}
 
-	w.logger.Debugf("Initialized Sensor Worker for sensor %q.", w.Sensor.Name)
+	w.logger.Debugf("Initialized Actuator Worker for sensor %q.", w.Sensor.Name)
 
 	return nil
 }

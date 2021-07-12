@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ApiService} from "../svc/api.service";
-import {Sensor, SensorMap} from "../util/model";
+import {ApiService} from "./util/svc/api.service";
+import {Actuator, ActuatorMap, Sensor, SensorMap} from "./util/model";
 
 @Component({
   selector: 'app-root',
@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
   loading: boolean = true;
 
   sensors: any = {};
+  actuators: Actuator[] = [];
 
 
   constructor(private api: ApiService) {
@@ -27,6 +28,12 @@ export class AppComponent implements OnInit {
         this.sensors[sensor.sensor.place].push(sensor);
       }
       this.loading = false;
+    });
+    this.api.getActuatorInfos().subscribe((e: ActuatorMap) => {
+      for (let eKey in e) {
+        const actuator = e[eKey];
+        this.actuators.push(actuator);
+      }
     })
   }
 

@@ -15,7 +15,7 @@ sensors:
   place: Indoors
   name: air-particles-indoors
   unit: ug/m3
-  initial_value: 50
+  initial_value: 5
   topic: room001/input/particulate-matter
   location: room001
 - type: Humidity
@@ -43,7 +43,7 @@ sensors:
   place: Outdoors
   name: air-particles-outdoors
   unit: ug/m3
-  initial_value: 50
+  initial_value: 30
   topic: outdoors/particulate-matter
   location: outdoors
 actuators:

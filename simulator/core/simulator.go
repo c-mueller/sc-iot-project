@@ -45,7 +45,7 @@ func (s *Simulator) Run() error {
 		for _, worker := range s.sensorWorkers {
 			err := worker.Stop()
 			if err != nil {
-				s.logger.WithError(err).Errorf("Termination of Sensor Worker %q failed. Reason: %s", worker.GetWorkerDeviceName(), err.Error())
+				s.logger.WithError(err).Errorf("Termination of Actuator Worker %q failed. Reason: %s", worker.GetWorkerDeviceName(), err.Error())
 			}
 		}
 		for _, worker := range s.actuatorWorkers {

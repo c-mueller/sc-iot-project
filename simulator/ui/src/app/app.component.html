@@ -1,12 +1,24 @@
 <main role="main" style="margin: 30px">
   <div class="container" *ngIf="!loading">
-    <div *ngFor="let sensorLocation of getLocations()">
-      <h1>{{sensorLocation}}</h1>
-      <div class="row">
-        <div class="col-lg-4" *ngFor="let e of sensors[sensorLocation]">
-          <app-sensor [sensorName]="e.sensor.name"></app-sensor>
-        </div>
+    <div class="row">
+      <div class="col-lg-9">
+        <div *ngFor="let sensorLocation of getLocations()">
+          <h1>Sensors: {{sensorLocation}}</h1>
+          <div class="row">
+            <div class="col-lg-4" *ngFor="let sensorInfo of sensors[sensorLocation]">
+              <app-sensor [sensorName]="sensorInfo.sensor.name"></app-sensor>
+            </div>
 
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <h1>Actuators</h1>
+        <div class="row">
+          <div class="col-sm-12" *ngFor="let actuatorInfo of actuators">
+            <app-actuator [actuatorName]="actuatorInfo.actuator.name"></app-actuator>
+          </div>
+        </div>
       </div>
     </div>
   </div>

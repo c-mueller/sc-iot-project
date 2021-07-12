@@ -5,6 +5,13 @@ export enum SensorType {
   CO2 = "CO2"
 }
 
+export enum ActuatorType {
+  Heater = "Heater",
+  Ventilation = "Ventilation",
+  AirConditioner = "AirConditioner",
+  AirPurifier = "AirPurifier"
+}
+
 export const SensorRanges: any = {
   [SensorType.Temperature]: {
     min: -20,
@@ -20,16 +27,37 @@ export const SensorRanges: any = {
   },
   [SensorType.CO2]: {
     min: 0,
-    max: 10000,
-    step: 1,
+    max: 2500,
+    step: 10,
     unit: 'ppm'
   },
   [SensorType.ParticulateMatter]: {
     min: 0,
-    max: 10000,
+    max: 200,
     step: 1,
     unit: 'ug/m³'
   }
+}
+
+export interface ActuatorMap {
+  [name: string]: Actuator
+}
+
+export interface Actuator {
+  state: string
+  current_state: ActuatorState
+  actuator: ActuatorInfo
+}
+
+export interface ActuatorState {
+  active: boolean
+  last_updated: string
+}
+
+export interface ActuatorInfo {
+  type: string
+  name: string
+  location: string
 }
 
 export interface SensorMap {
