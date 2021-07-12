@@ -35,8 +35,6 @@ namespace Core.AiPlanning
                 case ThresholdRelation.BelowThreshold:
                     problem.AddInitState("humidity-low", Constants.HumidityOutObjectName);
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
 
             return problem;
@@ -52,8 +50,6 @@ namespace Core.AiPlanning
                 case ThresholdRelation.BelowThreshold:
                     problem.AddInitState("temperature-low", Constants.TemperatureOutObjectName);
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
 
             return problem;
@@ -69,8 +65,6 @@ namespace Core.AiPlanning
                 case ThresholdRelation.BelowThreshold:
                     problem.AddInitState("temperature-low", Constants.TemperatureInObjectName);
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
 
             return problem;
