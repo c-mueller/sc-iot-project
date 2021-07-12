@@ -26,15 +26,10 @@ namespace Core.AiPlanning
         {
             // Log.Information(JsonConvert.SerializeObject(currentContext));
             var currentObjectState = SensorContextEvaluator.Evaluate(currentContext);
-            Log.Information(JsonConvert.SerializeObject(currentObjectState));
+            // Log.Information(JsonConvert.SerializeObject(currentObjectState));
 
             var latestActuatorState = _contextStore.GetLatestActuatorState();
-
-            // Fill in actuator values that are not included in the plan with the value they currently have 
-            currentObjectState.ActuatorState.IsVentilationActive ??= latestActuatorState.IsVentilationActive;
-            currentObjectState.ActuatorState.IsHeaterActive ??= latestActuatorState.IsHeaterActive;
-            currentObjectState.ActuatorState.IsAirConditionerActive ??= latestActuatorState.IsAirConditionerActive;
-            currentObjectState.ActuatorState.IsAirPurifierActive ??= latestActuatorState.IsAirPurifierActive;
+            currentObjectState.ActuatorState = latestActuatorState;
 
             var currentProblem = PddlProblemParser.Parse(currentObjectState);
             if (!currentProblem.HasInitStates())
@@ -52,10 +47,10 @@ namespace Core.AiPlanning
                     currentProblem.GetInitStatesAsString());
                 return;
             }
-
             if (plan.Any())
             {
                 Log.Information("[AI Planner] Planning finished: Plan is empty and no changes are required");
+                return;
             }
             // Log.Information(JsonConvert.SerializeObject(plan));
 
