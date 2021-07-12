@@ -24,6 +24,7 @@ Mögliche Sensorwerte:
 	Temperatur:
 		--> gemessen in Grad
 		--> 20 Grad angenehm --> 20 Grad Zielbereich --> geregelt über Heizung / Klima
+		--> über 25 und unter 15 keine Fenster mehr auf
 	Luftfeuchtigkeit:
 		--> gemessen in %
 		--> 0%..100%
