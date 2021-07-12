@@ -37,6 +37,7 @@
             ?to - temperature-out
             ?ho - humidity-out
             ?ai - air-purity-in
+            ?ao - air-purity-out
             ?ci - co2-level-in
         )
         :precondition (or 
@@ -58,6 +59,7 @@
                         )
                     )
                     (humidity-low ?ho)
+                    (air-purity-bad ?ao)
                 )
             )
             (co2-level-emergency ?ci)
@@ -117,6 +119,7 @@
             ?ti - temperature-in
             ?to - temperature-out
             ?ho - humidity-out
+            ?ao - air-purity-out
         )
         :precondition (and
             (and 
@@ -129,8 +132,14 @@
                 (or
                     (temperature-low ?to)
                     (and
-                        (temperature-high ?to)
-                        (humidity-high ?ho)
+                        (or
+                            (temperature-high ?to)
+                            (not(temperature-low ?to))
+                        )
+                        (or
+                            (air-purity-bad ?ao)
+                            (humidity-high ?ho)
+                        )
                     )
                 )
             )
@@ -175,6 +184,7 @@
             ?ti - temperature-in
             ?to - temperature-out
             ?ho - humidity-out
+            ?ao - air-purity-out
         )
         :precondition (and
             (and 
@@ -187,8 +197,14 @@
                 (or
                     (temperature-high ?to)
                     (and
-                        (temperature-low ?to)
-                        (humidity-high ?ho)
+                        (or
+                            (temperature-low ?to)
+                            (not(temperature-high ?to))
+                        )
+                        (or
+                            (air-purity-bad ?ao)
+                            (humidity-high ?ho)
+                        )
                     )
                 )
             )
