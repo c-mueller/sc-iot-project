@@ -40,7 +40,6 @@
             ?ci - co2-level-in
         )
         :precondition (or 
-            (co2-level-emergency ?ci)
             (and
                 (and
                     (not(on ?h))
@@ -67,12 +66,10 @@
                     (not(air-purity-bad ?ao))
                 )
             )
+            (co2-level-emergency ?ci)
         )
         :effect (and
             (on ?v)
-            (not(on ?h))
-            (not(on ?ac))
-            (not(on ?ap))
             (not(temperature-low ?ti))
             (not(temperature-high ?ti))
             (not(air-purity-bad ?ai))
@@ -92,11 +89,7 @@
             ?ci - co2-level-in
         )
         :precondition (and
-            (and
-                (on ?v)
-                (not(on ?h))
-                (not(on ?ac))
-            )
+            (on ?v)
             (or 
                 (and
                     (not(temperature-low ?ti))
