@@ -5,6 +5,6 @@ namespace Model.Interfaces
 {
     public interface IExternalPddlSolver
     {
-        public IEnumerable<PddlPlanStep> CreatePlanForProblem(PddlProblem problem);
+        public List<PddlPlanStep> CreatePlanForProblem(PddlProblem problem);
     }
 }

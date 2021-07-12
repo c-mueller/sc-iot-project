@@ -3,6 +3,7 @@ using System.Linq;
 using Model;
 using Model.Interfaces;
 using Model.Model;
+using Newtonsoft.Json;
 using Serilog;
 
 namespace Core.AiPlanning
@@ -23,7 +24,17 @@ namespace Core.AiPlanning
 
         public void Initiate(SensorContext currentContext)
         {
+            // Log.Information(JsonConvert.SerializeObject(currentContext));
             var currentObjectState = SensorContextEvaluator.Evaluate(currentContext);
+            Log.Information(JsonConvert.SerializeObject(currentObjectState));
+
+            var latestActuatorState = _contextStore.GetLatestActuatorState();
+
+            // Fill in actuator values that are not included in the plan with the value they currently have 
+            currentObjectState.ActuatorState.IsVentilationActive ??= latestActuatorState.IsVentilationActive;
+            currentObjectState.ActuatorState.IsHeaterActive ??= latestActuatorState.IsHeaterActive;
+            currentObjectState.ActuatorState.IsAirConditionerActive ??= latestActuatorState.IsAirConditionerActive;
+            currentObjectState.ActuatorState.IsAirPurifierActive ??= latestActuatorState.IsAirPurifierActive;
 
             var currentProblem = PddlProblemParser.Parse(currentObjectState);
             if (!currentProblem.HasInitStates())
@@ -31,12 +42,25 @@ namespace Core.AiPlanning
                 Log.Information("[AI Planner] Planning finished: No Init states for pddl problem found");
                 return;
             }
+            // Log.Information(currentProblem.BuildProblemFile());
 
             var plan = _pddlSolver.CreatePlanForProblem(currentProblem);
+            if (plan == null)
+            {
+                Log.Error(
+                    "[AI Planner] Planning finished: Error creating a plan for the given problem init states \n'{InitStates}'",
+                    currentProblem.GetInitStatesAsString());
+                return;
+            }
+
+            if (plan.Any())
+            {
+                Log.Information("[AI Planner] Planning finished: Plan is empty and no changes are required");
+            }
+            // Log.Information(JsonConvert.SerializeObject(plan));
 
             Log.Information("[AI Planner] Finding changes in actuator state");
             var newActuatorState = PddlPlanParser.Parse(plan);
-            var latestActuatorState = _contextStore.GetLatestActuatorState();
 
             // Fill in actuator values that are not included in the plan with the value they currently have 
             newActuatorState.IsVentilationActive ??= latestActuatorState.IsVentilationActive;

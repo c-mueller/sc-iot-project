@@ -4,6 +4,7 @@ using Flurl;
 using Flurl.Http;
 using Model.Interfaces;
 using Model.Model;
+using Newtonsoft.Json;
 using Serilog;
 
 namespace Core.AiPlanning.ExternalPddlSolver
@@ -13,7 +14,7 @@ namespace Core.AiPlanning.ExternalPddlSolver
         private const string Url = "http://solver.planning.domains";
         private const string SolverApiPath = "solve-and-validate";
 
-        public IEnumerable<PddlPlanStep> CreatePlanForProblem(PddlProblem problem)
+        public List<PddlPlanStep> CreatePlanForProblem(PddlProblem problem)
         {
             Log.Information("[AI Planner] Creating plan for PDDL Problem");
             var response =  Url
@@ -24,7 +25,21 @@ namespace Core.AiPlanning.ExternalPddlSolver
                     problem = problem.BuildProblemFile(),
                 }).ReceiveJson<OnlineSolverResponse>().Result;
             
-            return response.Result.Plan;
+            // var responseString = Url
+            //     .AppendPathSegment(SolverApiPath)
+            //     .PostJsonAsync(new
+            //     {
+            //         domain = PddlDomain.Domain,
+            //         problem = problem.BuildProblemFile(),
+            //     }).ReceiveString().Result;
+            // Log.Information(responseString);
+            // var response = JsonConvert.DeserializeObject<OnlineSolverResponse>(responseString);
+
+            if (response.Status.ToLower() == "ok")
+            {
+                return response.Result.Plan;
+            }
+            return response.Result.Output.Contains("TRUE") ? new List<PddlPlanStep>() : null;
         }
     }
 
@@ -58,7 +73,7 @@ namespace Core.AiPlanning.ExternalPddlSolver
         [DataMember(Name = "val_status")] 
         public string ValStatus { get; set; }
         [DataMember(Name = "error")] 
-        public bool Error { get; set; }
+        public string Error { get; set; }
         [DataMember(Name = "planPath")] 
         public string PlanPath { get; set; }
         [DataMember(Name = "logPath")] 

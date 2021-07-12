@@ -58,6 +58,17 @@ namespace Model.Model
             return _initStates.Any();
         }
 
+        public string GetInitStatesAsString()
+        {
+            var sb = new StringBuilder();
+            foreach (var initState in _initStates)
+            {
+                sb.AppendLine($"({initState.Predicate} {initState.ObjectName})");
+            }
+
+            return sb.ToString();
+        }
+        
         public void AddInitState(string predicate, string objectName)
         {
             _initStates.Add(new PddlPredicateObjectPair
