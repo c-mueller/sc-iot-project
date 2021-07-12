@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Model.Model;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace Core.AiPlanning
 {
@@ -17,6 +19,8 @@ namespace Core.AiPlanning
             
             var activateSteps = FindActivateActuatorStep(steps).ToList();
             var deactivateSteps = FindDeactivateActuatorStep(steps, activateSteps).ToList();
+            // Log.Information(JsonConvert.SerializeObject(activateSteps));
+            // Log.Information(JsonConvert.SerializeObject(deactivateSteps));
             
             var actuatorState = new ActuatorState();
             foreach (var activateStep in activateSteps)
@@ -24,6 +28,8 @@ namespace Core.AiPlanning
 
             foreach (var deactivateStep in deactivateSteps)
                 actuatorState.DecideActuatorState(deactivateStep, false);
+            
+            // Log.Information(JsonConvert.SerializeObject(actuatorState));
             
             return actuatorState;
         }

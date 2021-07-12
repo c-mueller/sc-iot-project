@@ -19,10 +19,10 @@ namespace MessagingEndpoint
         {
             "room001/input/temperature",
             "room001/input/particulate-matter",
-            "room001/input/humidity",
             "room001/input/co2",
             "outdoors/temperature",
-            "outdoors/particulate-matter"
+            "outdoors/particulate-matter",
+            "outdoors/humidity"
         };
 
         private readonly ISensorContextConsumer _incomingMessages;

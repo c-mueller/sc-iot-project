@@ -58,10 +58,12 @@ namespace Core.AiPlanning
             var newActuatorState = PddlPlanParser.Parse(plan);
 
             // Fill in actuator values that are not included in the plan with the value they currently have 
+            /*
             newActuatorState.IsVentilationActive ??= latestActuatorState.IsVentilationActive;
             newActuatorState.IsHeaterActive ??= latestActuatorState.IsHeaterActive;
             newActuatorState.IsAirConditionerActive ??= latestActuatorState.IsAirConditionerActive;
             newActuatorState.IsAirPurifierActive ??= latestActuatorState.IsAirPurifierActive;
+            */
 
             var actuators = GetActuatorContexts(newActuatorState, latestActuatorState).ToList();
             if (!actuators.Any())

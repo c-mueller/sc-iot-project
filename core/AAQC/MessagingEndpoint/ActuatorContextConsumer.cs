@@ -23,7 +23,7 @@ namespace MessagingEndpoint
         }
         
         private static async Task PublishAsync(IManagedMqttClient mqttClient, string topic, string payload,
-            bool retainFlag = true, int qos = 1) =>
+            bool retainFlag = false, int qos = 1) =>
             await mqttClient.PublishAsync(new MqttApplicationMessageBuilder()
                 .WithTopic(topic)
                 .WithPayload(payload)

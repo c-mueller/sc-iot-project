@@ -18,13 +18,6 @@ sensors:
   initial_value: 5
   topic: room001/input/particulate-matter
   location: room001
-- type: Humidity
-  place: Indoors
-  name: humidity-outdoors
-  unit: Percent
-  initial_value: 50
-  topic: room001/input/humidity
-  location: room001
 - type: CO2
   place: Indoors
   name: co2-indoors
@@ -45,6 +38,13 @@ sensors:
   unit: ug/m3
   initial_value: 30
   topic: outdoors/particulate-matter
+  location: outdoors
+- type: Humidity
+  place: Outdoors
+  name: humidity-outdoors
+  unit: Percent
+  initial_value: 50
+  topic: outdoors/humidity
   location: outdoors
 actuators:
 - type: Ventilation
