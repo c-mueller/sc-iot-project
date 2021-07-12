@@ -40,6 +40,7 @@
             ?ci - co2-level-in
         )
         :precondition (or 
+            (co2-level-emergency ?ci)
             (and
                 (and
                     (not(on ?h))
@@ -66,22 +67,16 @@
                     (not(air-purity-bad ?ao))
                 )
             )
-            (co2-level-emergency ?ci)
         )
         :effect (and
             (on ?v)
-            (when
-                (and (co2-level-emergency ?ci))
-                (and 
-                    (not(on ?h))
-                    (not(on ?ac))
-                    (not(on ?ap))
-                )
-            )
-            (not (temperature-low ?ti))
-            (not (temperature-high ?ti))
-            (not (air-purity-bad ?ai))
-            (not (co2-level-emergency ?ci))
+            (not(on ?h))
+            (not(on ?ac))
+            (not(on ?ap))
+            (not(temperature-low ?ti))
+            (not(temperature-high ?ti))
+            (not(air-purity-bad ?ai))
+            (not(co2-level-emergency ?ci))
         )
     )
 
@@ -93,9 +88,12 @@
             ?ti - temperature-in
             ?to - temperature-out
             ?ho - humidity-out
+            ?ao - air-purity-out
+            ?ci - co2-level-in
         )
         :precondition (and
             (and
+                (on ?v)
                 (not(on ?h))
                 (not(on ?ac))
             )
@@ -107,7 +105,9 @@
                 (temperature-high ?to)
                 (temperature-low ?to)
                 (humidity-high ?ho)
+                (air-purity-bad ?ao)
             )
+            (not(co2-level-emergency ?ci))
         )
         :effect (
             not(on ?v)
@@ -123,6 +123,7 @@
             ?to - temperature-out
             ?ho - humidity-out
             ?ao - air-purity-out
+            ?ci - co2-level-in
         )
         :precondition (and
             (and 
@@ -145,6 +146,7 @@
                     )
                 )
             )
+            (not(co2-level-emergency ?ci))
         )
         :effect (and
             (on ?h)
@@ -161,6 +163,7 @@
             ?ti - temperature-in
             ?to - temperature-out
             ?ho - humidity-out
+            ?ci - co2-level-in
         )
         :precondition (and
             (and
@@ -177,6 +180,7 @@
                     (on ?h)
                 )
             )
+            (not(co2-level-emergency ?ci))
         )
         :effect (
             not(on ?h)
@@ -192,6 +196,7 @@
             ?to - temperature-out
             ?ho - humidity-out
             ?ao - air-purity-out
+            ?ci - co2-level-in
         )
         :precondition (and
             (and 
@@ -214,6 +219,7 @@
                     )
                 )
             )
+            (not(co2-level-emergency ?ci))
         )
         :effect (and
             (on ?ac)
@@ -230,6 +236,7 @@
             ?ti - temperature-in
             ?to - temperature-out
             ?ho - humidity-out
+            ?ci - co2-level-in
         )
         :precondition (and
             (and
@@ -246,6 +253,7 @@
                     (on ?ac)
                 )
             )
+            (not(co2-level-emergency ?ci))
         )
         :effect (
             not(on ?ac)
@@ -257,9 +265,11 @@
             ?ap - air-purifier
             ?ai - air-purity-in
             ?ao - air-purity-out
+            ?ci - co2-level-in
         )
-        :precondition ( 
-            air-purity-bad ?ai
+        :precondition (and
+            (air-purity-bad ?ai)
+            (not(co2-level-emergency ?ci))
         )
         :effect (and 
             (on ?ap)
@@ -272,9 +282,11 @@
             ?ap - air-purifier
             ?ai - air-purity-in
             ?ao - air-purity-out
+            ?ci - co2-level-in
         )
-        :precondition (
-            not (air-purity-bad ?ai)
+        :precondition (and
+            (not(air-purity-bad ?ai))
+            (not(co2-level-emergency ?ci))
         )
         :effect (
             not(on ?ap)
