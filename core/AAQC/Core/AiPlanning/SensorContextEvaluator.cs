@@ -30,7 +30,9 @@ namespace Core.AiPlanning
                             sensors = EvaluateParticulateMatter(measure, sensors, location.Location);
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException();
+                            Log.Warning("[AI Planning] Measure found with unknown sensor type");
+                            break;
+                        
                     }
                 }
             }
@@ -101,7 +103,8 @@ namespace Core.AiPlanning
                 }
                 default:
                 {
-                    throw new ArgumentOutOfRangeException(nameof(location), location, null);
+                    Log.Warning("[AI Planning] Sensor found with unknown location");
+                    break;
                 }
             }
 
@@ -163,7 +166,8 @@ namespace Core.AiPlanning
                 }
                 default:
                 {
-                    throw new ArgumentOutOfRangeException(nameof(location), location, null);
+                    Log.Warning("[AI Planning] Sensor found with unknown location");
+                    break;
                 }
             }
 

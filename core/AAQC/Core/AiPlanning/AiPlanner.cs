@@ -28,7 +28,7 @@ namespace Core.AiPlanning
             var currentProblem = PddlProblemParser.Parse(currentObjectState);
             if (!currentProblem.HasInitStates())
             {
-                Log.Information("[AI Planner] Planning finished: No Init states found");
+                Log.Information("[AI Planner] Planning finished: No Init states for pddl problem found");
                 return;
             }
 

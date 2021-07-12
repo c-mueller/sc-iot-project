@@ -8,6 +8,16 @@ namespace Model.Model
 
     public class SensorState
     {
+        public SensorState()
+        {
+            TemperatureIn = ThresholdRelation.Normal;
+            TemperatureOut = ThresholdRelation.Normal;
+            HumidityOut = ThresholdRelation.Normal;
+            AirPurityIn = ThresholdRelation.Normal;
+            AirPurityOut = ThresholdRelation.Normal;
+            Co2LevelIn = ThresholdRelation.Normal;
+        }
+
         public ThresholdRelation TemperatureIn { set; get; }
         public ThresholdRelation TemperatureOut { set; get; }
         public ThresholdRelation HumidityOut { set; get; }
@@ -25,7 +35,7 @@ namespace Model.Model
 
         public bool Equals(ActuatorState other)
         {
-            return IsVentilationActive == other.IsVentilationActive && 
+            return IsVentilationActive == other.IsVentilationActive &&
                    IsHeaterActive == other.IsHeaterActive &&
                    IsAirConditionerActive == other.IsAirConditionerActive &&
                    IsAirPurifierActive == other.IsAirPurifierActive;
