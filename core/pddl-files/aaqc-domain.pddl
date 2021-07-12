@@ -51,15 +51,21 @@
                     (or
                         (and
                             (temperature-high ?ti)
-                            (temperature-low ?to)
+                            (or
+                                (temperature-low ?to)
+                                (not(temperature-high ?to))
+                            )
                         )
                         (and
                             (temperature-low ?ti)
-                            (temperature-high ?to)
+                            (or
+                                (temperature-high ?to)
+                                (not(temperature-low ?to))
+                            )
                         )
                     )
-                    (humidity-low ?ho)
-                    (air-purity-bad ?ao)
+                    (not(humidity-high ?ho))
+                    (not(air-purity-bad ?ao))
                 )
             )
             (co2-level-emergency ?ci)
@@ -166,10 +172,7 @@
                 (not(on ?ac))
                 (not(on ?v))
             )
-            (and
-                (not(temperature-low ?ti))
-                (not(temperature-high ?ti))
-            )
+            (not(temperature-low ?ti))
         )
         :effect (
             not(on ?h)
@@ -231,10 +234,7 @@
                 (on ?ac)
                 (not(on ?v))
             )
-            (and
-                (not(temperature-low ?ti))
-                (not(temperature-high ?ti))
-            )
+            (not(temperature-high ?ti))
         )
         :effect (
             not(on ?ac)
