@@ -22,7 +22,6 @@
         (temperature-high ?t - temperature)
         (temperature-low ?t - temperature)
         (humidity-high ?h - humidity)
-        (humidity-low ?h - humidity)
         (air-purity-bad ?a - air-purity)
         (co2-level-emergency ?c - co2-level)
     )
@@ -45,7 +44,6 @@
                 (and
                     (not(on ?h))
                     (not(on ?ac))
-                    (not(on ?v))
                 )
                 (and
                     (or
@@ -72,10 +70,6 @@
         )
         :effect (and
             (on ?v)
-            (not (temperature-low ?ti))
-            (not (temperature-high ?ti))
-            (not (air-purity-bad ?ai))
-            (not (co2-level-emergency ?ci))
             (when
                 (and (co2-level-emergency ?ci))
                 (and 
@@ -84,6 +78,10 @@
                     (not(on ?ap))
                 )
             )
+            (not (temperature-low ?ti))
+            (not (temperature-high ?ti))
+            (not (air-purity-bad ?ai))
+            (not (co2-level-emergency ?ci))
         )
     )
 
@@ -100,7 +98,6 @@
             (and
                 (not(on ?h))
                 (not(on ?ac))
-                (on ?v)
             )
             (or 
                 (and
@@ -129,7 +126,6 @@
         )
         :precondition (and
             (and 
-                (not(on ?h))
                 (not(on ?ac))
                 (not(on ?v))
             )
@@ -168,11 +164,19 @@
         )
         :precondition (and
             (and
-                (on ?h)
                 (not(on ?ac))
                 (not(on ?v))
             )
-            (not(temperature-low ?ti))
+            (or
+                (or
+                    (not(temperature-low ?ti))
+                    (temperature-high ?ti)
+                )
+                (and
+                    (temperature-low ?ti)
+                    (on ?h)
+                )
+            )
         )
         :effect (
             not(on ?h)
@@ -192,7 +196,6 @@
         :precondition (and
             (and 
                 (not(on ?h))
-                (not(on ?ac))
                 (not(on ?v))
             )
             (and
@@ -231,10 +234,18 @@
         :precondition (and
             (and
                 (not(on ?h))
-                (on ?ac)
                 (not(on ?v))
             )
-            (not(temperature-high ?ti))
+            (or
+                (or
+                    (not(temperature-high ?ti))
+                    (temperature-low ?ti)
+                )
+                (and
+                    (temperature-high ?ti)
+                    (on ?ac)
+                )
+            )
         )
         :effect (
             not(on ?ac)
@@ -247,9 +258,8 @@
             ?ai - air-purity-in
             ?ao - air-purity-out
         )
-        :precondition (and 
-            (not(on ?ap))
-            (air-purity-bad ?ai)
+        :precondition ( 
+            air-purity-bad ?ai
         )
         :effect (and 
             (on ?ap)
@@ -263,9 +273,8 @@
             ?ai - air-purity-in
             ?ao - air-purity-out
         )
-        :precondition (and
-            (on ?ap)
-            (not (air-purity-bad ?ai))
+        :precondition (
+            not (air-purity-bad ?ai)
         )
         :effect (
             not(on ?ap)
