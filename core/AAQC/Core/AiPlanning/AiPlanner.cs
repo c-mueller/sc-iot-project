@@ -56,7 +56,7 @@ namespace Core.AiPlanning
                 _actuatorContextConsumer.Consume(actuator);
             }
 
-            _contextStore.StoreLatestActuatorState(currentObjectState.ActuatorState);
+            _contextStore.StoreLatestActuatorState(newActuatorState);
             Log.Information("[AI Planner] Planning finished: Changes in actuator state found");
         }
 

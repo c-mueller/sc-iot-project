@@ -11,37 +11,26 @@ namespace Core.AiPlanning
         private const string AirConditionerPddlName = "airconditioner";
         private const string AirPurifierPddlName = "airpurifier";
 
-        public static ActuatorState Parse(string plan)
+        public static ActuatorState Parse(IEnumerable<PddlPlanStep> plan)
         {
-            var steps = SplitPlanIntoSteps(plan).ToList();
-
+            var steps = plan.Select(step => step.Name.CleanUpStep()).ToList();
+            
             var activateSteps = FindActivateActuatorStep(steps).ToList();
             var deactivateSteps = FindDeactivateActuatorStep(steps, activateSteps).ToList();
-
+            
             var actuatorState = new ActuatorState();
             foreach (var activateStep in activateSteps)
-                actuatorState = DecideActuatorState(activateStep, actuatorState, true);
+                actuatorState.DecideActuatorState(activateStep, true);
 
             foreach (var deactivateStep in deactivateSteps)
-                actuatorState = DecideActuatorState(deactivateStep, actuatorState, false);
-
+                actuatorState.DecideActuatorState(deactivateStep, false);
+            
             return actuatorState;
         }
-
-        private static IEnumerable<string> SplitPlanIntoSteps(string plan)
+        
+        private static string CleanUpStep(this string uncleanedStep)
         {
-            var steps = plan.Split("\n");
-            for (var i = 0; i < steps.Length; i++)
-            {
-                steps[i] = CleanUpStep(steps[i]);
-            }
-
-            return steps;
-        }
-
-        private static string CleanUpStep(string uncleanedStep)
-        {
-            return uncleanedStep.Split()[0].Trim('(').ToLower();
+            return uncleanedStep.Split(" ")[0].Trim('(').ToLower();
         }
 
         private static IEnumerable<string> FindActivateActuatorStep(IEnumerable<string> steps)
@@ -51,16 +40,16 @@ namespace Core.AiPlanning
             {
                 switch (step)
                 {
-                    case VentilationPddlName:
+                    case "activate" + VentilationPddlName:
                         activatedActuators.Add(VentilationPddlName);
                         break;
-                    case HeaterPddlName:
+                    case "activate" + HeaterPddlName:
                         activatedActuators.Add(HeaterPddlName);
                         break;
-                    case AirConditionerPddlName:
+                    case "activate" + AirConditionerPddlName:
                         activatedActuators.Add(AirConditionerPddlName);
                         break;
-                    case AirPurifierPddlName:
+                    case "activate" + AirPurifierPddlName:
                         activatedActuators.Add(AirPurifierPddlName);
                         break;
                 }
@@ -75,21 +64,21 @@ namespace Core.AiPlanning
             var deactivatedActuators = new List<string>();
             foreach (var step in steps.Where(s => s.StartsWith("deactivate")))
             {
-                if (activateActuatorSteps.Exists(s => s == step))
+                if (activateActuatorSteps.Exists(s => step.EndsWith(s)))
                     break;
 
                 switch (step)
                 {
-                    case VentilationPddlName:
+                    case "deactivate" + VentilationPddlName:
                         deactivatedActuators.Add(VentilationPddlName);
                         break;
-                    case HeaterPddlName:
+                    case "deactivate" + HeaterPddlName:
                         deactivatedActuators.Add(HeaterPddlName);
                         break;
-                    case AirConditionerPddlName:
+                    case "deactivate" + AirConditionerPddlName:
                         deactivatedActuators.Add(AirConditionerPddlName);
                         break;
-                    case AirPurifierPddlName:
+                    case "deactivate" + AirPurifierPddlName:
                         deactivatedActuators.Add(AirPurifierPddlName);
                         break;
                 }
@@ -98,26 +87,24 @@ namespace Core.AiPlanning
             return deactivatedActuators;
         }
 
-        private static ActuatorState DecideActuatorState(string step, ActuatorState actuators,
+        private static void DecideActuatorState(this ActuatorState actuatorState, string step,
             bool isActive)
         {
             switch (step)
             {
-                case "ventilation":
-                    actuators.IsVentilationActive = isActive;
+                case VentilationPddlName:
+                    actuatorState.IsVentilationActive = isActive;
                     break;
-                case "heater":
-                    actuators.IsHeaterActive = isActive;
+                case HeaterPddlName:
+                    actuatorState.IsHeaterActive = isActive;
                     break;
-                case "airconditioner":
-                    actuators.IsAirConditionerActive = isActive;
+                case AirConditionerPddlName:
+                    actuatorState.IsAirConditionerActive = isActive;
                     break;
-                case "airpurifier":
-                    actuators.IsAirPurifierActive = isActive;
+                case AirPurifierPddlName:
+                    actuatorState.IsAirPurifierActive = isActive;
                     break;
             }
-
-            return actuators;
         }
     }
 }

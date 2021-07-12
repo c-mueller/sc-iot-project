@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using Model.Model;
 
 namespace Model.Interfaces
 {
     public interface IExternalPddlSolver
     {
-        public string CreatePlanForProblem(PddlProblem problem);
+        public IEnumerable<PddlPlanStep> CreatePlanForProblem(PddlProblem problem);
     }
 }
