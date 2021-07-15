@@ -17,21 +17,20 @@ namespace Core.AiPlanning
                     switch (measure.Type)
                     {
                         case SensorType.Humidity:
-                            sensors = EvaluateHumidity(measure, sensors);
+                            sensors.EvaluateHumidity(measure);
                             break;
                         case SensorType.Temperature:
-                            sensors = EvaluateTemperature(measure, sensors, location.Location);
+                            sensors.EvaluateTemperature(measure, location.Location);
                             break;
                         case SensorType.CO2:
-                            sensors = EvaluateCo2(measure, sensors);
+                            sensors.EvaluateCo2(measure);
                             break;
                         case SensorType.ParticulateMatter:
-                            sensors = EvaluateParticulateMatter(measure, sensors, location.Location);
+                            sensors.EvaluateParticulateMatter(measure, location.Location);
                             break;
                         default:
                             Log.Warning("[AI Planning] Measure found with unknown sensor type");
                             break;
-                        
                     }
                 }
             }
@@ -43,7 +42,7 @@ namespace Core.AiPlanning
             };
         }
 
-        private static SensorState EvaluateHumidity(SensorMeasure measure, SensorState sensors)
+        private static void EvaluateHumidity(this SensorState sensors, SensorMeasure measure)
         {
             if (measure.Value > Constants.HumidityOutsideThreshold)
             {
@@ -57,11 +56,9 @@ namespace Core.AiPlanning
             {
                 sensors.HumidityOut = ThresholdRelation.Normal;
             }
-
-            return sensors;
         }
 
-        private static SensorState EvaluateTemperature(SensorMeasure measure, SensorState sensors,
+        private static void EvaluateTemperature(this SensorState sensors, SensorMeasure measure,
             Location location)
         {
             switch (location)
@@ -106,26 +103,17 @@ namespace Core.AiPlanning
                     break;
                 }
             }
-
-            return sensors;
         }
 
-        private static SensorState EvaluateCo2(SensorMeasure measure, SensorState sensors)
+        private static void EvaluateCo2(this SensorState sensors, SensorMeasure measure)
         {
-            if (measure.Value > Constants.Co2EmergencyThreshold)
-            {
-                sensors.Co2LevelIn = ThresholdRelation.AboveThreshold;
-            }
-            else
-            {
-                sensors.Co2LevelIn = ThresholdRelation.BelowThreshold;
-            }
-
-            return sensors;
+            sensors.Co2LevelIn = measure.Value > Constants.Co2EmergencyThreshold
+                ? ThresholdRelation.AboveThreshold
+                : ThresholdRelation.BelowThreshold;
         }
 
-        private static SensorState EvaluateParticulateMatter(SensorMeasure measure,
-            SensorState sensors, Location location)
+        private static void EvaluateParticulateMatter(this SensorState sensors, SensorMeasure measure,
+            Location location)
         {
             switch (location)
             {
@@ -169,8 +157,6 @@ namespace Core.AiPlanning
                     break;
                 }
             }
-
-            return sensors;
         }
     }
 }
