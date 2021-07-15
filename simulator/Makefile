@@ -12,6 +12,11 @@ build: clean build_ui pack
 	go build -v -a -o bin/simulator
 	cp config.yml bin/config.yml
 
+build_rpi: clean build_ui pack
+	mkdir "bin"
+	GOARCH=arm go build -v -a -o bin/simulator
+	cp config.yml bin/config.yml
+
 build_win: clean build_ui pack
 	mkdir "bin"
 	GOOS=windows go build -v -a -o bin/simulator.exe
