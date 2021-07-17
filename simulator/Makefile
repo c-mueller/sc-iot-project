@@ -14,7 +14,7 @@ build: clean build_ui pack
 
 build_rpi: clean build_ui pack
 	mkdir "bin"
-	GOARCH=arm go build -v -a -o bin/simulator
+	CGO_ENABLED=0 GOARCH=arm go build -v -a -o bin/simulator
 	cp config.yml bin/config.yml
 
 build_win: clean build_ui pack
