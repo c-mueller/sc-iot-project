@@ -1,36 +1,36 @@
 
-\section{System Analysis}
+\section{System Analysis}\label{sec:system-analysis}
+
 There are some core requirements and functionalities a user wants from this autonomous system.
 Given the described scenario we want to improve the situation of users by providing an autonomous way to control and adjust the air quality of a given room.
-In addition we want to improve comfort of users by also regulating temperature or humidity of a given room based on environmental factors.
-Another part of our system is to identify human presence or out of office time and adjust the functionality of the system accordingly.
+In addition, we want to improve comfort of users by also regulating temperature or air purity of a given room based on environmental factors.
 
 The core system functions will be separated into both functional and non-functional requirements according to ISO 25010.
-All requirements will be priorized by - - / - / 0 / + and ++, where all requirements with + or ++ are considered to be mandatory for our project.
-All other requirements are considered desirable or optional.
+All requirements will be prioritized by - - / - / 0 / + and ++, where all requirements with + or ++ are considered to be mandatory for our project.
+All other requirements are desirable or optional.
 
-\subsection{Functional Requirements}
+\subsection{Functional Requirements}\label{subsec:functional-requirements}
 
 \begin{description}
     \item[Name] FA-1
     \item[Title] Autonomous temperature regulation
-    \item[Description] The system should be able to regulate the temperature of the room based on system information and human presence
+    \item[Description] The system should be able to regulate the temperature of the room based on system information
     \item[Dependencies] FA-8 FA-10
-    \item[Priority] +
+    \item[Priority] ++
 \end{description}
 
 \begin{description}
     \item[Name] FA-2
     \item[Title] Autonomous humidity regulation
-    \item[Description] The system should be able to regulate the humidity of the room based on system information and human presence
+    \item[Description] The system should be able to regulate the humidity of the room based on system information
     \item[Dependencies] FA-9 FA-10
-    \item[Priority] +
+    \item[Priority] -
 \end{description}
 
 \begin{description}
     \item[Name] FA-3
     \item[Title] Autonomous air quality regulation
-    \item[Description] The system should be able to regulate the air quiality of the room based on system information and human presence. Particle count (Particulate matter) and $CO_2$ concentration are the basis for measuring the air quality.
+    \item[Description] The system should be able to regulate the air quality of the room based on system information. Particle count (Particulate matter) and $CO_2$ concentration are the basis for measuring the air quality.
     \item[Dependencies] FA-6 FA-7 FA-10
     \item[Priority] ++
 \end{description}
@@ -38,7 +38,7 @@ All other requirements are considered desirable or optional.
 \begin{description}
     \item[Name] FA-4
     \item[Title] Night regulation
-    \item[Description] The System should reduce its functionality to a minimum during night time.
+    \item[Description] The System should reduce its functionality to a minimum during nighttime.
     \item[Dependencies] FA-1 FA-2 FA-3
     \item[Priority] 0
 \end{description}
@@ -48,7 +48,7 @@ All other requirements are considered desirable or optional.
     \item[Title] Display system activity to User
     \item[Description] The System should be able to show its activity and monitoring information to the user
     \item[Dependencies] Everything else
-    \item[Priority] - -
+    \item[Priority] -
 \end{description}
 
 \begin{description}
@@ -80,7 +80,7 @@ All other requirements are considered desirable or optional.
     \item[Title] Monitor indoor and outdoor humidity
     \item[Description] The System should be able to recognize the humidity indoors and outdoors of its operating location.
     \item[Dependencies] None
-    \item[Priority] ++
+    \item[Priority] 0
 \end{description}
 
 \begin{description}
@@ -91,11 +91,11 @@ All other requirements are considered desirable or optional.
     \item[Priority] -
 \end{description}
 
-\subsection{Non-functional Requirements}
+\subsection{Non-functional Requirements}\label{subsec:non-functional-requirements}
 
 \begin{description}
     \item[ID] NFA-1
-    \item[Title] Realworld application
+    \item[Title] Real world application
     \item[Description] The system should be able to be easily transformed to a real world running smart home system.
     \item[Dependencies] None
     \item[Priority] -
@@ -104,7 +104,7 @@ All other requirements are considered desirable or optional.
 \begin{description}
     \item[ID] NFA-2
     \item[Title] Automation with minimal user intervention
-    \item[Description] The system should utilze AI-planning in order to automate its autonomous functionalities with minimal user intervention.
+    \item[Description] The system should utilize AI-planning in order to automate its autonomous functionalities with minimal user intervention.
     \item[Dependencies] None
     \item[Priority] ++
 \end{description}
