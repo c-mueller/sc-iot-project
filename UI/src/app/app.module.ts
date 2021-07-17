@@ -9,6 +9,7 @@ import {ActuatorComponent} from './actuator/actuator.component';
 import {FormatDatePipe} from './util/format-date.pipe';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCardModule} from "@angular/material/card";
+import {MatDividerModule} from "@angular/material/divider";
 
 @NgModule({
   declarations: [
@@ -17,13 +18,14 @@ import {MatCardModule} from "@angular/material/card";
     ActuatorComponent,
     FormatDatePipe
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    FormsModule,
-    BrowserAnimationsModule,
-    MatCardModule
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        FormsModule,
+        BrowserAnimationsModule,
+        MatCardModule,
+        MatDividerModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
