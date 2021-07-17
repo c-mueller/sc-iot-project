@@ -29,7 +29,7 @@ Result 7 Relevant states
 
 ### Übergänge im Graph
 
-![](upload_d5a9f687809029ff2591e94e155ce23a.png)
+![](oldimg/upload_d5a9f687809029ff2591e94e155ce23a.png)
 
 #### Edge #1
 
