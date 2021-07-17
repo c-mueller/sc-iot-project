@@ -1,0 +1,8 @@
+<mat-card *ngIf="actuatorInfo" style="margin-bottom: 20px">
+  <mat-card-title>{{actuatorInfo.name}}</mat-card-title>
+  <mat-card-content>
+    <ul>
+      <li>Currently Active: <strong>{{actuatorInfo.active ? 'Yes' : 'No'}}</strong></li>
+    </ul>
+  </mat-card-content>
+</mat-card>

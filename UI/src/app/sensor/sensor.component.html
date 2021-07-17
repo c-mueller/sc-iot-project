@@ -1,0 +1,9 @@
+<mat-card *ngIf="sensorMeasure" style="margin-bottom: 20px">
+  <mat-card-title>{{getDisplayNameForType(sensorMeasure.type)}}</mat-card-title>
+  <mat-card-content>
+    <ul>
+      <li>Current value: <strong>{{sensorMeasure.value + ' ' + getUnitForType(sensorMeasure.type)}}</strong></li>
+      <li>Last measured at: <strong>{{sensorMeasure.measuredAt | formatDate}}</strong></li>
+    </ul>
+  </mat-card-content>
+</mat-card>
