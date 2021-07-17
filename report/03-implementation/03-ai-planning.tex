@@ -1,10 +1,15 @@
-\subsection{AI Planning}
-The AI Planning routine is implemented using a mix between an external AI Planner and internal programming logic. It is the central part of the application core and therefore also implemented using C\#.
+\subsection{AI Planning}\label{subsec:ai-planning}
+The AI Planning routine is implemented using a mix between an external AI Planner and internal programming logic.
+It is the central part of the application core and therefore also implemented using C\#.
 
-The planning routine is initialized with the latest measurement of all sensors of the system in the so-called sensor context. All sensor measurements of this sensor context are uniquely identifiable for the AI Planning in order to know which physical location they come from.
+The planning routine is initialized with the latest measurement of all sensors of the system in the so-called sensor context.
+All sensor measurements of this sensor context are uniquely identifiable for the AI Planning in order to know which physical location they come from.
 
-\subsubsection{Sensor context evaluation}
-In a first step the AI Planning component evaluates this sensor context. There are different evaluation steps depending on the type of a sensor. The system has four different types of sensors which are the following:
+\subsubsection{Sensor context evaluation}\label{subsubsec:sensor-context-evaluation}
+In a first step the AI Planning component evaluates this sensor context.
+There are different evaluation steps depending on the type of a sensor.
+The system has four different types of sensors which are the following:
+
 \begin{itemize}
     \item Temperature
     \item Humidity
@@ -12,27 +17,47 @@ In a first step the AI Planning component evaluates this sensor context. There a
     \item CO2
 \end{itemize}
 
-Each sensor measure will be evaluated in relation to certain threshold values. Depending on the sensor type there are is either a threshold above or below which we want to take action or an acceptable value range above or below which we want to take action. For example the evaluation of a temperature measure of $30^\circ$C indoors will be considered above a pre-defined temperature threshold for indoor rooms and therefore be too high. After the application finishes this sensor context evaluation it will have a sensor state in which all relations with the given thresholds of this sensor have been saved.
+Each sensor measure will be evaluated in relation to certain threshold values.
+Depending on the sensor type there are is either a threshold above or below which we want to take action or an acceptable value range above or below which we want to take action.
+For example the evaluation of a temperature measure of $30^\circ$C indoors will be considered above a pre-defined temperature threshold for indoor rooms and therefore be too high.
+After the application finishes this sensor context evaluation it will have a sensor state in which all relations with the given thresholds of this sensor have been saved.
 
-\subsubsection{PDDL domain}
-In this implementation we want a PDDL domain which is able to generate us any plan, which can be parsed and if necessary filtered or transformed to some extent, that lets us know the new state of our actuators, precisely if any of them are activated of deactivated. For this initialization, we can only use the previously evaluated sensor state as well as the current actuator state that we have saved inside the application state store.
+\subsubsection{PDDL domain}\label{subsubsec:pddl-domain}
+In this implementation we want a PDDL domain which is able to generate us any plan, which can be parsed and if necessary filtered or transformed to some extent, that lets us know the new state of our actuators, precisely if any of them are activated of deactivated.
+For this initialization, we can only use the previously evaluated sensor state as well as the current actuator state that we have saved inside the application state store.
 
 \paragraph{Types}
-The general Idea behind the Types is that we have both actuators and sensors at the core. Actuators are modelled as a 'device' type and sensors as a 'sensor' type. The sensors are then separated into which type of sensor they are, e.g. temperature, humidity, air purity or co2. Functionally, this would be sufficient to model the domain, however to improve readability and therefore make changes to the domain easier there are more types. Each Actuator, namely the ventilation, heater, air conditioner and air purifier have a type of their own. Additionally, Each sensor type has a type of their own that also has where this sensor is located, e.g. 'temperature-in' which is of type temperature.
+The general Idea behind the Types is that we have both actuators and sensors at the core.
+Actuators are modelled as a 'device' type and sensors as a 'sensor' type.
+The sensors are then separated into which type of sensor they are, e.g. temperature, humidity, air purity or co2.
+Functionally, this would be sufficient to model the domain, however to improve readability and therefore make changes to the domain easier there are more types.
+Each Actuator, namely the ventilation, heater, air conditioner and air purifier have a type of their own.
+Additionally, Each sensor type has a type of their own that also has where this sensor is located, e.g. 'temperature-in' which is of type temperature.
 
 \paragraph{Predicates}
-Most predicated of this domain will describe the sensor relation towards our given value or value range thresholds, as explained in (TODO). This relation was already saved inside the sensor state and will be somewhat reflected in the predicated that were chosen to describe our PDDL domain. The following predicates currently exist in our domain:
+Most predicated of this domain will describe the sensor relation towards our given value or value range thresholds, as explained in (TODO).
+This relation was already saved inside the sensor state and will be somewhat reflected in the predicated that were chosen to describe our PDDL domain.
+The following predicates currently exist in our domain:
 \begin{itemize}
-    \item \textbf{(on ?d - device)}: This predicate is used to determine which actuator, and therefore the potential device which it controls, is currently on. If this predicate is true the actuator is activated and if it is false the actuator is deactivated.
-    \item \textbf{(temperature-high ?t - temperature)}: This predicate together with the temperature-low predicate shows if a given temperature from a sensor is deemed not normal or acceptable. There need to be two predicated designated to modelling a threshold relation if the accepted value is a range. In this case, if the temperature-high predicate is true the temperature is too high, otherwise if it is false the temperature can be either normal or too low. Therefore, if both temperature-high is false and temperature-low is false, we know that the temperature for a given sensor is normal.
-    \item \textbf{(temperature-low ?t - temperature)}: As mentioned, this predicate together with the temperature- high predicate shows if a given temperature from a sensor is seemed normal or acceptable. If this predicate is true the temperature is too low and if it is false the temperature is either normal or too high.
-    \item \textbf{(humidity-high ?h - humidity)}: Unlike the temperature predicated where we needed multiple ones to model the sensor state, for humidity we are only interested if the humidity is too high. Therefore, if this predicate is true the humidity is too high otherwise if it is false the humidity is deemed acceptable.
-    \item \textbf{(air-purity-bad ?a - air-purity)}: This predicate is used to determine the air purity, namely if there is too much particulate matter in the air. If this predicate is true we deem the air purity bad and if it is false the air purity is deemed acceptable.
-    \item \textbf{(co2-level-emergency ?c - co2-level)}: This predicate indicates if the co2 level, in this case inside a given room, is either too high in which case this predicate is true or it is not too high and deemed acceptable in which case this predicate is false. This is a very problematic case and the system has to react more extremely to this than for other cases.
+    \item \textbf{(on ?d - device)}: This predicate is used to determine which actuator, and therefore the potential device which it controls, is currently on.
+    If this predicate is true the actuator is activated and if it is false the actuator is deactivated.
+    \item \textbf{(temperature-high ?t - temperature)}: This predicate together with the temperature-low predicate shows if a given temperature from a sensor is deemed not normal or acceptable.
+    There need to be two predicated designated to modelling a threshold relation if the accepted value is a range.
+    In this case, if the temperature-high predicate is true the temperature is too high, otherwise if it is false the temperature can be either normal or too low.
+    Therefore, if both temperature-high is false and temperature-low is false, we know that the temperature for a given sensor is normal.
+    \item \textbf{(temperature-low ?t - temperature)}: As mentioned, this predicate together with the temperature- high predicate shows if a given temperature from a sensor is seemed normal or acceptable.
+    If this predicate is true the temperature is too low and if it is false the temperature is either normal or too high.
+    \item \textbf{(humidity-high ?h - humidity)}: Unlike the temperature predicated where we needed multiple ones to model the sensor state, for humidity we are only interested if the humidity is too high.
+    Therefore, if this predicate is true the humidity is too high otherwise if it is false the humidity is deemed acceptable.
+    \item \textbf{(air-purity-bad ?a - air-purity)}: This predicate is used to determine the air purity, namely if there is too much particulate matter in the air.
+    If this predicate is true we deem the air purity bad and if it is false the air purity is deemed acceptable.
+    \item \textbf{(co2-level-emergency ?c - co2-level)}: This predicate indicates if the co2 level, in this case inside a given room, is either too high in which case this predicate is true or it is not too high and deemed acceptable in which case this predicate is false.
+    This is a very problematic case and the system has to react more extremely to this than for other cases.
 \end{itemize}
 
 \paragraph{Actions}
-The actions of our PDDL domain are exclusively related to activating or deactivating the actuators. There are these following actions:
+The actions of our PDDL domain are exclusively related to activating or deactivating the actuators.
+There are these following actions:
 \begin{itemize}
     \item activateVentilation
     \item deactivateVentilation
@@ -44,10 +69,13 @@ The actions of our PDDL domain are exclusively related to activating or deactiva
     \item deactivateAirPurifier
 \end{itemize}
 
-\subsubsection{Parsing sensor and actuator state to PDDL problem}
-The PDDL problem we want to generate depends on both the sensor state, which we evaluated previously, and the actuator state, which we received from the application state store. Additionally, the PDDL domain is the basis for any PDDL problem we want to generate.
+\subsubsection{Parsing sensor and actuator state to PDDL problem}\label{subsubsec:parsing-sensor-and-actuator-state-to-pddl-problem}
+The PDDL problem we want to generate depends on both the sensor state, which we evaluated previously, and the actuator state, which we received from the application state store.
+Additionally, the PDDL domain is the basis for any PDDL problem we want to generate.
 
-The objects of any problem we generate is identical. Here we create an object for any actuator as well as all sensors of our system. For our problem, we need objects of the following types:
+The objects of any problem we generate is identical.
+Here we create an object for any actuator as well as all sensors of our system.
+For our problem, we need objects of the following types:
 \begin{itemize}
     \item ventilation
     \item heater
@@ -61,20 +89,43 @@ The objects of any problem we generate is identical. Here we create an object fo
     \item co2-level-in
 \end{itemize}
 
-The initial states of a PDDL problem is the most interesting part, since these depend on the sensor measurements and the current actuator state. Actuator initial states are based on if they are active or not.
-For active actuators, each will have an 'on' predicate added to the init of the problem. Due to the close world assumption of PDDL inactive actuators will not be part of the problem init section.
-The sensor state will also be parsed to init predicates of the PDDL problem. Here we will add the predicates as is described in (TODO) to the problem init. Since we only have unwanted behavior as sensor predicates if there are no sensor predicates, we know the system is in a state where we do not need to activate any actuators. This is also the case for the actuators, since the best case for our system is that all sensor measurements are acceptable and all actuators are deactivated. This fact already describes what goal our PDDL problem will have. Furthermore, if any problem we create has no initial states, we also know that no action has to be taken without consulting any external AI Planner at all. This is due to the fact that such an initial state would mean all actuators are deactivated and any sensor measures acceptable values.
+The initial states of a PDDL problem is the most interesting part, since these depend on the sensor measurements and the current actuator state.
+Actuator initial states are based on if they are active or not.
+For active actuators, each will have an 'on' predicate added to the init of the problem.
+Due to the close world assumption of PDDL inactive actuators will not be part of the problem init section.
+The sensor state will also be parsed to init predicates of the PDDL problem.
+Here we will add the predicates as is described in (TODO) to the problem init.
+Since we only have unwanted behavior as sensor predicates if there are no sensor predicates, we know the system is in a state where we do not need to activate any actuators.
+This is also the case for the actuators, since the best case for our system is that all sensor measurements are acceptable and all actuators are deactivated.
+This fact already describes what goal our PDDL problem will have.
+Furthermore, if any problem we create has no initial states, we also know that no action has to be taken without consulting any external AI Planner at all.
+This is due to the fact that such an initial state would mean all actuators are deactivated and any sensor measures acceptable values.
 
-The goal of our problem is always the same. Find a plan for our current system, after which all actuators are deactivated and all sensor measurements inside the room our system runs for are acceptable. Precisely, we want the temperature to be neither too high nor too low, we do not want the air purity to be bad and there should not be too high of a co2 concentration inside the room. For our goal, the state of the outside sensors is irrelevant, since that is not something our system can change.
+The goal of our problem is always the same.
+Find a plan for our current system, after which all actuators are deactivated and all sensor measurements inside the room our system runs for are acceptable.
+Precisely, we want the temperature to be neither too high nor too low, we do not want the air purity to be bad and there should not be too high of a co2 concentration inside the room.
+For our goal, the state of the outside sensors is irrelevant, since that is not something our system can change.
 
-\subsubsection{Create PDDL plan via external AI Planner}
-In order to create any plan, our application has to interact with some external AI Planner which can create such a plan based on the given PDDL domain and problem. In order to stay flexible regarding which external AI Planner wants to be used, we provide an interface which has to be implemented. This interface gets a PDDL problem and returns a list of steps the plan consist of. If this list is either empty or null, we know that we don't have to do anything and can conclude the current AI Planning routine.
+\subsubsection{Create PDDL plan via external AI Planner}\label{subsubsec:create-pddl-plan-via-external-ai-planner}
+In order to create any plan, our application has to interact with some external AI Planner which can create such a plan based on the given PDDL domain and problem.
+In order to stay flexible regarding which external AI Planner wants to be used, we provide an interface which has to be implemented.
+This interface gets a PDDL problem and returns a list of steps the plan consist of.
+If this list is either empty or null, we know that we don't have to do anything and can conclude the current AI Planning routine.
 
-For our implementation we used an online pddl solver (TODO footnote http://solver.planning.domains). Here we can just send an HTTP request with the domain and problem file and this planner will return a response with the plan and some other meta information. For this requesting, we used Flurl (TODO footnote).
+For our implementation we used an online pddl solver (TODO footnote http://solver.planning.domains).
+Here we can just send an HTTP request with the domain and problem file and this planner will return a response with the plan and some other meta information.
+For this requesting, we used Flurl (TODO footnote).
 
-\subsubsection{Parse PDDL plan and execution}
-Due to the way our PDDL domain and the PDDL problem is modeled, a given plan can not be takes completely at face value. We need to filter the given plan somewhat to get which actuators we have to activate or deactivate.
+\subsubsection{Parse PDDL plan and execution}\label{subsubsec:parse-pddl-plan-and-execution}
+Due to the way our PDDL domain and the PDDL problem is modeled, a given plan can not be takes completely at face value.
+We need to filter the given plan somewhat to get which actuators we have to activate or deactivate.
 
-Since part of the goal of our problem is that all actuators are deactivated, a given plan will contain a step for activating as well as deactivating said actuator in the cases where in reality we only want to activate this actuator. This however can easily be filtered out by looking at which activation action have a paired deactivation step, since in practice we do not want to activate and deactivate an actuator in the same planning routine. This is not the case for deactivation, therefore, if there is only a deactivation step present in the plan we know that we really want to deactivate this actuator.
+Since part of the goal of our problem is that all actuators are deactivated, a given plan will contain a step for activating as well as deactivating said actuator in the cases where in reality we only want to activate this actuator.
+This however can easily be filtered out by looking at which activation action have a paired deactivation step, since in practice we do not want to activate and deactivate an actuator in the same planning routine.
+This is not the case for deactivation, therefore, if there is only a deactivation step present in the plan we know that we really want to deactivate this actuator.
 
-This filtering and parsing step will result in a new actuator state like the one we initially used before going into the PDDL problem parsing. This actuator state will have all states of the system's actuators, namely if they are activated or deactivated. If this new actuator state is the same as the one we used going into the planning, we know that nothing has changed, and we can successfully finish the AI planning routine. If this is not the case, we will transform this information into the message format which the messaging endpoint wants and send such a message for each actuator for which we want to change its state. Finally, if there are changes in the actuator state, we will save the new actuator state inside the application state store, so it is up-to-date.
+This filtering and parsing step will result in a new actuator state like the one we initially used before going into the PDDL problem parsing.
+This actuator state will have all states of the system's actuators, namely if they are activated or deactivated.
+If this new actuator state is the same as the one we used going into the planning, we know that nothing has changed, and we can successfully finish the AI planning routine.
+If this is not the case, we will transform this information into the message format which the messaging endpoint wants and send such a message for each actuator for which we want to change its state.
+Finally, if there are changes in the actuator state, we will save the new actuator state inside the application state store, so it is up-to-date.
