@@ -12,7 +12,6 @@ export class AppComponent implements OnInit {
   sensors: SensorContext | undefined;
   actuators: ActuatorInfo[] = [];
 
-
   constructor(private api: ApiService) {
   }
 

@@ -30,6 +30,15 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("allowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
             services.AddControllers();
 
             services.AddSingleton<IConnectionMultiplexer>(e => ConnectionMultiplexer.Connect(new ConfigurationOptions
@@ -100,10 +109,12 @@ namespace API
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            app.UseCors("allowAll");
 
             app.UseAuthorization();
 

@@ -33,3 +33,4 @@ export interface ActuatorInfo {
   name: string;
   active: boolean;
 }
+

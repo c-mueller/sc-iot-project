@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ApiService} from "../util/svc/api.service";
 import {SensorMeasure, SensorType} from "../util/model";
 
 @Component({
@@ -12,13 +11,50 @@ export class SensorComponent implements OnInit {
   @Input()
   sensorMeasure: SensorMeasure | undefined;
 
-  nValSet = false;
-  newValue = 0
+  types = SensorType;
 
-  constructor(private api: ApiService) {
+  constructor() {
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
 
+  getDisplayNameForType(type: SensorType) {
+    switch (type) {
+      case SensorType.Temperature: {
+        return 'Temperature';
+      }
+      case SensorType.Humidity: {
+        return 'Humidity';
+      }
+      case SensorType.ParticulateMatter: {
+        return 'Particulate matter';
+      }
+      case SensorType.CO2: {
+        return 'CO2';
+      }
+      default: {
+        return '';
+      }
+    }
+  }
+
+  getUnitForType(type: SensorType): string {
+    switch (type) {
+      case SensorType.Temperature: {
+        return '°C';
+      }
+      case SensorType.Humidity: {
+        return '%';
+      }
+      case SensorType.ParticulateMatter: {
+        return 'ug/m3';
+      }
+      case SensorType.CO2: {
+        return 'ppm';
+      }
+      default: {
+        return '';
+      }
+    }
   }
 }

@@ -1,10 +1,9 @@
-<div *ngIf="sensorMeasure" class="card" style="margin-bottom: 20px">
-  <h3 class="card-header">{{sensorMeasure.type}}</h3>
-  <div class="card-body">
+<mat-card *ngIf="sensorMeasure" style="margin-bottom: 20px">
+  <mat-card-title>{{getDisplayNameForType(sensorMeasure.type)}}</mat-card-title>
+  <mat-card-content>
     <ul>
-      <li>Current Value: <strong>{{sensorMeasure.value + ' TODO unit'}}</strong></li>
-      <li>Last Sent: <strong>{{sensorMeasure.measuredAt | formatDate}}</strong></li>
+      <li>Current value: <strong>{{sensorMeasure.value + ' ' + getUnitForType(sensorMeasure.type)}}</strong></li>
+      <li>Measured at: <strong>{{sensorMeasure.measuredAt | formatDate}}</strong></li>
     </ul>
-  </div>
-
-</div><!-- /.col-lg-4 -->
+  </mat-card-content>
+</mat-card>
