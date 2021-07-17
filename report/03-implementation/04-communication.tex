@@ -1,38 +1,42 @@
-\subsubsection{Communication}\label{communication}
+\subsubsection{Communication}\label{subsubsec:communication}
 
 As mentioned in chapter (TODO), the communication between our components
-is ensured via the lightweight MQTT protocol. For this purpose, we use
-the Mosquitto (TODO: link https://mosquitto.org/) message broker to send
-and receive our json (TODO: link https://www.json.org/json-en.html)
-encoded data. In the following we will explain the communication in more
-detail. MQTT requires subscribing to so-called topics to receive
-messages instead of using a unique recipient address such as an IP
-address. Our topics are designed to be extended for larger use cases.
-The topics start with an identifier for the location e.g.~``room001''
-followed by ``input'' or ``output'' to specifiy the content of the
-payload. With that information we separate the payload into a message
-from a sensor or a message that is sent to an actuator. The finest
-granularity is defined by the last part of the topic which defines the
+is ensured via the lightweight MQTT protocol.
+For this purpose, we use the Mosquitto (TODO: link https://mosquitto.org/) message broker to send and receive our json (TODO: link https://www.json.org/json-en.html)encoded data.
+In the following we will explain the communication in more
+detail.
+MQTT requires subscribing to so-called topics to receive messages instead of using a unique recipient address such as an IP address.
+Our topics are designed to be extended for larger use cases.
+The topics start with an identifier for the location e.g.~``room001'' followed by ``input'' or ``output'' to specifiy the content of the payload.
+With that information we separate the payload into a message from a sensor or a message that is sent to an actuator.
+The finest granularity is defined by the last part of the topic which defines the
 name of a communication component such as ``temperature'' for a
-temperature sensor. An example for a valid topic is
-``room001/input/temperature''. Another example for an actuator topic is
-``room001/output/air\_conditioning''. There exist some special cases for
-example when having outside sensors that do not have a roomID. In this
-specific case, the location will be ``outside'', followed by the
-sensorID in the next granularity. The messaging endpoint component
-subscribes to all available topics to receive all measurements from
-sensors. Each created sensor or actuator subscribes to the corresponding
-topic as described before. This is necessary to ensure that the core
-component can reach all loosely coupled components.
+temperature sensor.
+An example for a valid topic is
+``room001/input/temperature''.
+Another example for an actuator topic is
+``room001/output/air\_conditioning''.
+There exist some special cases for
+example when having outside sensors that do not have a roomID. In this specific case, the location will be ``outside'', followed by the sensorID in the next granularity.
+The messaging endpoint component subscribes to all available topics to receive all measurements from sensors.
+Each created sensor or actuator subscribes to the corresponding topic as described before.
+This is necessary to ensure that the core component can reach all loosely coupled components.
 
-The communication in general can be divided into different areas: -
-Sensor to MQTT broker - MQTT broker to Actuator - MQTT broker and Core -
-Core to User Interface
+The communication in general can be divided into different areas:
+\begin{itemize}
+    \item Sensor to MQTT broker
+    \item MQTT broker to Actuator
+    \item MQTT broker and Core
+    \item Core to User Interface
+\end{itemize}
+
 
 The protocol for a sending sensor to the MQTT broker and therefore to
-the Core is defined as followed. A location attribute, timestamp
+the Core is defined as followed.
+A location attribute, timestamp
 according to ISO 8601 (https://www.iso.org/standard/70907.html), the
-sensortype and the sensor measurement referred to as ``value''. An
+sensortype and the sensor measurement referred to as ``value''.
+An
 example for a humditiy sensor within room001 can be seen below:
 
 \begin{verbatim}
@@ -45,22 +49,21 @@ example for a humditiy sensor within room001 can be seen below:
 \end{verbatim}
 
 In the following we will describe the protocol for the core sending a
-state change to an actuator. The MQTTEndpoint looks up the corresponding
+state change to an actuator.
+The MQTTEndpoint looks up the corresponding
 topic to an actuator and send a message with the state e.g.~true or
 false and an optional targetTemperature attribute in case we have an
-actuator with input integer value e.g.~when having air conditoning. We
-drop the attribute for ventilation or air-purifier actuators. Since the
+actuator with input integer value e.g.~when having air conditoning.
+We
+drop the attribute for ventilation or air-purifier actuators.
+Since the
 identification is already achieved by looking up the topics and sending
 a message to a specific topic, an identifier of the actuator is not
-necessary in the payload. Am example for an actuator message can be seen
-below:
+necessary in the payload.
+Am example for an actuator message can be seen below:
 
 \begin{verbatim}
 {
     "active": "true"
 }
 \end{verbatim}
-
-TODO: MQTT broker and core --\textgreater{} endpoint subscribed auf mqtt
-
-TODO: Core to User Interface

@@ -1,19 +1,25 @@
-\subsection{Simulation}
-\label{simulation}
+\subsection{Simulation}\label{subsec:simulation}
 
 Of course, it was not possible for us to build the system in person
-using actual senors and actuators. Therefore, we had to consider virtual
-i.e.~simulated actuators and sensors instead. For this, we faced two
-initial options: - Using an existing IoT simulation framework or
-platform - Writing a simulation build for our purpose from the ground up
+using actual senors and actuators.
+Therefore, we had to consider virtual
+i.e.~simulated actuators and sensors instead.
+For this, we faced two
+initial options:
+\begin{itemize}
+    \item Using an existing IoT simulation framework or platform
+    \item Writing a simulation build for our purpose from the ground up
+\end{itemize}
 
 First we investigated potential simulation frameworks and platforms such
-as IoTIFY or the Microsoft Azure IoT Device Simulation, however we could
+as IoTIFY (TODO) or the Microsoft Azure IoT Device Simulation (TODO), however we could
 not identify a suitable solution that was not deprecated (Microsoft
-Azure IoT Device Simulation) or had a decent free version. We could not
+Azure IoT Device Simulation) or had a decent free version.
+We could not
 even identify a platform that had acceptable cost associated with it,
 however we did not investigate this far, since no one in our team wanted
-to spend money on this. The only remaining option was to build a
+to spend money on this.
+The only remaining option was to build a
 simulation ourselves suitable for our use case from the ground up
 
 When implementing, we had several goals/requirements in mind:
@@ -23,7 +29,8 @@ When implementing, we had several goals/requirements in mind:
     Make the simulated devices as independent as possible while still
     allowing simple, mostly centralized, control of everything.
     \item
-    Make the simulator reconfigurable. For example, it should be easy to
+    Make the simulator reconfigurable.
+    For example, it should be easy to
     add a new sensor, change the topic of a device or adjust the default
     value of a sensor.
     \item
@@ -34,22 +41,27 @@ When implementing, we had several goals/requirements in mind:
 To fulfil the third goal, we could either use Docker or a programming
 language that allows developers to produce assets that do not have any
 external dependencies apart from their runtime, like the Java Runtime
-Environment. Our simulator was implemented using the Go programming
+Environment.
+Our simulator was implemented using the Go programming
 language, since it produces a single statically linked binary with none
 or almost no external dependencies, depending on the compiler options
-chosen. Past personal experience has also shown that Go can be used to
+chosen.
+Past personal experience has also shown that Go can be used to
 implement applications such as simple HTTP APIs or CLI utilities
-relatively quickly. To realize the simulation, the Gin web-framework
-(https://github.com/gin-gonic/gin) and the Paho MQTT Go Client
-(https://github.com/eclipse/paho.mqtt.golang) were used to implement the
+relatively quickly.
+To realize the simulation, the Gin web-framework
+(TODO https://github.com/gin-gonic/gin) and the Paho MQTT Go Client
+(TODO https://github.com/eclipse/paho.mqtt.golang) were used to implement the
 functionality.
 
 To achieve the second goal, a YAML based configuration file was
 constructed that allows the configuration of the simulator in the
-expected manner. The following listing shows a simplified version of the
+expected manner.
+The following listing shows a simplified version of the
 configuration file for our simulator, in this sample the simulator only
 simulates sensors for indoor and outdoor temperature and an actuator for
-the ventilation. The meaning of the values in the configuration are
+the ventilation.
+The meaning of the values in the configuration are
 explained as comments in the listing.
 
 \begin{lstlisting}[language=yaml]
@@ -120,7 +132,7 @@ from the topic the simulated actuator subscribes to.
 
 Following this approach, the first goal has also been fulfilled.
 
-\subsubsection{Simulator User Interface}\label{ui}
+\subsubsection{Simulator User Interface}\label{subsubsec:ui}
 
 Of course, the values for the virtual sensors have to be set somehow. We
 decided to implement this using a simple Web UI based on Angular. This
@@ -131,42 +143,52 @@ are active or not.
 
 The Web UI communicates with the simulator backend using an HTTP based
 REST-like API. The current value of an actuator or sensor is retrieved
-by polling an HTTP endpoint. We decided against the use of the more
+by polling an HTTP endpoint.
+We decided against the use of the more
 efficient alternative of a Publish-Subscribe approach using web-sockets,
 because we did not see any benefit, while the use of web-sockets or long
 polling may reduce the load on the backend if many users are connected
 to the UI, we only expect one or two concurrent users making high server
-load caused by redundant requests no concern to us. Doing it this way
+load caused by redundant requests no concern to us.
+Doing it this way
 also made the implementation of both the UI and the backend API less
 complicated, which was way more important to us.
 
 Once the simulation UI is compiled it only consists of static files,
 that could be served using any web server such as Apache httpd, assuming
-the path / URL to the API of the backend is set properly. In order to
+the path / URL to the API of the backend is set properly.
+In order to
 keep the deployment of the simulator as a whole simple, these static
-files are directly served using the simulator backend. The compiled
+files are directly served using the simulator backend.
+The compiled
 JavaScript binaries of the Web UI are also included in the binary of the
-backend application. To achieve this, a Go library called packr was
-used. It loads all files in a previously defined directory into a go
+backend application.
+To achieve this, a Go library called packr was
+used.
+It loads all files in a previously defined directory into a go
 source file that defines the content of the directory as variables.
 packr then exposes these variables using an interface that is part of
-the Go standard library. Once the interface has been instantiated, it
+the Go standard library.
+Once the interface has been instantiated, it
 can be served through HTTP, making the directory or in our case the UI
 accessible over HTTP.
 
 When a Go application is compiled it usually consists of a single file
 which is relatively large that includes everything, i.e.~the UI, the
-Backend Code and the dependencies. This is comparable to a Fat JAR in
-Java.
+Backend Code and the dependencies.
+This is comparable to a Fat JAR in Java.
 
 
 \subsubsection{Going into the real
 world}\label{going-into-the-real-world}
 
 The system in the current shape is pretty much usable in the real world,
-assuming of course, real sensors and actuators are used. In a real world
+assuming of course, real sensors and actuators are used.
+In a real world
 system one also has to reimplement the scripts for actuators and
-sensors, since the simulated ones are not usable. Also the system will
+sensors, since the simulated ones are not usable.
+Also the system will
 become more distributed in the real world, since one device handling all
-6 Sensors and 4 actuators is unlikely. The collection of data will
+6 Sensors and 4 actuators is unlikely.
+The collection of data will
 therefore be handled in multiple locations.

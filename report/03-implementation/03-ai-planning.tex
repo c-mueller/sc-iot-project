@@ -9,13 +9,12 @@ All sensor measurements of this sensor context are uniquely identifiable for the
 In a first step the AI Planning component evaluates this sensor context.
 There are different evaluation steps depending on the type of a sensor.
 The system has four different types of sensors which are the following:
-
-\begin{itemize}
+\begin{inparaenum}[1)]
     \item Temperature
     \item Humidity
-    \item Particulate matter
-    \item CO2
-\end{itemize}
+    \item Particulate matter and
+    \item CO2.
+\end{inparaenum}
 
 Each sensor measure will be evaluated in relation to certain threshold values.
 Depending on the sensor type there are is either a threshold above or below which we want to take action or an acceptable value range above or below which we want to take action.
@@ -39,19 +38,19 @@ Most predicated of this domain will describe the sensor relation towards our giv
 This relation was already saved inside the sensor state and will be somewhat reflected in the predicated that were chosen to describe our PDDL domain.
 The following predicates currently exist in our domain:
 \begin{itemize}
-    \item \textbf{(on ?d - device)}: This predicate is used to determine which actuator, and therefore the potential device which it controls, is currently on.
+    \item \texttt{(on ?d - device)}: This predicate is used to determine which actuator, and therefore the potential device which it controls, is currently on.
     If this predicate is true the actuator is activated and if it is false the actuator is deactivated.
-    \item \textbf{(temperature-high ?t - temperature)}: This predicate together with the temperature-low predicate shows if a given temperature from a sensor is deemed not normal or acceptable.
+    \item \texttt{(temperature-high ?t - temperature)}: This predicate together with the temperature-low predicate shows if a given temperature from a sensor is deemed not normal or acceptable.
     There need to be two predicated designated to modelling a threshold relation if the accepted value is a range.
     In this case, if the temperature-high predicate is true the temperature is too high, otherwise if it is false the temperature can be either normal or too low.
     Therefore, if both temperature-high is false and temperature-low is false, we know that the temperature for a given sensor is normal.
-    \item \textbf{(temperature-low ?t - temperature)}: As mentioned, this predicate together with the temperature- high predicate shows if a given temperature from a sensor is seemed normal or acceptable.
+    \item \texttt{(temperature-low ?t - temperature)}: As mentioned, this predicate together with the temperature- high predicate shows if a given temperature from a sensor is seemed normal or acceptable.
     If this predicate is true the temperature is too low and if it is false the temperature is either normal or too high.
-    \item \textbf{(humidity-high ?h - humidity)}: Unlike the temperature predicated where we needed multiple ones to model the sensor state, for humidity we are only interested if the humidity is too high.
+    \item \texttt{(humidity-high ?h - humidity)}: Unlike the temperature predicated where we needed multiple ones to model the sensor state, for humidity we are only interested if the humidity is too high.
     Therefore, if this predicate is true the humidity is too high otherwise if it is false the humidity is deemed acceptable.
-    \item \textbf{(air-purity-bad ?a - air-purity)}: This predicate is used to determine the air purity, namely if there is too much particulate matter in the air.
+    \item \texttt{(air-purity-bad ?a - air-purity)}: This predicate is used to determine the air purity, namely if there is too much particulate matter in the air.
     If this predicate is true we deem the air purity bad and if it is false the air purity is deemed acceptable.
-    \item \textbf{(co2-level-emergency ?c - co2-level)}: This predicate indicates if the co2 level, in this case inside a given room, is either too high in which case this predicate is true or it is not too high and deemed acceptable in which case this predicate is false.
+    \item \texttt{(co2-level-emergency ?c - co2-level)}: This predicate indicates if the co2 level, in this case inside a given room, is either too high in which case this predicate is true or it is not too high and deemed acceptable in which case this predicate is false.
     This is a very problematic case and the system has to react more extremely to this than for other cases.
 \end{itemize}
 
@@ -59,14 +58,14 @@ The following predicates currently exist in our domain:
 The actions of our PDDL domain are exclusively related to activating or deactivating the actuators.
 There are these following actions:
 \begin{itemize}
-    \item activateVentilation
-    \item deactivateVentilation
-    \item activateHeater
-    \item deactivateHeater
-    \item activateAirConditioner
-    \item deactivateAirConditioner
-    \item activateAirPurifier
-    \item deactivateAirPurifier
+    \item \texttt{activateVentilation}
+    \item \texttt{deactivateVentilation}
+    \item \texttt{activateHeater}
+    \item \texttt{deactivateHeater}
+    \item \texttt{activateAirConditioner}
+    \item \texttt{deactivateAirConditioner}
+    \item \texttt{activateAirPurifier}
+    \item \texttt{deactivateAirPurifier}
 \end{itemize}
 
 \subsubsection{Parsing sensor and actuator state to PDDL problem}\label{subsubsec:parsing-sensor-and-actuator-state-to-pddl-problem}
@@ -77,16 +76,16 @@ The objects of any problem we generate is identical.
 Here we create an object for any actuator as well as all sensors of our system.
 For our problem, we need objects of the following types:
 \begin{itemize}
-    \item ventilation
-    \item heater
-    \item air-conditioner
-    \item air-purifier
-    \item temperature-in
-    \item temperature-out
-    \item humidity-out
-    \item air-purity-in
-    \item air-purity-out
-    \item co2-level-in
+    \item \texttt{ventilation}
+    \item \texttt{heater}
+    \item \texttt{air-conditioner}
+    \item \texttt{air-purifier}
+    \item \texttt{temperature-in}
+    \item \texttt{temperature-out}
+    \item \texttt{humidity-out}
+    \item \texttt{air-purity-in}
+    \item \texttt{air-purity-out}
+    \item \texttt{co2-level-in}
 \end{itemize}
 
 The initial states of a PDDL problem is the most interesting part, since these depend on the sensor measurements and the current actuator state.
