@@ -13,7 +13,7 @@ The system has four different types of sensors which are the following:
     \item Temperature
     \item Humidity
     \item Particulate matter and
-    \item CO2.
+    \item $CO_2$.
 \end{inparaenum}
 
 Each sensor measure will be evaluated in relation to certain threshold values.
@@ -27,14 +27,14 @@ For this initialization, we can only use the previously evaluated sensor state a
 
 \paragraph{Types}
 The general Idea behind the Types is that we have both actuators and sensors at the core.
-Actuators are modelled as a 'device' type and sensors as a 'sensor' type.
-The sensors are then separated into which type of sensor they are, e.g. temperature, humidity, air purity or co2.
+Actuators are modelled as a \texttt{device} type and sensors as a \texttt{sensor} type.
+The sensors are then separated into which type of sensor they are, e.g. temperature, humidity, air purity or $CO_2$.
 Functionally, this would be sufficient to model the domain, however to improve readability and therefore make changes to the domain easier there are more types.
 Each Actuator, namely the ventilation, heater, air conditioner and air purifier have a type of their own.
-Additionally, Each sensor type has a type of their own that also has where this sensor is located, e.g. 'temperature-in' which is of type temperature.
+Additionally, Each sensor type has a type of their own that also has where this sensor is located, e.g. \texttt{temperature-in} which is of type temperature.
 
-\paragraph{Predicates}
-Most predicated of this domain will describe the sensor relation towards our given value or value range thresholds, as explained in (TODO).
+\paragraph{Predicates}\label{para:predicates}
+Most predicates of this domain will describe the sensor relation towards our given value or value range thresholds, as explained in \cref{subsubsec:sensor-context-evaluation}.
 This relation was already saved inside the sensor state and will be somewhat reflected in the predicated that were chosen to describe our PDDL domain.
 The following predicates currently exist in our domain:
 \begin{itemize}
@@ -50,7 +50,7 @@ The following predicates currently exist in our domain:
     Therefore, if this predicate is true the humidity is too high otherwise if it is false the humidity is deemed acceptable.
     \item \texttt{(air-purity-bad ?a - air-purity)}: This predicate is used to determine the air purity, namely if there is too much particulate matter in the air.
     If this predicate is true we deem the air purity bad and if it is false the air purity is deemed acceptable.
-    \item \texttt{(co2-level-emergency ?c - co2-level)}: This predicate indicates if the co2 level, in this case inside a given room, is either too high in which case this predicate is true or it is not too high and deemed acceptable in which case this predicate is false.
+    \item \texttt{(co2-level-emergency ?c - co2-level)}: This predicate indicates if the $CO_2$ level, in this case inside a given room, is either too high in which case this predicate is true or it is not too high and deemed acceptable in which case this predicate is false.
     This is a very problematic case and the system has to react more extremely to this than for other cases.
 \end{itemize}
 
@@ -90,10 +90,10 @@ For our problem, we need objects of the following types:
 
 The initial states of a PDDL problem is the most interesting part, since these depend on the sensor measurements and the current actuator state.
 Actuator initial states are based on if they are active or not.
-For active actuators, each will have an 'on' predicate added to the init of the problem.
+For active actuators, each will have an \texttt{on} predicate added to the init of the problem.
 Due to the close world assumption of PDDL inactive actuators will not be part of the problem init section.
 The sensor state will also be parsed to init predicates of the PDDL problem.
-Here we will add the predicates as is described in (TODO) to the problem init.
+Here we will add the predicates as is described in \cref{para:predicates} to the problem init.
 Since we only have unwanted behavior as sensor predicates if there are no sensor predicates, we know the system is in a state where we do not need to activate any actuators.
 This is also the case for the actuators, since the best case for our system is that all sensor measurements are acceptable and all actuators are deactivated.
 This fact already describes what goal our PDDL problem will have.
@@ -102,7 +102,7 @@ This is due to the fact that such an initial state would mean all actuators are 
 
 The goal of our problem is always the same.
 Find a plan for our current system, after which all actuators are deactivated and all sensor measurements inside the room our system runs for are acceptable.
-Precisely, we want the temperature to be neither too high nor too low, we do not want the air purity to be bad and there should not be too high of a co2 concentration inside the room.
+Precisely, we want the temperature to be neither too high nor too low, we do not want the air purity to be bad and there should not be too high of a $CO_2$ concentration inside the room.
 For our goal, the state of the outside sensors is irrelevant, since that is not something our system can change.
 
 \subsubsection{Create PDDL plan via external AI Planner}\label{subsubsec:create-pddl-plan-via-external-ai-planner}
@@ -111,9 +111,9 @@ In order to stay flexible regarding which external AI Planner wants to be used, 
 This interface gets a PDDL problem and returns a list of steps the plan consist of.
 If this list is either empty or null, we know that we don't have to do anything and can conclude the current AI Planning routine.
 
-For our implementation we used an online pddl solver (TODO footnote http://solver.planning.domains).
+For our implementation we used an online pddl solver\footnote{\url{http://solver.planning.domains}}.
 Here we can just send an HTTP request with the domain and problem file and this planner will return a response with the plan and some other meta information.
-For this requesting, we used Flurl (TODO footnote).
+For this requesting, we used Flurl\footnote{\url{https://flurl.dev}}.
 
 \subsubsection{Parse PDDL plan and execution}\label{subsubsec:parse-pddl-plan-and-execution}
 Due to the way our PDDL domain and the PDDL problem is modeled, a given plan can not be takes completely at face value.

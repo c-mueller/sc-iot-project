@@ -1,2 +1,10 @@
 
 \subsection{User Interface}\label{subsec:user-interface}
+
+Similar to the simulation user interface we have also implemented a user interface for the core application.
+The goal of this user interface is to inform the user about the current state of the core application.
+It shows the current state of the measurements accumulated by the core application, as well as the expected state of the actuators.
+It shows the target values of the actuators and the actual values of the sensors, whereas the simulator ui shows the opposite.
+
+Just like the simulator ui the Angular framework has been  used to implement it, but unlike the simulator, the UI is not served via HTTP by an underlying application.
+Instead, it must be served separately, for example by using an external webserver.

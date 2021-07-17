@@ -1,10 +1,10 @@
 \subsection{Core}\label{subsec:core}
 
 The application core is written using the C\# programming language and consists of three different parts.
-Firstly The AI Planning which will be further elaborated in (TODO).
+Firstly The AI Planning which will be further elaborated in \cref{subsec:ai-planning}.
 Additionally, a messaging endpoint component which has the job to receive incoming messages from the MQTT broker as well as send outgoing messages to this MQTT broker.
-This communication will be explained in detail in (TODO).
-Furthermore, the application core has an HTTP API endpoint from which the User Interface, which is topic of (TODO), can get user relevant information about the sensor measurements and current state of the systems actuators.
+This communication will be explained in detail in \cref{subsec:communication}.
+Furthermore, the application core has an HTTP API endpoint from which the User Interface, which is topic of \cref{subsec:user-interface}, can get user relevant information about the sensor measurements and current state of the systems actuators.
 
 The communication inside the Core differs for the communication between the messaging endpoint and the AI Planning and the communication between the AI Planning and the HTTP API.
 The AI Planning component and HTTP API do not communicate directly with each other.
