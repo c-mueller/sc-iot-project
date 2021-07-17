@@ -1,6 +1,6 @@
 http_port: 8080
-mqtt_endpoint: nsa-agent.l.krnl.eu
-#mqtt_endpoint: 127.0.0.1
+#mqtt_endpoint: nsa-agent.l.krnl.eu
+mqtt_endpoint: 127.0.0.1
 mqtt_port: 1883
 sensor_update_interval: 1s
 sensors:
