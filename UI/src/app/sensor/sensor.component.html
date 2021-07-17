@@ -1,0 +1,10 @@
+<div *ngIf="sensorMeasure" class="card" style="margin-bottom: 20px">
+  <h3 class="card-header">{{sensorMeasure.type}}</h3>
+  <div class="card-body">
+    <ul>
+      <li>Current Value: <strong>{{sensorMeasure.value + ' TODO unit'}}</strong></li>
+      <li>Last Sent: <strong>{{sensorMeasure.measuredAt | formatDate}}</strong></li>
+    </ul>
+  </div>
+
+</div><!-- /.col-lg-4 -->

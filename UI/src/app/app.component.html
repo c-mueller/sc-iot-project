@@ -1,0 +1,24 @@
+<main role="main" style="margin: 30px">
+  <div class="container" *ngIf="sensors">
+    <div class="row">
+      <div class="col-lg-9">
+        <div *ngFor="let sensorLocation of sensors.locations">
+          <h1>Sensors: {{sensorLocation.locationId}}</h1>
+          <div class="row">
+            <div class="col-lg-4" *ngFor="let sensorMeasure of sensorLocation.measures">
+              <app-sensor [sensorMeasure]="sensorMeasure"></app-sensor>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <h1>Actuators</h1>
+        <div class="row">
+          <div class="col-sm-12" *ngFor="let actuatorInfo of actuators">
+            <app-actuator [actuatorInfo]="actuatorInfo"></app-actuator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

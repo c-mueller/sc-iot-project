@@ -5,14 +5,16 @@ using System.Runtime.Serialization;
 
 namespace Model.Model
 {
+    [DataContract]
     public class SensorContext
     {
+        [DataMember(Name = "locations")]
+        public List<SensorLocation> Locations { get; set; }
+        
         public SensorContext()
         {
             Locations ??= new List<SensorLocation>();
         }
-        
-        public List<SensorLocation> Locations { get; set; }
 
         public void SubmitMeasurement(SensorInput sensorInput)
         {
@@ -42,18 +44,27 @@ namespace Model.Model
         }
     }
 
+    [DataContract]
     public class SensorLocation
     {
+        [DataMember(Name = "locationId")]
         public string LocationId { get; set; }
+        [DataMember(Name = "location")]
         public Location Location { get; set; }
+        [DataMember(Name = "measures")]
         public List<SensorMeasure> Measures { get; set; }
     }
 
+    [DataContract]
     public class SensorMeasure
     {
+        [DataMember(Name = "name")]
         public string Name { get; set; }
+        [DataMember(Name = "type")]
         public SensorType Type { get; set; }
+        [DataMember(Name = "value")]
         public double Value { get; set; }
+        [DataMember(Name = "measuredAt")]
         public DateTime MeasuredAt { get; set; }
     }
 
