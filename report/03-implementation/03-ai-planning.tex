@@ -117,7 +117,9 @@ In order to stay flexible regarding which external AI-planner wants to be used, 
 This interface gets a PDDL problem and returns a list of steps the plan consist of.
 If this list is either empty or null, we know that we don't have to do anything and can conclude the current AI-planning routine.
 
-For our implementation we used an online pddl solver\footnote{\url{http://solver.planning.domains}}.
+For our implementation we used an online PDDL solver\footnote{\url{http://solver.planning.domains}}.
+This was done because this PDDL solver is very easy to use and integrate into the application.
+Additionally, other solutions we looked into are somewhat dated and have very limited or bad documentation on how to use them on top of other technical difficulties like, projects not being buildable at all and others.
 Here we can just send an HTTP request with the domain and problem file and this planner will return a response with the plan and some other meta information.
 For this requesting, we used Flurl\footnote{\url{https://flurl.dev}}.
 
