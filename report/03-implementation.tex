@@ -12,6 +12,23 @@ The source code of the implementation of all seperate components can be found on
     \label{fig:implementation-architecture}
 \end{figure}
 
+In our implementation, the system has six sensors and four actuators. The four actuators in our system or designated to activating or deactivating specific devices. In this implementation they are: 
+\begin{inparaenum}[1)]
+    \item the ventilation
+    \item the heater
+    \item the air conditioner and
+    \item the air purifier.
+\end{inparaenum}
+The sensors we use are: 
+\begin{inparaenum}[1)]
+    \item a temperature sensor indoors
+    \item a temperature sensor outdoors
+    \item a particulate matter sensor indoors
+    \item a particulate matter sensor outdoors
+    \item a humidity sensor outdoors and
+    \item a $CO_2$ sensor indoors.
+\end{inparaenum}
+
 %\input{03-implementation/01-architecture.tex}
 \input{03-implementation/02-core.tex}
 \input{03-implementation/03-ai-planning.tex}
