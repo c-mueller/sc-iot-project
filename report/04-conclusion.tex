@@ -1,11 +1,30 @@
 \section{Discussion and Conclusions}\label{sec:discussion-and-conclusions}
 
+As we have seen, we developed a system that can control the temperature, $CO_2$ level and particulate matter level in a room.
+Improving the overall air quality using several quality improving actuators, like an air conditioner to reduce the temperature in a room, a heater to increase the temperature in a room, an air purifier to adjust the particulate matter level and the ventilation to bring the indoor levels to the outdoor levels.
+Of course our system can be expanded with many more devices.
+Here are some example additions or improvments that could be made to the AAQC system:
 
-With the AAQC project we have demonstrated how air quality can automatically controlled and monitored at best comfortable state.
-We always tried to keep our system as extensible as possible which makes it easy to roll out our system in a bigger system with more then one room with minor adjustments.
-It is also possible to apply our system in different application areas different to office spaces.
-Considering other rooms it would only be necessary to adjust thresholds for the room.
-The system can easily be run on hardware such as raspberry pis.
-In addition, all components can be easily exchanged and replaced with other components, taking into account our
-protocols and architecture.
-Therefore a roll out on a real world application can easily be achieved.
+\begin{itemize}
+    \item One could also monitor the indoor humidity levels and could then use a humidifier and a dehumidifier to keep the humidity level comfortable.
+
+    \item The parameters for actuators could be expanded, to set the ventilation speed depending on the severity of the difference between indoors and outdoor parameters, for example.
+
+    \item The system could also detect human absence to save energy if no one is using the room.
+    This can save energy because an unused room could have different, less strict levels in comparison to the time when a human is present.
+    For example, the temperature may go down to 15 \textdegree C and up to 30 \textdegree C, instead of 20 \textdegree C and 22 \textdegree C, if no one is in the room for a longer time.
+
+    \item The time and date could also be taken into account, as an example the upper and lower thresholds may be changed based on the time or even the day of the week.
+    This could also work depending on the time of the year, or maybe in combination with a weather forecast to know which times of the day would be best or worst for ventilation.
+
+    \item There could also be an override for ventilating the room before anyone enters, e.g. early in the morning, to lower the $CO_2$ level to a minimum.
+    As a result, the change of an $CO_2$ emergency where we have to ventilate could be lowered significantly, since this is unwanted on very hot or cold days.
+
+    \item The system could be expanded, so that it may be able to control multiple rooms or even a whole building.
+    However, when doing so, the usage of a local or self maintainer AI planner is mandatory.
+
+    \item The system could also use a different AI planner instead, for example one could use the 'ff' (fast-forward) planner locally instead of sending everything to the online planner we used.
+    Doing so would also make the system completely independent of the internet.
+\end{itemize}
+
+The above list is by no means completed, there are many further additions and refinements one could think of adding to this system.
