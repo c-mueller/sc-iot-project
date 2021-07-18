@@ -1,12 +1,12 @@
 \subsection{AI Planning}\label{subsec:ai-planning}
-The AI Planning routine is implemented using a mix between an external AI Planner and internal programming logic.
+The AI-planning routine is implemented using a mix between an external AI-planner and internal programming logic.
 It is the central part of the application core and therefore also implemented using C\#.
 
 The planning routine is initialized with the latest measurement of all sensors of the system in the so-called sensor context.
-All sensor measurements of this sensor context are uniquely identifiable for the AI Planning in order to know which physical location they come from.
+All sensor measurements of this sensor context are uniquely identifiable for the AI-planning in order to know which physical location they come from.
 
 \subsubsection{Sensor context evaluation}\label{subsubsec:sensor-context-evaluation}
-In a first step the AI Planning component evaluates this sensor context.
+In a first step the AI-planning component evaluates this sensor context.
 There are different evaluation steps depending on the type of a sensor.
 The system has four different types of sensors which are the following:
 \begin{inparaenum}[1)]
@@ -97,7 +97,7 @@ Here we will add the predicates as is described in \cref{para:predicates} to the
 Since we only have unwanted behavior as sensor predicates if there are no sensor predicates, we know the system is in a state where we do not need to activate any actuators.
 This is also the case for the actuators, since the best case for our system is that all sensor measurements are acceptable and all actuators are deactivated.
 This fact already describes what goal our PDDL problem will have.
-Furthermore, if any problem we create has no initial states, we also know that no action has to be taken without consulting any external AI Planner at all.
+Furthermore, if any problem we create has no initial states, we also know that no action has to be taken without consulting any external AI-planner at all.
 This is due to the fact that such an initial state would mean all actuators are deactivated and any sensor measures acceptable values.
 
 The goal of our problem is always the same.
@@ -105,11 +105,11 @@ Find a plan for our current system, after which all actuators are deactivated an
 Precisely, we want the temperature to be neither too high nor too low, we do not want the air purity to be bad and there should not be too high of a $CO_2$ concentration inside the room.
 For our goal, the state of the outside sensors is irrelevant, since that is not something our system can change.
 
-\subsubsection{Create PDDL plan via external AI Planner}\label{subsubsec:create-pddl-plan-via-external-ai-planner}
-In order to create any plan, our application has to interact with some external AI Planner which can create such a plan based on the given PDDL domain and problem.
-In order to stay flexible regarding which external AI Planner wants to be used, we provide an interface which has to be implemented.
+\subsubsection{Create PDDL plan via external AI-planner}\label{subsubsec:create-pddl-plan-via-external-ai-planner}
+In order to create any plan, our application has to interact with some external AI-planner which can create such a plan based on the given PDDL domain and problem.
+In order to stay flexible regarding which external AI-planner wants to be used, we provide an interface which has to be implemented.
 This interface gets a PDDL problem and returns a list of steps the plan consist of.
-If this list is either empty or null, we know that we don't have to do anything and can conclude the current AI Planning routine.
+If this list is either empty or null, we know that we don't have to do anything and can conclude the current AI-planning routine.
 
 For our implementation we used an online pddl solver\footnote{\url{http://solver.planning.domains}}.
 Here we can just send an HTTP request with the domain and problem file and this planner will return a response with the plan and some other meta information.
@@ -125,6 +125,6 @@ This is not the case for deactivation, therefore, if there is only a deactivatio
 
 This filtering and parsing step will result in a new actuator state like the one we initially used before going into the PDDL problem parsing.
 This actuator state will have all states of the system's actuators, namely if they are activated or deactivated.
-If this new actuator state is the same as the one we used going into the planning, we know that nothing has changed, and we can successfully finish the AI planning routine.
+If this new actuator state is the same as the one we used going into the planning, we know that nothing has changed, and we can successfully finish the AI-planning routine.
 If this is not the case, we will transform this information into the message format which the messaging endpoint wants and send such a message for each actuator for which we want to change its state.
 Finally, if there are changes in the actuator state, we will save the new actuator state inside the application state store, so it is up-to-date.
