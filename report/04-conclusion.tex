@@ -21,10 +21,16 @@ Here are some example additions or improvments that could be made to the AAQC sy
     As a result, the change of an $CO_2$ emergency where we have to ventilate could be lowered significantly, since this is unwanted on very hot or cold days.
 
     \item The system could be expanded, so that it may be able to control multiple rooms or even a whole building.
-    However, when doing so, the usage of a local or self maintainer AI planner is mandatory.
+    However, when doing so, the usage of a local or self maintained AI planner is mandatory.
 
-    \item The system could also use a different AI planner instead, for example one could use the 'ff' (fast-forward) planner locally instead of sending everything to the online planner we used.
+    \item The system could also use a different AI planner instead, for example one could use the \texttt{ff}~(fast-forward)~planner\footnote{\url{https://fai.cs.uni-saarland.de/hoffmann/ff.html}} locally instead of sending everything to the online planner we used.
     Doing so would also make the system completely independent of the internet.
 \end{itemize}
 
 The above list is by no means completed, there are many further additions and refinements one could think of adding to this system.
+
+As we mentioned in the previous sections, our current system should be operatable in the real world, with some limitations, since the system in its current state can only turn actuators on or off.
+This limitation of course has impacts on the usability of the system, since the actuated devices can only operate at a preset speed / level.
+This either has impact on the comfort of persons in the room if the devices are operating a high level causing unwanted noises like loud fan noises.
+If the levels are set too low, the system may not operate at its full potential, which means it will take longer for the system to achieve the expected goal, potentially resulting in higher energy use.
+
