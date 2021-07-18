@@ -26,14 +26,16 @@ On the other hand, this way all actuators can receive their instructions from th
 The following listing illustrates a measurement message in JSON from the $CO_2$ sensor in \texttt{room001}.
 It contains the location of the sensor, the type of sensor, the time at which the measurement was made and the measured value as a floating point number.
 
-\begin{verbatim}
+\begin{lstlisting}[language=json, 
+    caption={Example measurement message from a sensor in JSON format}, 
+    captionpos=b]
 {
     "location": "room001",
     "timestamp": "2021-07-05T07:30:01Z",
     "sensortype": "CO2",
     "value": 143
 }
-\end{verbatim}
+\end{lstlisting}
 Looking at the other direction, from the core application to the actuators, we just send a message regarding the actuation state of the respective device.
 When designing the initial idea of the system we thought of electrical relays or smart plugs as actuators that turn the device on or off depending on the messages from the core application.
 We therefore did not have any further configuration attributes like ventilation speed or target temperature in mind.
