@@ -67,6 +67,10 @@ There are these following actions:
     \item \texttt{activateAirPurifier}
     \item \texttt{deactivateAirPurifier}
 \end{itemize}
+The effect of these actions are mostly related to the \texttt{on} predicate in relation to each device of the system, e.g. one of the effects of \texttt{activateHeater} is \texttt{(on ?h)} and the effect of \texttt{deactivateHeater} is \texttt{(not(on ?h))}.
+These are all the effects of deactivate actions, however, activate actions also effect sensor related predicates, e.g. the other effects of the mentioned \texttt{activateHeater} action are also \texttt{(not(temperature-low ?ti))} and \texttt{(not(temperature-high ?ti))}, which say that the temperature inside a room are supposed to be neither too high nor too low.
+While these additional effects make parsing and filtering the plans necessary in some cases, which will be further elaborated in the next \cref{subsubsec:parsing-sensor-and-actuator-state-to-pddl-problem}, they also enable easier generation of problem files.
+This is the case because this way we can use a constant goal state, which is the same for any problem as well as make finding the initial states we need for a problem easier.
 
 \subsubsection{Parsing sensor and actuator state to PDDL problem}\label{subsubsec:parsing-sensor-and-actuator-state-to-pddl-problem}
 The PDDL problem we want to generate depends on both the sensor state, which we evaluated previously, and the actuator state, which we received from the application state store.

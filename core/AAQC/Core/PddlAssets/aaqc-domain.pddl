@@ -286,13 +286,3 @@
         )
     )
 )
-;            ?v - ventilation
-;            ?h - heater
-;            ?ac - air-conditioner
-;            ?ap - air-purifier
-;            ?ti - temperature-in
-;            ?to - temperature-out
-;            ?ho - humidity-out
-;            ?ai - air-purity-in
-;            ?ao - air-purity-out
-;            ?ci - co2-level-in
