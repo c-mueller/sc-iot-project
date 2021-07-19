@@ -24,9 +24,7 @@ namespace Core.AiPlanning
 
         public void Initiate(SensorContext currentContext)
         {
-            // Log.Information(JsonConvert.SerializeObject(currentContext));
             var currentObjectState = SensorContextEvaluator.Evaluate(currentContext);
-            // Log.Information(JsonConvert.SerializeObject(currentObjectState));
 
             var latestActuatorState = _contextStore.GetLatestActuatorState();
             currentObjectState.ActuatorState = latestActuatorState;
@@ -37,7 +35,6 @@ namespace Core.AiPlanning
                 Log.Information("[AI Planner] Planning finished: No Init states for pddl problem found");
                 return;
             }
-            // Log.Information(currentProblem.BuildProblemFile());
 
             var plan = _pddlSolver.CreatePlanForProblem(currentProblem);
             if (plan == null)
@@ -52,19 +49,10 @@ namespace Core.AiPlanning
                 Log.Information("[AI Planner] Planning finished: Plan is empty and no changes are required");
                 return;
             }
-            // Log.Information(JsonConvert.SerializeObject(plan));
 
             Log.Information("[AI Planner] Finding changes in actuator state");
             var newActuatorState = PddlPlanParser.Parse(plan);
-
-            // Fill in actuator values that are not included in the plan with the value they currently have 
-            /*
-            newActuatorState.IsVentilationActive ??= latestActuatorState.IsVentilationActive;
-            newActuatorState.IsHeaterActive ??= latestActuatorState.IsHeaterActive;
-            newActuatorState.IsAirConditionerActive ??= latestActuatorState.IsAirConditionerActive;
-            newActuatorState.IsAirPurifierActive ??= latestActuatorState.IsAirPurifierActive;
-            */
-
+            
             var actuators = GetActuatorContexts(newActuatorState, latestActuatorState).ToList();
             if (!actuators.Any())
             {
